@@ -65,7 +65,8 @@ export added_mass, D0, dD0, k_open, k0, host_roots, kappa1
 export green_1d, green_1d_integral, green_1d_patch, green_2d, green_2d_integral
 export inv_alpha, alpha, gamma_r, gamma_d, energy_flux
 export lattice_sum_1d, lattice_sum_1d_modal, bloch_residual_1d, bloch_roots_1d
-export omega_gamma_1d, omega_X_1d, lower_band_maximum_1d, lattice_compliance_number_1d
+export omega_gamma_1d, omega_X_1d, lower_band_maximum_1d, lattice_compliance_number_1d, bloch_qa_1d, bare_frequency
+export gap_asymptotic_1d, gap_a4_1d, bloch_decay_1d
 export Pi_L_estimate_plate, Pi_L_estimate_membrane, Pi_L_estimate_square
 export local_branches, crossing_wavenumber, anticrossing_width
 export single_resonator_1d, cross_sections_3d, renormalised_frequency, critical_damping, Q_rad
@@ -471,6 +472,79 @@ function lower_band_maximum_1d(h::HostSpec, r::ResonatorSpec, a::Real;
     end
     return best
 end
+
+"""
+    bloch_qa_1d(h, r, a, ω; nc=2001, roots=host_roots(h, ω))
+
+Real Bloch phases qa ∈ [0, π] of a lossless line array at frequency ω: the
+roots in c = cos qa of 1/α(ω) = 𝒮(q, ω), with 𝒮 in the multimode form
+(`lattice_sum_1d_modal`), which is a sum of simple poles in c. Scanned on `nc`
+points of [−1, 1]; sign changes across the pole c = cos k₀a are rejected. An
+empty result means that ω lies in a stop band.
+"""
+function bloch_qa_1d(h::HostSpec, r::ResonatorSpec, a::Real, ω::Real; nc::Int=2001, roots=host_roots(h, ω))
+    s = [sin(k * a) / dD0(h, k, ω) for k in roots]
+    cm = [cos(k * a) for k in roots]
+    F(c) = real(inv_alpha(r, ω) + sum(s ./ (c .- cm)))
+    cs = range(-1.0, 1.0; length=nc)
+    Fs = F.(cs)
+    qa = Float64[]
+    for i in 1:(nc - 1)
+        (isfinite(Fs[i] * Fs[i + 1]) && Fs[i] * Fs[i + 1] < 0) || continue
+        c = _bracket_root(F, cs[i], cs[i + 1])
+        abs(F(c)) < 1e-6 * (abs(Fs[i]) + abs(Fs[i + 1])) && push!(qa, acos(clamp(c, -1.0, 1.0)))
+    end
+    return sort!(qa)
+end
+
+"""
+    bloch_decay_1d(h, r, a, ω; cmax=1e4, nc=4001, roots=host_roots(h, ω))
+
+Attenuations Im(q)a of the Bloch modes of a lossless line array with real
+c = cos qa, |c| > 1, at frequency ω: the real roots of 1/α(ω) = 𝒮(q, ω)
+(multimode form, as `bloch_qa_1d`), Im(q)a = acosh|c| (eq. lat_decay), sorted by
+magnitude and signed: negative for c < −1 (Re q = π/a), positive for c > 1 (Re q = 0). Besides the mode that continues the
+propagating branch into the stop band, the list contains the modes that
+continue the fluid evanescent roots kₙ = iκₙ (c ≈ cosh κₙa); the slowest of
+them, Im q ≈ κ₁, bounds the attenuation of long arrays. Complex roots
+(Re q ∉ {0, π/a}) are not searched.
+"""
+function bloch_decay_1d(h::HostSpec, r::ResonatorSpec, a::Real, ω::Real; cmax::Real=1e4, nc::Int=4001,
+                        roots=host_roots(h, ω))
+    s = [sin(k * a) / dD0(h, k, ω) for k in roots]
+    cm = [cos(k * a) for k in roots]
+    F(c) = real(inv_alpha(r, ω) + sum(s ./ (c .- cm)))
+    found = Float64[]
+    for sgn in (1.0, -1.0)
+        cs = sgn .* exp.(range(log(1 + 1e-12), log(cmax); length=nc))
+        Fs = F.(cs)
+        for i in 1:(nc - 1)
+            (isfinite(Fs[i] * Fs[i + 1]) && Fs[i] * Fs[i + 1] < 0) || continue
+            c = _bracket_root(F, minmax(cs[i], cs[i + 1])...)
+            abs(F(c)) < 1e-6 * (abs(Fs[i]) + abs(Fs[i + 1])) && push!(found, sgn * acosh(abs(c)))
+        end
+    end
+    return sort!(found; by=abs)
+end
+
+"Frequency of the bare host at real wavenumber k (lossless): 𝒟₀(k, ω) = 0, i.e. ω₀(k) of eq. (normalised_quadratic)."
+bare_frequency(h::HostSpec, k::Real) = sqrt((h.g + h.T_ρ * k^2 + h.C_ρ * k^4) / (h.m_ρ + added_mass(k, h.H)))
+
+"""
+    gap_asymptotic_1d(h, r, a)
+
+Asymptotic width of the complete stop band of a line array, eq. (gap_asymptotic):
+(ω_Γ − ω_X)/ω_r ≃ μ(π/a)ω_r²/(ω₀²(π/a) − ω_r²) − Π_L/2, with
+μ(k) = n₀m_ρ,r/(m_ρ + M_f,ρ(k, H)) (eq. lat_mu), n₀ = 1/a. Valid for ak_c/π ≲ 0.75.
+"""
+function gap_asymptotic_1d(h::HostSpec, r::ResonatorSpec, a::Real)
+    ωr = natural_frequency(r)
+    μ = (r.m_ρ / a) / (h.m_ρ + added_mass(π / a, h.H))
+    return μ * ωr^2 / (bare_frequency(h, π / a)^2 - ωr^2) - lattice_compliance_number_1d(h, r, a) / 2
+end
+
+"Bending-dominated limit of the gap, eq. (gap_a4): (1/π⁴ − 1/1440) n₀m_ρ,r ω_r² a⁴/C_ρ."
+gap_a4_1d(h::HostSpec, r::ResonatorSpec, a::Real) = (1 / π^4 - 1 / 1440) * (r.m_ρ / a) * natural_frequency(r)^2 * a^4 / h.C_ρ
 
 "Lattice-compliance number Π_L = n₀ k_ρ,r σ′(0, ω_r), eq. (lat_PiL), line array."
 lattice_compliance_number_1d(h::HostSpec, r::ResonatorSpec, a::Real; N::Int=4000) =

@@ -20,7 +20,11 @@ include("references.jl")
 include("L1_1_bare_host_dispersion.jl")
 include("L1_2_flux_normalisation.jl")       # uses the L1-1 problem
 include("L1_3_single_line_resonator.jl")    # L1-1 problem with a resonator
+include("L1_4_finite_array_foldy.jl")       # L1-1 problem with N resonators
+include("L1_5_discrete_stop_band.jl")       # periodic supercells (reused by L1-6, L1-8)
+include("L1_6_spacing_sweep.jl")            # L1-5 supercells against the spacing
+include("L1_8_fluid_dilution.jl")           # L1-5 supercells at q = k_c
 
-export References, L1_1, L1_2, L1_3
+export References, L1_1, L1_2, L1_3, L1_4, L1_5, L1_6, L1_8
 
 end
