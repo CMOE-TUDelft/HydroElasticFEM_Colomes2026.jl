@@ -144,7 +144,8 @@ function plot_dilution(df::DataFrame, dir::AbstractString)
     with_theme(theme) do
         fig = Figure(size=(1000, 380))
         axa = Axis(fig[1, 1]; xscale=log10, yscale=log10, xlabel=L"\varepsilon_s = k_c a/2\pi",
-                   ylabel=L"|(\omega_+ - \omega_-)/(\omega_r\sqrt{\mu(k_c)}) - 1|", title="(a) discreteness correction")
+                   ylabel=L"|(\omega_+ - \omega_-)/(\omega_r\sqrt{\mu(k_c)}) - 1|", title="(a) discreteness correction",
+                   xticks=([1 / 16, 1 / 8, 1 / 4], ["1/16", "1/8", "1/4"]))
         axb = Axis(fig[1, 2]; xlabel=L"\sqrt{\mu(k_c)}", ylabel=L"(\omega_+ - \omega_-)/\omega_r\ \mathrm{(FE)}",
                    title="(b) splitting at ε_s = 1/16")
         groups = collect(groupby(sort(fn, :eps_s), [:T_ρ, :C_ρ, :H, :ω_r]))

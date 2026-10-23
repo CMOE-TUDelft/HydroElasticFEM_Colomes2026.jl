@@ -48,7 +48,7 @@ using TOML
 import HydroElasticFEM
 using HydroElasticFEM_xxx2026.L1_4
 import HydroElasticFEM_xxx2026.L1_1
-using HydroElasticFEM_xxx2026.References: bloch_decay_1d, resonator_from_frequency
+using HydroElasticFEM_xxx2026.References: bloch_decay_1d, resonator_from_frequency, omega_X_1d, omega_gamma_1d, kappa1
 
 const TEST_ID = "L1-4"
 const REPO = normpath(joinpath(@__DIR__, "..", ".."))
@@ -204,21 +204,33 @@ function plot_transmission(cv::DataFrame, dir::AbstractString)
     end
 end
 
-function plot_decay(dc::DataFrame, dir::AbstractString)
+"""
+Decay rate between N = 10 and 20 inside the stop band [ω_X, ω_Γ] of each T_ρ:
+Foldy (line), FE (markers), Im q of the zone-boundary Bloch mode (dashed) and
+the decay rate κ₁ of the slowest fluid evanescent mode (dotted).
+"""
+function plot_decay(dc::DataFrame, p0::L1_4_Params, dir::AbstractString)
     nrow(dc) == 0 && return
     theme = Theme(fontsize=12, Axis=(xgridvisible=false, ygridvisible=false))
     mkpath(dir)
     with_theme(theme) do
-        fig = Figure(size=(560, 340))
-        ax = Axis(fig[1, 1]; xlabel=L"\omega\ \mathrm{(rad/s)}", ylabel=L"\mathrm{decay\ rate}\ (1/\mathrm{m})")
-        for (T, c) in zip(STUDY_T, (:black, :royalblue))
-            g = sort(filter(r -> r.T_ρ == T && 9.5 <= r.omega <= 10.05, dc), :omega)
-            lines!(ax, g.omega, max.(g.rate_foldy, 0.0); color=c, label=@sprintf("Foldy, (ln|T₁₀| − ln|T₂₀|)/10a, Tρ = %g", T))
-            scatter!(ax, g.omega, max.(g.rate_h, 0.0); color=c, markersize=5, label=@sprintf("FE, Tρ = %g", T))
-            lines!(ax, g.omega, g.Im_q_zone_boundary; color=c, linestyle=:dash, label=@sprintf("Im q, Re q = π/a, Tρ = %g", T))
-            lines!(ax, g.omega, g.Im_q_min; color=c, linestyle=:dot, label=@sprintf("least-attenuated real-c Bloch mode, Tρ = %g", T))
+        fig = Figure(size=(380 * length(STUDY_T) + 220, 340))
+        local ax
+        for (j, T) in enumerate(STUDY_T)
+            p = L1_4_Params(p0; T_ρ=T)
+            h, r = L1_1.host(p), resonator_from_frequency(p.m_ρr, p.ω_r)
+            ωX, ωΓ = omega_X_1d(h, r, p.a; ωmin=9.0, npts=4001), omega_gamma_1d(h, r, p.a)
+            g = sort(filter(row -> row.T_ρ == T && ωX <= row.omega <= ωΓ, dc), :omega)
+            nrow(g) == 0 && continue
+            Tstr = @sprintf("%g", T)
+            ax = Axis(fig[1, j]; xlabel=L"\omega\ \mathrm{(rad/s)}", ylabel=j == 1 ? L"\mathrm{decay\ rate}\ (1/\mathrm{m})" : "",
+                      title=L"T_\rho = %$Tstr", limits=((ωX, ωΓ), (0, 1.0)))
+            lines!(ax, g.omega, g.rate_foldy; color=:black, label=L"\mathrm{Foldy},\ \ln(|T_{10}|/|T_{20}|)/10a")
+            scatter!(ax, g.omega, g.rate_h; color=:firebrick, markersize=6, label="FE")
+            lines!(ax, g.omega, g.Im_q_zone_boundary; color=:royalblue, linestyle=:dash, label=L"\mathrm{Im}\,q,\ \mathrm{Re}\,q = \pi/a")
+            hlines!(ax, [kappa1(h, p.ω_r)]; color=:gray50, linestyle=:dot, label=L"\kappa_1\ \mathrm{(fluid\ evanescent)}")
         end
-        axislegend(ax; position=:lt, framevisible=false, labelsize=9)
+        Legend(fig[1, length(STUDY_T) + 1], ax; framevisible=false, labelsize=10)
         save(joinpath(dir, "decay.pdf"), fig)
         save(joinpath(dir, "decay.png"), fig; px_per_unit=300 / 96)
     end
@@ -249,7 +261,7 @@ function main(; smoke::Bool=false, force::Bool=false, root::AbstractString=REPO,
     CSV.write(joinpath(out, "checks.csv"), ck)
     figdir = joinpath(root, "plots", TEST_ID)
     plot_transmission(cv, figdir)
-    plot_decay(dc, figdir)
+    plot_decay(dc, first(cs), figdir)
 
     show(stdout, MIME"text/plain"(), select(df, :T_ρ, :N, :ζ, :elements_per_cell, :sweep, :ndofs, :err_R, :err_T, :err_A,
                                             :power_residual, :wall_time_s); allrows=true)
