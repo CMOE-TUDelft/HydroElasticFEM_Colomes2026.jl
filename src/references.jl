@@ -601,13 +601,15 @@ function foldy_1d(h::HostSpec, ω::Real, xs::AbstractVector, resonators::Abstrac
     length(resonators) == N || throw(DimensionMismatch("one resonator per position"))
     G0 = green_1d(h, 0.0, ω; roots=roots)
     G = [i == j ? G0 : green_1d(h, xs[i] - xs[j], ω; roots=roots) for i in 1:N, j in 1:N]
-    α = alpha.(resonators, ω)
+    # forces f = αη from (1/α − G) f = η^inc: finite also at ω = ω_r of a lossless resonator (α = ∞)
+    ia = inv_alpha.(resonators, ω)
     kp = real(roots[1])
     d = dD0(h, kp, ω)
-    η = (I - G * Diagonal(α)) \ (A .* exp.(im * kp .* xs))
-    R = im / (d * A) * sum(α .* η .* exp.(im * kp .* xs))
-    T = 1 + im / (d * A) * sum(α .* η .* exp.(-im * kp .* xs))
-    absorbed = 2 / (d * abs2(A)) * sum(imag.(α) .* abs2.(η))
+    f = (Diagonal(ia) - G) \ (A .* exp.(im * kp .* xs))
+    η = ia .* f
+    R = im / (d * A) * sum(f .* exp.(im * kp .* xs))
+    T = 1 + im / (d * A) * sum(f .* exp.(-im * kp .* xs))
+    absorbed = 2 / (d * abs2(A)) * sum(-imag.(ia) .* abs2.(f))      # Im α |η|² = −Im(1/α) |f|²
     return (η=η, R=R, T=T, absorbed=absorbed, energy_residual=abs2(R) + abs2(T) + absorbed - 1)
 end
 

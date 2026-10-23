@@ -111,6 +111,7 @@ are those of `L1_1_Params`, so that `L1_1.solve` takes this struct.
     sponge_wavelengths::Float64 = 6.0
     sponge_strength::Float64 = 3.0
     sponge_power::Int = 2
+    sponge_viscous::Float64 = 0.0         # viscous sponge loss factor (`L1_1.viscous_sponges`); 0: none
 
     # ── Fixed: discretisation (as L1-1) ──────────────────────────────────────
     top_fraction::Float64 = 0.5
@@ -128,9 +129,17 @@ end
 "Fields of `L1_3_Params` varied by the L1-3 study (they name the records)."
 const VARIABLE = (:T_ρ, :c_factor, :snap, :elements_per_wavelength, :order, :n_omega)
 
+"Fields added after the first L1-3 records; left out of the hash at their default, so those records keep their names."
+const LATE_FIELDS = (:sponge_viscous => 0.0,)
+
+"Fixed fields of `p` that enter the record hash (all but `exclude`, and late fields at their default)."
+hashed_fields(p::L1_3_Params, exclude) =
+    Tuple(getfield(p, f) for f in fieldnames(L1_3_Params)
+          if !(f in exclude) && !any(l -> l.first == f && getfield(p, f) == l.second, LATE_FIELDS))
+
 "Short hash of the fixed parameters, appended to the record name."
 function fixed_hash(p::L1_3_Params)
-    fixed = Tuple(getfield(p, f) for f in fieldnames(L1_3_Params) if !(f in VARIABLE))
+    fixed = hashed_fields(p, VARIABLE)
     return string(hash(fixed); base=16, pad=16)[1:8]
 end
 
@@ -284,11 +293,14 @@ function run_case(p::L1_3_Params)
     lo_ref = find_zero(lower(invR_ref), (ω̃_ref - Δ, ω̃_ref))
     hi_ref = find_zero(upper(invR_ref), (ω̃_ref, ω̃_ref + Δ))
 
-    # FE roots, started at the references; NaN if not converged inside the band
-    band = p.ω_r .* (1 - p.span / Q, 1 + p.span / Q)
+    # FE roots, started at the references; NaN if not converged within ω̃₀(1 ± span/Q). The window is
+    # centred on the renormalised resonance: at low ω_r the shift ω̃₀ − ω_r is itself ≈ ω_r·5/Q
+    # (−4.2e-4 at ω_r = 1), so a window centred on ω_r rejects the FE root.
+    band = p.ω_r .* (1 - p.span / Q, 1 + p.span / Q)              # response curves
+    admissible = res.ω̃0 .* (1 - p.span / Q, 1 + p.span / Q)
     function fe_root(f, x0)
         s = secant_root(f, x0, x0 * (1 + 1e-3); xtol=p.xtol)
-        return s.converged && band[1] <= s.root <= band[2] ? s.root : NaN
+        return s.converged && admissible[1] <= s.root <= admissible[2] ? s.root : NaN
     end
     ω̃_h = fe_root(ω -> imag(invR(ω)), ω̃_ref)
     lo_h = fe_root(lower(invR), lo_ref)

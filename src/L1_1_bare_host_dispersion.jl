@@ -88,7 +88,8 @@ import HydroElasticFEM.Simulation as S
 import HydroElasticFEM.ParameterHandler as PH
 using HydroElasticFEM: map_vertical_GP_for_const_dep
 
-using ..References: HostSpec, ResonatorSpec, k0, kappa1, host_roots, gamma_r, green_1d_patch
+using ..References: HostSpec, ResonatorSpec, k0, kappa1, host_roots, gamma_r, green_1d_patch, bare_frequency,
+                    added_mass
 
 export L1_1_Params, VARIABLE, fixed_hash, run_case
 
@@ -198,6 +199,27 @@ function sponge_loss(p, x::Real, L::Real, Ls::Real)
     return p.sponge_strength * ξ^p.sponge_power
 end
 
+"""
+    viscous_sponges(p, lay)
+
+Optional viscous dashpot sponges (`StructuralDampingZone`) over the same
+`Ls` as the bending sponges, for parameter structs with a field
+`sponge_viscous` > 0 (none otherwise). The dashpot cᵨσ(x)ηₜ absorbs waves
+of every length, unlike the bending sponge, which is transparent to long
+waves. Its strength is the loss factor s_v = `sponge_viscous` relative to the
+host inertia at the wavenumber k = 2π/λ of the layout:
+cᵨ = s_v ω₀(k)(m_ρ + M_f,ρ(k, H)); σ ramps as ξ^`sponge_power`.
+"""
+function viscous_sponges(p, lay)
+    sv = hasproperty(p, :sponge_viscous) ? p.sponge_viscous : 0.0
+    sv > 0 || return P.StructuralDampingZone[]
+    h = host(p)
+    k = 2π / lay.λ
+    c = sv * bare_frequency(h, k) * (p.m_ρ + added_mass(k, p.H))
+    return [P.StructuralDampingZone(profile=P.ramp_profile(x_start=lay.Ls, x_end=0.0, power=p.sponge_power), cᵨ=c),
+            P.StructuralDampingZone(profile=P.ramp_profile(x_start=lay.L - lay.Ls, x_end=lay.L, power=p.sponge_power), cᵨ=c)]
+end
+
 # ─── FE problem (HydroElasticFEM.jl) ────────────────────────────────────────
 
 """
@@ -230,7 +252,8 @@ function solve(p; ω::Real=p.ω, lay=layout(p), resonators::AbstractVector{Reson
     fluid = P.PotentialFlow(g=p.g, ρw=p.ρ, fe=fe(), space_domain_symbol=:Ω)
     EI(x) = p.C_ρ * (1 - im * sponge_loss(p, x[1], L, lay.Ls))
     plate = P.TensionedEulerBernoulliBeam(L=L, mᵨ=p.m_ρ, EIᵨ=EI, Tᵨ=p.T_ρ, g=p.g, symbol=:η,
-                                          fe=fe(γ=p.γ_penalty), space_domain_symbol=:Γs)
+                                          fe=fe(γ=p.γ_penalty), space_domain_symbol=:Γs,
+                                          damping_zones=viscous_sponges(p, lay))
 
     entities = P.PhysicsParameters[fluid, plate]
     if N > 0   # HydroElasticFEM takes dimensional mass, stiffness and damping

@@ -100,7 +100,7 @@ function simulate(p::L1_3_Params; root::AbstractString=REPO, force::Bool=false)
     end
     # guard against two cases sharing a record name (values rounded in the name)
     stored = data["params"]
-    all(f -> stored[string(f)] == getfield(p, f), fieldnames(L1_3_Params)) ||
+    all(f -> get(stored, string(f), getfield(L1_3_Params(), f)) == getfield(p, f), fieldnames(L1_3_Params)) ||   # late fields: default
         error("record $(record_name(p)) holds other parameters than the case")
     return data
 end

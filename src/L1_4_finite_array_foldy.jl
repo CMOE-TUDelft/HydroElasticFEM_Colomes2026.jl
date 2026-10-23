@@ -41,8 +41,13 @@ the L1-1 rules, with λ_p at `ω_ref`.
    by the array driven by the source near field e(xₙ) (O(2e-3)), from the
    Foldy response to e; their error is second order.
 2. 𝒜 = 1 − |R|² − |T|², and independently the power balance of the FE
-   solution: net incoming flux ¼ω𝒟₀′(|a_L|² + |a_R|² − |b_L|² − |b_R|²)
-   against the dashpot power Σ ½ω²c|qₙ − ηₙ|².
+   solution for the part driven by the propagating waves: net incoming flux
+   ¼ω𝒟₀′(|a_L|² + |a_R|² − |b_L − c_L|² − |b_R − c_R|²) against the dashpot
+   power Σ ½ω²c|(qₙ − qₑ,ₙ) − (ηₙ − ηₑ,ₙ)|², with the response to the source near
+   field e (qₑ, ηₑ, from Foldy) removed: that response receives its energy by
+   evanescent tunnelling through the probe section, which a propagating-flux
+   balance does not count (in lossless resonant arrays it left residuals of
+   up to 6 %).
 3. References: `foldy_1d` (R, T, 𝒜) with the same resonators.
 
 ## Reproduce
@@ -52,9 +57,9 @@ the L1-1 rules, with λ_p at `ω_ref`.
 module L1_4
 
 using Parameters
-using LinearAlgebra: I, Diagonal
+using LinearAlgebra: I
 using ..References: HostSpec, ResonatorSpec, k0, kappa1, host_roots, dD0, resonator_from_frequency,
-                    foldy_1d, green_1d, alpha
+                    foldy_1d, green_1d, inv_alpha
 import ..L1_1
 import ..L1_3
 
@@ -70,7 +75,7 @@ those of `L1_1_Params`, so that `L1_1.solve` takes this struct.
     T_ρ::Float64 = 0.0
     N::Int = 10                           # number of resonators
     ζ::Float64 = 0.0                      # damping ratio of every resonator
-    elements_per_cell::Int = 8            # horizontal elements per spacing a
+    elements_per_cell::Int = 4            # horizontal elements per spacing a (≈ 9 per λ_p at ω = 10)
     order::Int = 3
     sweep::Symbol = :curve                # :curve (n_wide + n_fine frequencies) or :check (`check_omegas`)
 
@@ -89,9 +94,9 @@ those of `L1_1_Params`, so that `L1_1.solve` takes this struct.
     # ── Fixed: frequencies ────────────────────────────────────────────────────
     ω_ref::Float64 = 10.0                 # sizes the layout and δ
     wide::Tuple{Float64,Float64} = (8.0, 12.0)
-    n_wide::Int = 81
+    n_wide::Int = 41
     fine::Tuple{Float64,Float64} = (9.55, 10.05)   # around the stop band [ω_X, ω_Γ]
-    n_fine::Int = 101
+    n_fine::Int = 61
     check_omegas::Tuple{Vararg{Float64}} = (8.5, 9.5, 9.8, 10.02, 11.0)
 
     # ── Fixed: forcing ────────────────────────────────────────────────────────
@@ -225,18 +230,21 @@ function scattering(p::L1_4_Params, lay, r::ResonatorSpec, ω::Real, δ::Real)
 
     # waves radiated by the array driven by the source near field, from the Foldy response
     d = dD0(h, kp, ω)
-    α = alpha(r, ω)
     xr = lay.xs .- lay.x_c
     G = [green_1d(h, xr[i] - xr[j], ω; roots=roots) for i in 1:p.N, j in 1:p.N]
-    e = src_near.(lay.xs)
-    ηe = (I - α * G) \ e
-    cL = im / d * sum(α .* ηe .* exp.(im * kp .* xr))
-    cR = im / d * sum(α .* ηe .* exp.(-im * kp .* xr))
+    fe = (inv_alpha(r, ω) * I - G) \ src_near.(lay.xs)      # forces driven by e (finite at ω = ω_r)
+    cL = im / d * sum(fe .* exp.(im * kp .* xr))
+    cR = im / d * sum(fe .* exp.(-im * kp .* xr))
     s = two_port(aL, aR, bL - cL, bR - cR)
 
-    # power balance of the FE solution (density-normalised, per unit width)
-    flux_in = ω / 4 * d * (abs2(aL) + abs2(aR) - abs2(bL) - abs2(bR))
-    dashpot = ω^2 / 2 * r.c_ρ * sum(abs2, sol.q .- η)
+    # power balance of the FE solution (density-normalised, per unit width), for the part driven by the
+    # propagating waves only: the response to the source near field e reaches the array by tunnelling
+    # through the probe section, where only propagating flux is counted, so it is removed from the
+    # outgoing amplitudes (c_L, c_R) and from the motions (Foldy response: fₑ, ηₑ = fₑ/α, qₑ = fₑ/(ω²m))
+    ηe = inv_alpha(r, ω) .* fe
+    qe = fe ./ (ω^2 * r.m_ρ)
+    flux_in = ω / 4 * d * (abs2(aL) + abs2(aR) - abs2(bL - cL) - abs2(bR - cR))
+    dashpot = ω^2 / 2 * r.c_ρ * sum(abs2, (sol.q .- qe) .- (η .- ηe))
     return (R=s.R, T=s.T, A=1 - abs2(s.R) - abs2(s.T), power_residual=abs(flux_in - dashpot) / (ω / 4 * d * (abs2(aL) + abs2(aR))),
             fit_residual=max(up.residual, down.residual), ndofs=sol.ndofs, ny=sol.vm.ny)
 end
@@ -265,7 +273,7 @@ function run_case(p::L1_4_Params)
         "R_h" => getfield.(fe, :R), "T_h" => getfield.(fe, :T), "A_h" => getfield.(fe, :A),
         "R_ref" => getfield.(ref, :R), "T_ref" => getfield.(ref, :T), "A_ref" => getfield.(ref, :absorbed),
         "energy_residual_ref" => maximum(abs, getfield.(ref, :energy_residual)),
-        "power_residual_h" => getfield.(fe, :power_residual), "fit_residual" => maximum(getfield.(fe, :fit_residual)),
+        "power_residual_corrected_h" => getfield.(fe, :power_residual), "fit_residual" => maximum(getfield.(fe, :fit_residual)),
         "dispersion_error" => δ, "ndofs" => fe[1].ndofs, "ny" => fe[1].ny, "lambda_p" => lay.λ,
         "element_size" => lay.he, "L" => lay.L, "x_c" => lay.x_c, "fe_solves" => length(ωs) + 1,
     )

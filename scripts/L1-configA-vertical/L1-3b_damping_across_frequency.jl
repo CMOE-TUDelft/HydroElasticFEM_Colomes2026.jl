@@ -42,6 +42,7 @@ using Printf
 using TOML
 import HydroElasticFEM
 using HydroElasticFEM_xxx2026.L1_3
+import HydroElasticFEM_xxx2026.L1_3
 import HydroElasticFEM_xxx2026.L1_1
 using HydroElasticFEM_xxx2026.References: k0, dD0, natural_frequency, resonator_from_frequency
 
@@ -54,13 +55,16 @@ const STUDY_T = (0.0, 9.8)
 const STUDY_W = (1.0, 2.0, 5.0, 10.0)
 const STUDY_C = (0.25, 0.5, 1.0, 2.0, 4.0)
 const STUDY_N = (10, 20)
+const VISCOUS_SPONGE = 1.0      # loss factor of the viscous sponges at ω_r = 1 (`L1_1.viscous_sponges`)
 
 "Record fields of L1-3b: the L1-3 variable fields plus the resonator frequency."
 const VARIABLE_3b = (:ω_r, VARIABLE...)
 
 function cases(; smoke::Bool=false)
     smoke && return [L1_3_Params(ω_r=2.0, c_factor=1.0, elements_per_wavelength=10, order=3)]
-    return [L1_3_Params(T_ρ=T, ω_r=ω, c_factor=c, elements_per_wavelength=n, order=3)
+    # at ω_r = 1 the bending sponges are transparent (bending is 1e-5 of gravity): viscous sponges
+    sv(ω) = ω <= 1.0 ? VISCOUS_SPONGE : 0.0
+    return [L1_3_Params(T_ρ=T, ω_r=ω, c_factor=c, elements_per_wavelength=n, order=3, sponge_viscous=sv(ω))
             for T in STUDY_T for ω in STUDY_W for c in STUDY_C for n in STUDY_N]
 end
 
@@ -68,7 +72,7 @@ end
 
 "Fixed-parameter hash without ω_r (a variable of this study)."
 function fixed_hash_3b(p::L1_3_Params)
-    fixed = Tuple(getfield(p, f) for f in fieldnames(L1_3_Params) if !(f in VARIABLE_3b))
+    fixed = L1_3.hashed_fields(p, VARIABLE_3b)
     return string(hash(fixed); base=16, pad=16)[1:8]
 end
 
@@ -98,7 +102,7 @@ function simulate(p::L1_3_Params; root::AbstractString=REPO, force::Bool=false)
         return d
     end
     stored = data["params"]
-    all(f -> stored[string(f)] == getfield(p, f), fieldnames(L1_3_Params)) ||
+    all(f -> get(stored, string(f), getfield(L1_3_Params(), f)) == getfield(p, f), fieldnames(L1_3_Params)) ||   # late fields: default
         error("record $(record_name(p)) holds other parameters than the case")
     return data
 end
@@ -119,6 +123,7 @@ function errors(p::L1_3_Params, d)
     return (T_ρ=p.T_ρ, ω_r=p.ω_r, c_factor=p.c_factor, elements_per_wavelength=p.elements_per_wavelength,
             ndofs=d["ndofs"], omega_peak_h=d["omega_peak_h"], omega_peak_ref=d["omega_peak_ref"],
             err_omega=abs(d["omega_peak_h"] / d["omega_peak_ref"] - 1),
+            err_omega_over_width=abs(d["omega_peak_h"] - d["omega_peak_ref"]) / abs(-(d["omega_half_ref"]...)),
             A_peak_h=d["A_peak_h"], A_peak_ref=d["A_peak_ref"], err_A=abs(d["A_peak_h"] - d["A_peak_ref"]),
             zeta=p.c_factor * ζ_crit, zeta_crit=ζ_crit, zeta_opt=z.opt, zeta_bound=z.bound, Q_rad=d["Q_rad"],
             lambda_p=d["lambda_p"], L=d["L"], fe_solves=d["fe_solves"], wall_time_s=d["wall_time_s"])
@@ -242,7 +247,7 @@ function main(; smoke::Bool=false, force::Bool=false, root::AbstractString=REPO,
     plot_absorption(df, figdir)
     plot_zeta(opt, first(cs), figdir)
 
-    show(stdout, MIME"text/plain"(), select(finest(df), :T_ρ, :ω_r, :c_factor, :ndofs, :err_omega, :A_peak_h,
+    show(stdout, MIME"text/plain"(), select(finest(df), :T_ρ, :ω_r, :c_factor, :ndofs, :err_omega, :err_omega_over_width, :A_peak_h,
                                             :err_A, :zeta, :zeta_opt, :fe_solves); allrows=true)
     println()
     show(stdout, MIME"text/plain"(), opt; allrows=true)

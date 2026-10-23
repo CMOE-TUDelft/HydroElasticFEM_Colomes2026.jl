@@ -126,6 +126,9 @@ function fixed_hash(p::L1_5_Params)
     return string(hash(fixed); base=16, pad=16)[1:8]
 end
 
+"Relative residual |Re(1/g)|/|ω ∂_ω Re(1/g)| below which a pole is accepted although the secant steps still jitter (round-off)."
+const ROOT_TOL = 1e-9
+
 "Lossless resonator of the case."
 resonator(p) = resonator_from_frequency(p.m_ρr, p.ω_r)
 
@@ -224,7 +227,9 @@ end
 
 Pole of `bloch_response` next to the reference frequency `ω_ref`: root of
 Re(1/g) by secant iteration from ω_ref(1 ± `start`). Returns the root (NaN if
-not converged or further than `accept` from ω_ref), the number of FE solves,
+neither the step criterion `xtol` nor the residual criterion
+|Re(1/g)|/|ω ∂_ω Re(1/g)| ≤ `ROOT_TOL` holds, or if it lies further than
+`accept` from ω_ref), the relative residual, the number of FE solves,
 |Im(1/g)/Re(1/g)′| at the root (≈ 0 for the lossless problem, a check of the
 projection), and the DOFs.
 """
@@ -233,14 +238,15 @@ function band_frequency(p, ω_ref::Real; M::Int, j::Int, res::Union{Nothing,Reso
     resp(ω) = get!(() -> bloch_response(p, ω; M=M, j=j, res=res), cache, ω)
     f(ω) = real(1 / resp(ω).g)
     s = secant_root(f, ω_ref * (1 - p.start), ω_ref * (1 + p.start); xtol=p.xtol, maxiter=40)
-    # at round-off level the steps jitter above xtol: retry once with 100·xtol from the last iterates
-    s.converged || (s = secant_root(f, s.root * (1 - 1e3p.xtol), s.root * (1 + 1e3p.xtol); xtol=100p.xtol, maxiter=40))
-    ok = s.converged && abs(s.root / ω_ref - 1) <= p.accept
     ω = s.root
     slope = (f(ω * (1 + 1e-7)) - f(ω * (1 - 1e-7))) / (2e-7 * ω)
+    # at round-off level the secant steps jitter above xtol; the root is accepted when its residual
+    # fixes ω to `ROOT_TOL` (relative), whether or not the step criterion was met
+    residual = abs(f(ω)) / abs(slope * ω)
+    ok = (s.converged || residual <= ROOT_TOL) && abs(ω / ω_ref - 1) <= p.accept
     leak = abs(imag(1 / resp(ω).g)) / abs(slope * ω)
     r = resp(ω)
-    return (omega=ok ? ω : NaN, solves=length(cache), leak=leak, ndofs=r.ndofs, ny=r.ny)
+    return (omega=ok ? ω : NaN, solves=length(cache), leak=leak, residual=residual, ndofs=r.ndofs, ny=r.ny)
 end
 
 """
