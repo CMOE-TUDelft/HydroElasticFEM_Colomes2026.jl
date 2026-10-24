@@ -24,7 +24,12 @@ include("L1_4_finite_array_foldy.jl")       # L1-1 problem with N resonators
 include("L1_5_discrete_stop_band.jl")       # periodic supercells (reused by L1-6, L1-8)
 include("L1_6_spacing_sweep.jl")            # L1-5 supercells against the spacing
 include("L1_8_fluid_dilution.jl")           # L1-5 supercells at q = k_c
+include("L2_1_transfer_compliance.jl")      # configuration B: G_B columns (reused by L2-2 … L2-6)
+include("L2_2_woodbury.jl")                 # L2-1 columns vs monolithic resonators
+include("L2_3_wet_resonance.jl")            # L2-1 channel: modal (eq:eigWet) vs G_B resonance
+include("L2_4_asymmetric_absorption.jl")    # L2-1 channel: radiation asymmetry and absorption bound
+include("L2_5_finite_size_dilution.jl")     # L2-3 modal analysis: hybridisation vs plate length
 
-export References, L1_1, L1_2, L1_3, L1_4, L1_5, L1_6, L1_8
+export References, L1_1, L1_2, L1_3, L1_4, L1_5, L1_6, L1_8, L2_1, L2_2, L2_3, L2_4, L2_5
 
 end

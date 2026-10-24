@@ -1,0 +1,115 @@
+name,kind,value,tolerance,passed
+"radiated power ½ω Im G vs open-water flux, Lp=5, x1=0.25, n=8",D,1.2104601719187258e-5,0.001,true
+"max_ζ 𝒜 vs bound, Lp=5, x1=0.25, n=8",D,0.0005496164666322079,0.001,true
+"𝒜 at critical coupling vs bound, Lp=5, x1=0.25, n=8",D,0.00015914933463956338,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=5, x1=0.25, n=8",D,2.9529013484408395e-6,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=5, x1=0.625, n=8",D,9.770107049611454e-6,0.001,true
+"max_ζ 𝒜 vs bound, Lp=5, x1=0.625, n=8",D,0.0008049547431939752,0.001,true
+"𝒜 at critical coupling vs bound, Lp=5, x1=0.625, n=8",D,2.9402426824809424e-5,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=5, x1=0.625, n=8",D,5.497381538877022e-6,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=5, x1=1.25, n=8",D,1.006062568076338e-5,0.001,true
+"max_ζ 𝒜 vs bound, Lp=5, x1=1.25, n=8",D,0.00028821204997508953,0.001,true
+"𝒜 at critical coupling vs bound, Lp=5, x1=1.25, n=8",D,3.495268001030283e-6,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=5, x1=1.25, n=8",D,6.437948075754818e-7,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=5, x1=2.5, n=8",D,1.0158574733409864e-5,0.001,true
+"max_ζ 𝒜 vs bound, Lp=5, x1=2.5, n=8",D,1.0506689183786833e-5,0.001,true
+"𝒜 at critical coupling vs bound, Lp=5, x1=2.5, n=8",D,4.663994237041891e-6,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=5, x1=2.5, n=8",D,1.32350677861659e-7,1.0e-5,true
+"bound = ½ at the centre, Lp=5, x1=2.5, n=8",D,1.708466701444422e-11,0.001,true
+"radiated power ½ω Im G vs open-water flux, Lp=5, x1=3.75, n=8",D,1.006065466180317e-5,0.001,true
+"max_ζ 𝒜 vs bound, Lp=5, x1=3.75, n=8",D,0.0002882136372254207,0.001,true
+"𝒜 at critical coupling vs bound, Lp=5, x1=3.75, n=8",D,3.496857195806058e-6,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=5, x1=3.75, n=8",D,7.582661579741412e-7,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=5, x1=4.375, n=8",D,9.770096610850487e-6,0.001,true
+"max_ζ 𝒜 vs bound, Lp=5, x1=4.375, n=8",D,0.000804952991598884,0.001,true
+"𝒜 at critical coupling vs bound, Lp=5, x1=4.375, n=8",D,2.9400675844670765e-5,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=5, x1=4.375, n=8",D,4.2926314658409126e-7,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=5, x1=4.75, n=8",D,1.2104624341979786e-5,0.001,true
+"max_ζ 𝒜 vs bound, Lp=5, x1=4.75, n=8",D,0.0005496180237276604,0.001,true
+"𝒜 at critical coupling vs bound, Lp=5, x1=4.75, n=8",D,0.00015915089197726662,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=5, x1=4.75, n=8",D,3.123004215455083e-6,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=20, x1=0.25, n=8",D,1.0169334503373761e-5,0.001,true
+"max_ζ 𝒜 vs bound, Lp=20, x1=0.25, n=8",D,0.00036626649118354226,0.001,true
+"𝒜 at critical coupling vs bound, Lp=20, x1=0.25, n=8",D,0.00014565863738025264,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=20, x1=0.25, n=8",D,5.208212506824239e-7,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=20, x1=2.5, n=8",D,9.924491586543738e-6,0.001,true
+"max_ζ 𝒜 vs bound, Lp=20, x1=2.5, n=8",D,0.0002472103417247018,0.001,true
+"𝒜 at critical coupling vs bound, Lp=20, x1=2.5, n=8",D,3.8860550977126707e-7,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=20, x1=2.5, n=8",D,4.419969585889305e-7,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=20, x1=5, n=8",D,9.854221062477464e-6,0.001,true
+"max_ζ 𝒜 vs bound, Lp=20, x1=5, n=8",D,0.00045150485480371927,0.001,true
+"𝒜 at critical coupling vs bound, Lp=20, x1=5, n=8",D,4.907971863366001e-6,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=20, x1=5, n=8",D,6.833320329580062e-7,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=20, x1=10, n=8",D,8.565915716518546e-6,0.001,true
+"max_ζ 𝒜 vs bound, Lp=20, x1=10, n=8",D,0.0001270751800850345,0.001,true
+"𝒜 at critical coupling vs bound, Lp=20, x1=10, n=8",D,1.9011731778983965e-5,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=20, x1=10, n=8",D,2.3153287608268514e-6,1.0e-5,true
+"bound = ½ at the centre, Lp=20, x1=10, n=8",D,1.350657363730079e-10,0.001,true
+"radiated power ½ω Im G vs open-water flux, Lp=20, x1=15, n=8",D,9.854195286651546e-6,0.001,true
+"max_ζ 𝒜 vs bound, Lp=20, x1=15, n=8",D,0.000451504630741173,0.001,true
+"𝒜 at critical coupling vs bound, Lp=20, x1=15, n=8",D,4.9077478998516e-6,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=20, x1=15, n=8",D,3.35123570560647e-7,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=20, x1=17.5, n=8",D,9.924505417924223e-6,0.001,true
+"max_ζ 𝒜 vs bound, Lp=20, x1=17.5, n=8",D,0.0002472098679661139,0.001,true
+"𝒜 at critical coupling vs bound, Lp=20, x1=17.5, n=8",D,3.8907859423176205e-7,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=20, x1=17.5, n=8",D,4.276794832724917e-7,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=20, x1=19.75, n=8",D,1.0169456294839563e-5,0.001,true
+"max_ζ 𝒜 vs bound, Lp=20, x1=19.75, n=8",D,0.0003662644714833574,0.001,true
+"𝒜 at critical coupling vs bound, Lp=20, x1=19.75, n=8",D,0.00014565661633103577,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=20, x1=19.75, n=8",D,2.2477324517211628e-6,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=5, x1=0.25, n=16",D,1.9951146490448934e-7,0.001,true
+"max_ζ 𝒜 vs bound, Lp=5, x1=0.25, n=16",D,0.0005758871510085362,0.001,true
+"𝒜 at critical coupling vs bound, Lp=5, x1=0.25, n=16",D,0.00017912325191249412,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=5, x1=0.25, n=16",D,4.5391769121216896e-8,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=5, x1=0.625, n=16",D,1.5071261105781275e-7,0.001,true
+"max_ζ 𝒜 vs bound, Lp=5, x1=0.625, n=16",D,0.0008189694133838854,0.001,true
+"𝒜 at critical coupling vs bound, Lp=5, x1=0.625, n=16",D,4.463534582621609e-5,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=5, x1=0.625, n=16",D,4.9749910635554784e-8,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=5, x1=1.25, n=16",D,1.5091497340691262e-7,0.001,true
+"max_ζ 𝒜 vs bound, Lp=5, x1=1.25, n=16",D,0.0002999084936115004,0.001,true
+"𝒜 at critical coupling vs bound, Lp=5, x1=1.25, n=16",D,1.3582911804865816e-5,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=5, x1=1.25, n=16",D,2.0342488582514306e-8,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=5, x1=2.5, n=16",D,1.5902141470292008e-7,0.001,true
+"max_ζ 𝒜 vs bound, Lp=5, x1=2.5, n=16",D,1.7901316735402517e-5,0.001,true
+"𝒜 at critical coupling vs bound, Lp=5, x1=2.5, n=16",D,1.2502556610116677e-5,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=5, x1=2.5, n=16",D,1.6963238147482684e-8,1.0e-5,true
+"bound = ½ at the centre, Lp=5, x1=2.5, n=16",D,5.563650651296825e-10,0.001,true
+"radiated power ½ω Im G vs open-water flux, Lp=5, x1=3.75, n=16",D,1.507627926944366e-7,0.001,true
+"max_ζ 𝒜 vs bound, Lp=5, x1=3.75, n=16",D,0.0002999101674076021,0.001,true
+"𝒜 at critical coupling vs bound, Lp=5, x1=3.75, n=16",D,1.3584588520965113e-5,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=5, x1=3.75, n=16",D,5.058169771920973e-8,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=5, x1=4.375, n=16",D,1.5094316330177548e-7,0.001,true
+"max_ζ 𝒜 vs bound, Lp=5, x1=4.375, n=16",D,0.0008189670021285789,0.001,true
+"𝒜 at critical coupling vs bound, Lp=5, x1=4.375, n=16",D,4.4632975856884194e-5,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=5, x1=4.375, n=16",D,1.3908780793769893e-9,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=5, x1=4.75, n=16",D,1.994526810378261e-7,0.001,true
+"max_ζ 𝒜 vs bound, Lp=5, x1=4.75, n=16",D,0.0005758889131832756,0.001,true
+"𝒜 at critical coupling vs bound, Lp=5, x1=4.75, n=16",D,0.0001791250008765788,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=5, x1=4.75, n=16",D,4.873031467234057e-8,1.0e-5,true
+"radiated power ½ω Im G vs open-water flux, Lp=20, x1=10, n=16",D,1.4242059975799748e-7,0.001,true
+"max_ζ 𝒜 vs bound, Lp=20, x1=10, n=16",D,0.00014080421977546997,0.001,true
+"𝒜 at critical coupling vs bound, Lp=20, x1=10, n=16",D,2.970837793059289e-5,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=20, x1=10, n=16",D,2.0262037603302474e-8,1.0e-5,true
+"bound = ½ at the centre, Lp=20, x1=10, n=16",D,5.5734750148417334e-11,0.001,true
+"radiated power ½ω Im G vs open-water flux, Lp=20, x1=0.25, n=16",D,1.5697698030336937e-7,0.001,true
+"max_ζ 𝒜 vs bound, Lp=20, x1=0.25, n=16",D,0.00037050703718954914,0.001,true
+"𝒜 at critical coupling vs bound, Lp=20, x1=0.25, n=16",D,0.00015221482129512687,0.001,true
+"monolithic 𝒜 vs Woodbury at critical coupling, Lp=20, x1=0.25, n=16",D,5.6438032025596385e-9,1.0e-5,true
+"bound(x1) + bound(Lp − x1) = 1, Lp=5, x1=0.25, n=8",D,8.533174167268953e-12,0.001,true
+"bound(x1) + bound(Lp − x1) = 1, Lp=5, x1=0.625, n=8",D,9.407807866068651e-12,0.001,true
+"bound(x1) + bound(Lp − x1) = 1, Lp=5, x1=1.25, n=8",D,6.996447865503796e-11,0.001,true
+"bound(x1) + bound(Lp − x1) = 1, Lp=20, x1=0.25, n=8",D,9.430345393468542e-11,0.001,true
+"bound(x1) + bound(Lp − x1) = 1, Lp=20, x1=2.5, n=8",D,5.3879900541176085e-11,0.001,true
+"bound(x1) + bound(Lp − x1) = 1, Lp=20, x1=5, n=8",D,4.1641023962313284e-11,0.001,true
+"bound(x1) + bound(Lp − x1) = 1, Lp=5, x1=0.25, n=16",D,7.494671550034582e-10,0.001,true
+"bound(x1) + bound(Lp − x1) = 1, Lp=5, x1=0.625, n=16",D,2.68235211819956e-10,0.001,true
+"bound(x1) + bound(Lp − x1) = 1, Lp=5, x1=1.25, n=16",D,1.589706144500269e-11,0.001,true
+"bound, mesh 8 vs 16, Lp=5, x1=0.25",D,6.0898041311041595e-5,0.001,true
+"bound, mesh 8 vs 16, Lp=5, x1=0.625",D,5.20478859457052e-5,0.001,true
+"bound, mesh 8 vs 16, Lp=5, x1=1.25",D,4.311156292907681e-5,0.001,true
+"bound, mesh 8 vs 16, Lp=5, x1=2.5",D,5.734497321441268e-10,0.001,true
+"bound, mesh 8 vs 16, Lp=5, x1=3.75",D,4.311164879067242e-5,0.001,true
+"bound, mesh 8 vs 16, Lp=5, x1=4.375",D,5.2047627118217976e-5,0.001,true
+"bound, mesh 8 vs 16, Lp=5, x1=4.75",D,6.0898799311370766e-5,0.001,true
+"bound, mesh 8 vs 16, Lp=20, x1=0.25",D,5.8913919511072166e-5,0.001,true
+"bound, mesh 8 vs 16, Lp=20, x1=10",D,1.9080048652142523e-10,0.001,true

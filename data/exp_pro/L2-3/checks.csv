@@ -1,0 +1,16 @@
+name,kind,value,tolerance,passed
+"fixed-point iterations (max over meshes), x₁=0",I,3.0,29.0,true
+"mesh error ω̃ (Green), x₁=0",D,1.0386535653772455e-7,0.0001,true
+"mesh error ω_wet (modal), x₁=0",D,1.038761296978663e-7,0.0001,true
+"modal ω_wet vs Green ω̃, finest, x₁=0",D,2.047070490740488e-5,0.001,true
+"forced peak vs Green ω̃, finest, x₁=0",D,3.635549084002321e-9,0.001,true
+"fixed-point iterations (max over meshes), x₁=12.5",I,3.0,29.0,true
+"mesh error ω̃ (Green), x₁=12.5",D,3.544102341690447e-5,0.0001,true
+"mesh error ω_wet (modal), x₁=12.5",D,3.543407739470261e-5,0.0001,true
+"modal ω_wet vs Green ω̃, finest, x₁=12.5",D,3.401168608563321e-5,0.001,true
+"forced peak vs Green ω̃, finest, x₁=12.5",D,3.6355493060469257e-9,0.001,true
+"fixed-point iterations (max over meshes), x₁=25",I,3.0,29.0,true
+"mesh error ω̃ (Green), x₁=25",D,5.477170399714737e-5,0.0001,true
+"mesh error ω_wet (modal), x₁=25",D,5.4758037232760515e-5,0.0001,true
+"modal ω_wet vs Green ω̃, finest, x₁=25",D,4.0556038669259387e-5,0.001,true
+"forced peak vs Green ω̃, finest, x₁=25",D,3.6355491950246233e-9,0.001,true
