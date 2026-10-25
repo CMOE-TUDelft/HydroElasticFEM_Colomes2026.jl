@@ -5,7 +5,7 @@ Pre- and post-processing of the test defined in src/L2_5_finite_size_dilution.jl
 Study: P1 plate (T_ρ = 0), free edges, uniform lossless resonators every ≈ 1 m
 at n₀m_ρ,r = 0.01 m tuned to the first elastic wet mode; L ∈ {2.3, 4.6, 11.5,
 23, 46} m (≈ {1, 2, 5, 10, 20} λ_p at ω = 10), H ∈ {3, 10, 30} m; p = 3 with 16
-elements per wavelength, and 32 at H = 10 m (mesh check).
+elements per wavelength, and 32 at H = 10 m for L ≤ 11.5 m (mesh check).
 
 Acceptance (test matrix §L2.5):
   - type I: the hybridised modes have a projection ≥ 0.2 on the bare mode (the
@@ -16,7 +16,10 @@ Acceptance (test matrix §L2.5):
     of the added mass between ω₋ and ω₊, ≈ 6 % on the smoke case);
   - type A: deep water (H = 30 m, L ≤ 23 m, L < πH/4): fitted exponent of the
     splitting against L within −½ ± 0.1 (paper: μ_B ∝ 1/L for L ≪ πH);
-  - type D: splitting on 16 and 32 elements per wavelength (H = 10 m), to 1e-2.
+  - type D: splitting on 16 and 32 elements per wavelength (H = 10 m,
+    L ≤ 11.5 m; at larger L the 32-element case exceeds the per-run budget), to 1e-2;
+  - type I: the one-solve modal mass m_φ(ω₁) against φᵀ(M_η + Re A)φ from the
+    full added-mass matrix, to 1e-6.
   Reported: the exponent for shallow water (H = 3 m, L ≥ 11.5 m; expected → −1),
   and the paper's √μ_B and the local √μ(β₁/L) against the FE.
 
@@ -43,11 +46,14 @@ const REPO = normpath(joinpath(@__DIR__, "..", ".."))
 
 const STUDY_L = (2.3, 4.6, 11.5, 23.0, 46.0)
 const STUDY_H = (3.0, 10.0, 30.0)
+const MESH_L_MAX = 11.5               # 32-element check up to L = 11.5 m (≈ 16× the cost of 16 elements at larger L)
+const DEEP_L_MAX = 23.0               # H = 30: L = 46 m exceeds the 60 CPU-min budget; the deep-water exponent uses L ≤ 23 m
 
 function cases(; smoke::Bool=false)
     smoke && return [L2_5_Params(Lp=4.6, H=10.0, elements_per_wavelength=8)]
-    main = [L2_5_Params(Lp=L, H=H, elements_per_wavelength=16) for H in STUDY_H for L in STUDY_L]
-    fine = [L2_5_Params(Lp=L, H=10.0, elements_per_wavelength=32) for L in STUDY_L]
+    main = [L2_5_Params(Lp=L, H=H, elements_per_wavelength=16) for H in STUDY_H for L in STUDY_L
+            if !(H == 30.0 && L > DEEP_L_MAX)]
+    fine = [L2_5_Params(Lp=L, H=10.0, elements_per_wavelength=32) for L in STUDY_L if L <= MESH_L_MAX]
     return [main; fine]
 end
 
@@ -87,7 +93,7 @@ errors(p::L2_5_Params, d) = (Lp=p.Lp, H=p.H, elements_per_wavelength=p.elements_
                              sqrt_mu_B=d["sqrt_mu_B"], sqrt_mu_local=d["sqrt_mu_local"],
                              ratio_mode=d["split"] / d["sqrt_mu_mode"],
                              split_galerkin=d["split_galerkin"], ratio_galerkin=d["split"] / d["split_galerkin"],
-                             modal_mass_ratio=d["modal_mass_ratio"], ratio_B=d["split"] / d["sqrt_mu_B"],
+                             modal_mass_ratio=d["modal_mass_ratio"], modal_mass_check=d["modal_mass_check"], ratio_B=d["split"] / d["sqrt_mu_B"],
                              proj=min(d["proj_minus"], d["proj_plus"]), ndofs=d["ndofs"], wall_time_s=d["wall_time_s"])
 
 function loglog_slope(x, y)
@@ -103,10 +109,14 @@ function checks(df::DataFrame)
         tag = @sprintf("L=%g, H=%g", r.Lp, r.H)
         push!(rows, (name="hybrid pair identified (projection ≥ 0.2), $(tag)", kind="I", value=r.proj, tolerance=0.2,
                      passed=r.proj >= 0.2))
+        add!("one-solve modal mass vs full added-mass matrix, $(tag)", "I", r.modal_mass_check, 1e-6)
         add!("splitting vs single-mode Galerkin (dispersive added mass), $(tag)", "A", abs(r.ratio_galerkin - 1), 1e-2)
     end
-    deep = sort(filter(r -> r.H == 30.0 && r.Lp <= 23.0, main), :Lp)
-    nrow(deep) >= 3 && add!("deep-water exponent (H=30, L ≤ 23), |s + ½|", "A", abs(loglog_slope(deep.Lp, deep.split) + 0.5), 0.1)
+    # N ≥ 5: with N = 2 (L = 2.3 m) the resonators sit near the nodes of the free–free mode
+    # (0.22L, 0.78L), so the splitting is set by the sampling of φ, not by the size cut-off
+    # (√μ_mode, which contains the sampling, still matches the FE there).
+    deep = sort(filter(r -> r.H == 30.0 && r.Lp <= DEEP_L_MAX && r.N >= 5, main), :Lp)
+    nrow(deep) >= 3 && add!("deep-water exponent (H=30, N ≥ 5, L ≤ 23), |s + ½|", "A", abs(loglog_slope(deep.Lp, deep.split) + 0.5), 0.1)
     for L in STUDY_L
         a = filter(r -> r.Lp == L && r.H == 10.0, df)
         nrow(a) == 2 || continue

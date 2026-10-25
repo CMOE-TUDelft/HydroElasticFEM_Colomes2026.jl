@@ -360,4 +360,119 @@ The finite element model reproduces the band structure of the floating line latt
 For finite arrays, the finite element model and the Foldy solution agree on reflection, transmission and absorption, with the energy balance satisfied by both. The decay of the transmission inside the stop band reveals that a floating lattice of finite depth has, besides the Bloch mode that continues the propagating branch, a weakly attenuated Bloch mode that continues the slowest evanescent fluid mode. Its attenuation, close to $\kappa_1\simeq\pi/(2H)$, bounds the attenuation per unit length of long arrays and is not affected by the resonators. A long floating array therefore cannot be made more opaque than the evanescent tunnelling through the fluid allows, which limits the use of equation~\eqref{eq:lat_decay} to estimating the transmission of short arrays or of arrays with spacing large compared with $H/\pi$.
 
 On the numerical side, the Bloch-phased loading of periodic supercells provides band frequencies at any rational Bloch wavenumber from the forced-response solver, without quasi-periodic boundary conditions or an eigenvalue solver, at a cost of one or two cells per wavenumber. Because the band edges near $\omega_r$ are set by the near field of the attachments, the mesh must be sized with the cell rather than with the wavelength; the gap then converges at a relative accuracy independent of the spacing, $3\times10^{-4}$ with $p=2$ and $64$ elements per cell and $10^{-9}$ or better with $p=3$ and $16$. For single resonators at low frequency, the accuracy of the renormalised resonance is limited by the resolution of the flexural near field rather than of the wavelength, while the absorption at the computed resonance is reproduced exactly; meshes for low-frequency resonators should be refined around the attachments.
+
+\subsection{Finite structures in open water}\label{subsec:num_configB}
+
+For a finite structure in open water, configuration~B, the Green function of the host is replaced by the transfer compliance $G_B$ of the bare structure (Section~\ref{sec:finite_domain}). It has no closed form, and the finite element model is the only way to obtain it. The tests of this section therefore verify the identities that relate the monolithic model to $G_B$: reciprocity, the Woodbury equivalence~\eqref{eq:lat_woodbury} and the absorption bound~\eqref{eq:lat_absorbed_B}. They also verify the wet modal analysis~\eqref{eq:eigWet} against the resonance condition written with $G_B$. They then use $G_B$ to test two predictions of the local model on finite structures: the mode dilution~\eqref{eq:mode_dilution} and the footprint of graded arrays~\eqref{eq:footprint_lin_exp}.
+
+\subsubsection{Numerical setup}\label{subsubsec:num_setup_B}
+
+The structure is the plate of Section~\ref{subsubsec:num_setup_A} ($T_\rho=0$) of length $L_p$ with free edges, equations~\eqref{eq:structure_bcs}. It floats in a channel of depth $H=10~\si{\meter}$ with open water on both sides. The vertical ends of the channel carry the Sommerfeld condition with the open-water wavenumber $k_\mathrm{out}$, which is exact for the propagating wave only. The open water on each side has length $\max\{\lambda_\mathrm{out},6/\kappa_1\}$, with $\kappa_1$ the decay rate of the slowest evanescent mode in open water, so that the evanescent field reaching the ends is reduced by $\mathrm{e}^{-12}$. The element size is $h=\min\{\lambda_\mathrm{out},\lambda_p,4\ell_f\}/n$, with $\lambda_p$ the plate wavelength, $\ell_f$ the decay length of the flexural roots and $n$ the number of elements per wavelength. The plate edges and all attachment points lie on mesh nodes, and $p=3$.
+
+The columns of $\mathbf{G}_{B,h}$ are computed from one factorisation per frequency. A unit point force is applied at each attachment point through a massless spring, i.e.\ a resonator with $m_{\rho,r}=0$, whose equation $k_\rho(q-\eta(x_j))=F$ transmits exactly the force $F$ to the plate and which is inert when unloaded. Near the wet resonances of the free plate, which are sharp because plate waves are almost totally reflected at free edges when $\lambda_\mathrm{out}\ll\lambda_p$, a small shift of a resonance changes $G_B$ by a large fraction. Mesh and truncation changes of $\mathbf{G}_{B,h}$ are therefore expressed as an equivalent frequency shift,
+\begin{equation}\label{eq:num_freq_equivalent}
+    \delta\omega=\frac{\|\Delta\mathbf{G}_{B,h}\|}{\|\partial_\omega\mathbf{G}_{B,h}\|},
+\end{equation}
+with the derivative from central differences at $\omega(1\pm10^{-6})$.
+
+\subsubsection{Transfer compliance}\label{subsubsec:num_L2_1}
+
+\paragraph{Test description.} $\mathbf{G}_{B,h}$ is computed for $L_p=20~\si{\meter}$ at $25$ points: $20$ regular points at $x=0.5,1.5,\ldots,19.5~\si{\meter}$ and $5$ random points. The frequencies are $\omega\in\{2,5,9.8,10,10.2\}~\si{\radian\per\second}$, i.e.\ from $\lambda_p\approx L_p$ down to $\lambda_p\approx L_p/9$. The meshes have $n\in\{4,8,16\}$, plus $n=32$ at $\omega\in\{2,5\}$. The open-water length is varied between $4$, $6$ and $8$ decay lengths $1/\kappa_1$.
+
+\paragraph{Results.} Reciprocity, $\|\mathbf{G}_{B,h}-\mathbf{G}_{B,h}^{\mathsf T}\|/\|\mathbf{G}_{B,h}\|$, holds to between $10^{-14}$ and $1.7\times10^{-9}$ in all $42$ cases. The mirror symmetry of the regular block about the plate centre holds to $4\times10^{-9}$. These residuals grow with the number of unknowns as round-off does, so they confirm that the discrete problem with the Sommerfeld condition is complex-symmetric. On the two finest meshes the equivalent frequency shift~\eqref{eq:num_freq_equivalent} is $\delta\omega/\omega\le1.4\times10^{-5}$ at every frequency, at an observed order between $2.0$ and $2.7$. Increasing the open water from $6$ to $8$ decay lengths changes $\mathbf{G}_{B,h}$ by $\delta\omega/\omega\le1.8\times10^{-8}$, between $2\%$ and $10\%$ of the change from $4$ to $6$, consistent with the evanescent decay $\mathrm{e}^{-2\kappa_1\Delta}$. Figure~\ref{fig:num_L2_1} shows the diagonal $G_B(x,x)$. At $\omega=2~\si{\radian\per\second}$ the plate is short compared with the wavelength. The point compliance and the radiative width $\gamma_r=\operatorname{Im}G_B(x,x)$ are then nearly uniform, with an increase of the compliance within one metre of the free edges. At $\omega\simeq10~\si{\radian\per\second}$ both vary along the plate with the standing-wave pattern of the wet modes, and $\gamma_r$ changes by a factor of up to six between nodes and antinodes. A resonator on a finite structure therefore has a renormalised frequency and a radiative width that depend on its position, as stated in Section~\ref{sec:finite_domain}.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/L2_1_diagonal.png}
+    \caption{Diagonal of the transfer compliance of a free plate ($L_p=20~\si{\meter}$, $T_\rho=0$, $H=10~\si{\meter}$) in open water: point compliance $\operatorname{Re}G_B(x,x)$ (left) and radiative width $\gamma_r(x)=\operatorname{Im}G_B(x,x)$ (right), finite element with $p=3$ and $16$ elements per wavelength.}
+    \label{fig:num_L2_1}
+\end{figure*}
+
+\subsubsection{Woodbury equivalence}\label{subsubsec:num_L2_2}
+
+\paragraph{Test description.} Resonators are attached at the $20$ regular points of Section~\ref{subsubsec:num_L2_1}, and the plate is loaded by a point force at $x=7.25~\si{\meter}$. Three resonator sets are considered: identical resonators, random resonator frequencies, and graded resonator frequencies. The frequencies are $12$ values of $\omega$ in $[2,12]~\si{\radian\per\second}$, refined around $\omega_r=10~\si{\radian\per\second}$, with $n=8$. The plate deflections $\boldsymbol{\eta}_a$ and resonator displacements $\qvec$ of the monolithic solution, with the resonators as unknowns, are compared with the solution of equation~\eqref{eq:lat_woodbury}, with $\mathbf{G}_{B,h}$ and $\boldsymbol{\eta}_a^\mathrm{inc}$ from the bare model on the same mesh.
+
+\paragraph{Results.} The two solutions agree to between $9\times10^{-13}$ and $2.6\times10^{-10}$ (relative) in all $36$ cases, for both $\boldsymbol{\eta}_a$ and $\qvec$ (Figure~\ref{fig:num_L2_2}). This is the level of the reciprocity residual on the same systems, at most $8.9\times10^{-11}$, which is a pure round-off measure. Equation~\eqref{eq:lat_woodbury} is therefore an identity of the discrete model and not an approximation. Any resonator set can be evaluated from one bare factorisation and an $N\times N$ solve per frequency, which Sections~\ref{subsubsec:num_L2_4}--\ref{subsubsec:num_L2_6} use.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/L2_2_woodbury.png}
+    \caption{Woodbury equivalence for $20$ resonators on a free plate ($L_p=20~\si{\meter}$). Left: relative difference between the monolithic solution and equation~\eqref{eq:lat_woodbury} with the finite element transfer compliance, for the three resonator sets; dashed: tolerance $10^{-8}$. Right: plate deflection at the attachment points at $\omega=10~\si{\radian\per\second}$.}
+    \label{fig:num_L2_2}
+\end{figure*}
+
+\subsubsection{Wet resonance of a single resonator}\label{subsubsec:num_L2_3}
+
+\paragraph{Test description.} A lossless resonator with $\omega_r=0.5~\si{\radian\per\second}$ is attached to a membrane of length $50~\si{\meter}$ floating in water of depth $H=25~\si{\meter}$ ($\rho=1025~\si{\kilogram\per\meter\cubed}$). The attachment is at $x_1\in\{0,12.5,25\}~\si{\meter}$ from the edge, and the meshes have $64$, $128$ and $256$ elements per wavelength at $\omega_r$. Three estimates of the coupled resonance are compared:
+\begin{itemize}
+    \item the root $\tilde\omega$ of $\operatorname{Re}\bigl(1/\alpha(\omega)-G_B(x_1,x_1;\omega)\bigr)=0$, i.e.\ the renormalised resonance~\eqref{eq:renorm_single} with $G(0)$ replaced by $G_B(x_1,x_1)$;
+    \item the wet natural frequency $\omega_\mathrm{wet}$ of equation~\eqref{eq:eigWet} with $\operatorname{Re}\mathbf{A}$, from the fixed-point iteration of Section~\ref{subsec:algebraic_system};
+    \item the peak of the forced response.
+\end{itemize}
+The complex wet frequency with the full $\mathbf{A}(\omega)$ is also reported.
+
+\paragraph{Results.} The fixed-point iteration converges in three iterations in all cases. The resonance is lowered from $\omega_r$ by $1.4\times10^{-3}\,\omega_r$ at the edge and by $6.7\times10^{-4}\,\omega_r$ at $x_1=12.5$ and $25~\si{\meter}$ (Figure~\ref{fig:num_L2_3}). The forced-response peak agrees with $\tilde\omega$ to $3.6\times10^{-9}$. The mesh changes of $\tilde\omega$ and $\omega_\mathrm{wet}$ between the two finest meshes are $10^{-7}$ at the edge and at most $5.5\times10^{-5}$ elsewhere. The modal frequency lies below $\tilde\omega$ by $2.0\times10^{-5}$ to $4.1\times10^{-5}$ (relative). This is $0.7$ to $1.3$ half-widths of the resonance, given by the complex wet frequency, e.g.\ $0.499663-1.56\times10^{-5}\mathrm{i}~\si{\radian\per\second}$ at the centre. The difference does not decrease with the mesh, so it is not a discretisation error. It reflects the two definitions of an undamped resonance. Equation~\eqref{eq:eigWet} drops the radiation damping before the fluid and structure are condensed onto the resonator. $\tilde\omega$ drops it after this condensation, through $\operatorname{Re}G_B$. The two definitions agree to within a half-width of the resonance, i.e.\ to within its physical resolution, and they converge to each other as the radiation damping vanishes.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/L2_3_resonance.png}
+    \caption{Coupled resonance of a resonator ($\omega_r=0.5~\si{\radian\per\second}$) on a floating membrane of length $50~\si{\meter}$ against the attachment position. Line: root of $\operatorname{Re}(1/\alpha-G_B)=0$; triangles: wet modal analysis~\eqref{eq:eigWet}; crosses: peak of the forced response; dotted: $\omega_r$.}
+    \label{fig:num_L2_3}
+\end{figure}
+
+\subsubsection{Absorption by a single resonator on a finite structure}\label{subsubsec:num_L2_4}
+
+\paragraph{Test description.} A resonator with $m_{\rho,r}=0.01~\si{\meter\squared}$ and $\omega_r=10~\si{\radian\per\second}$ is attached to a free plate of length $L_p\in\{5,20\}~\si{\meter}$ at seven positions $x_1$, with a wave incident from the left. The positions are the centre, $L_p/4$, $L_p/8$, $0.25~\si{\meter}$ from the left edge, and the mirror images of the last three, which is equivalent to incidence from the right. For each position:
+\begin{enumerate}
+    \item the amplitudes $a^\pm$ radiated by a unit force at $x_1$ are fitted in the open water, and the bound~\eqref{eq:lat_absorbed_B} is evaluated at the renormalised resonance $\tilde\omega$;
+    \item the absorbed fraction $\mathcal{A}$ is computed from the Woodbury solution for $41$ damping ratios $\zeta\in[10^{-3},10^{-1}]$ and at critical coupling, $\gamma_d=\gamma_r$;
+    \item the monolithic model is solved at critical coupling, with $\mathcal{A}$ from the dashpot power.
+\end{enumerate}
+The meshes have $n=8$, and $n=16$ for $L_p=5~\si{\meter}$ and for two positions at $L_p=20~\si{\meter}$.
+
+\paragraph{Results.} The power radiated by a unit force, $\tfrac12\omega\gamma_r$, agrees with the open-water flux of the fitted $a^\pm$ to $1.2\times10^{-5}$ with $n=8$ and $2\times10^{-7}$ with $n=16$. This verifies $\gamma_r=\operatorname{Im}G_B(x_1,x_1)$ for a finite structure. The absorbed fraction at critical coupling equals the bound~\eqref{eq:lat_absorbed_B} to $1.8\times10^{-4}$ (relative) at every position. The maximum over the damping sweep reaches the bound to $8\times10^{-4}$, the resolution of the sweep (Figures~\ref{fig:num_L2_4} and~\ref{fig:num_L2_4_sweep}). The monolithic and Woodbury absorbed fractions agree to $5.5\times10^{-6}$. At the centre the bound is $\tfrac12$ to $6\times10^{-10}$, and the bounds for mirror positions add up to one to $7.5\times10^{-10}$, as reciprocity requires. Away from the centre the bound varies between $0.088$ and $0.912$ ($L_p=5~\si{\meter}$) and between $0.10$ and $0.90$ ($L_p=20~\si{\meter}$). At $x_1=L_p/8$ on the short plate a single critically damped resonator absorbs $91\%$ of the incident power. The critical damping ratio ranges from $0.003$ to $0.013$ and is proportional to $\gamma_r(x_1)$. The bound does not grow monotonically towards the edge: it follows the phase of the wet mode at $x_1$, i.e.\ the ratio of the waves that the attachment radiates to the two sides. A single resonator on a finite structure can thus absorb much more than one half of the incident power when it is placed where the structure radiates asymmetrically. This position is found from $G_B$ alone, without any resonator computation.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/L2_4_bound.png}
+    \caption{Absorption by a single resonator ($\omega_r=10~\si{\radian\per\second}$) on a free plate against the attachment position, for incidence from the left. Lines: bound~\eqref{eq:lat_absorbed_B} from the radiated amplitudes $a^\pm$; markers: maximum absorbed fraction of the finite element model over the damping ratio; dotted: $\tfrac12$.}
+    \label{fig:num_L2_4}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/L2_4_absorption.png}
+    \caption{Absorbed fraction at the renormalised resonance against the damping ratio for the attachment positions on the plate of length $L_p=20~\si{\meter}$; dotted: critical damping, $\gamma_d=\gamma_r$.}
+    \label{fig:num_L2_4_sweep}
+\end{figure}
+
+% L2-5 (finite-size dilution, eq:mode_dilution) and L2-6 (graded arrays,
+% eq:footprint_lin_exp, eq:density_grade): see subsubsections below.
+\subsubsection{Finite-size cut-off of the fluid dilution}\label{subsubsec:num_L2_5}
+
+\paragraph{Test description.} Section~\ref{subsubsec:lat_long_wave} states that the finite length $L$ of a structure cuts off the divergence of the added mass at $k\sim\pi/L$. The attainable mass ratio is then $\mu_B\sim n_0m_{\rho,r}\pi\tanh(\pi H/L)/L$, so that the hybridisation decreases as $L^{-1/2}$ in deep water and as $L^{-1}$ in shallow water. The same mechanism underlies the estimate~\eqref{eq:mode_dilution}. The test uses free plates of length $L\in\{2.3,4.6,11.5,23,46\}~\si{\meter}$ in water of depth $H\in\{3,10,30\}~\si{\meter}$, except $L=46~\si{\meter}$ at $H=30~\si{\meter}$. The procedure for each case is:
+\begin{enumerate}
+    \item compute the first elastic wet mode of the bare plate, with frequency $\omega_1$ and shape $\phi$, from equation~\eqref{eq:eigWet};
+    \item tune $N=L/a$ lossless resonators with spacing $a\simeq1~\si{\meter}$, at $x_i=(i-\tfrac12)a$, to $\omega_1$, with fixed loading $n_0m_{\rho,r}=0.01~\si{\meter}$;
+    \item compute the two hybridised wet modes $\omega_\mp$ from equation~\eqref{eq:eigWet}, which gives the splitting $\Delta=(\omega_+-\omega_-)/\omega_1$.
+\end{enumerate}
+$\Delta$ is compared with three estimates:
+\begin{itemize}
+    \item the two-mode value $\sqrt{\mu_\mathrm{mode}}$, with $\mu_\mathrm{mode}=m_{\rho,r}\sum_i\phi(x_i)^2/\phi^{\mathsf T}(\mathbf{M}_\eta+\operatorname{Re}\mathbf{A}(\omega_1))\phi$, i.e.\ the mass ratio with the wet modal mass of the bare mode;
+    \item the single-mode Galerkin solution with the frequency-dependent modal added mass $\phi^{\mathsf T}\operatorname{Re}\mathbf{A}(\omega)\phi$;
+    \item the estimate $\sqrt{\mu_B}$, and the local mass ratio~\eqref{eq:lat_mu} at the modal wavenumber $k_1=\beta_1/L$, $\beta_1=4.730$.
+\end{itemize}
+The meshes have $n=16$, and $n=32$ for $L\le11.5~\si{\meter}$ at $H=10~\si{\meter}$.
+
+\paragraph{Results.} The single-mode Galerkin solution reproduces the finite element splitting to $2.2\times10^{-3}$ in all cases, and to $6\times10^{-4}$ for $N\ge5$ (Figure~\ref{fig:num_L2_5}). The two hybridised modes therefore arise from the bare wet mode alone. The constant-mass value $\sqrt{\mu_\mathrm{mode}}$ agrees with $\Delta$ to between $1\%$ and $6.5\%$; the difference is the dispersion of the modal added mass between $\omega_-$ and $\omega_+$. The mesh changes of $\Delta$ are at most $7.8\times10^{-4}$, and $4\times10^{-6}$ at $L=11.5~\si{\meter}$. In deep water ($H=30~\si{\meter}$, $N\ge5$) $\Delta$ decreases as $L^{-0.54}$, which confirms the predicted exponent $-\tfrac12$. In shallow water ($H=3~\si{\meter}$) the local slope steepens from $-0.59$ (between $L=4.6$ and $23~\si{\meter}$) to $-0.79$ (between $23$ and $46~\si{\meter}$), towards $-1$ as $L/(\pi H)$ grows. At $L=2.3~\si{\meter}$ the two resonators lie close to the nodes of the free--free mode, at $0.22L$ and $0.78L$, so that $\Delta$ is small. $\sqrt{\mu_\mathrm{mode}}$ captures this sampling effect, but no continuum estimate can. The prefactor of the estimate is less accurate than its exponent. For $N\ge5$, $\sqrt{\mu_B}$ underestimates $\Delta$ by a factor of $1.7$--$1.8$ in deep and intermediate water and by $1.8$--$2.8$ at $H=3~\si{\meter}$. The local value at $k_1=\beta_1/L$ underestimates it by $1.4$--$1.5$ ($H\ge10~\si{\meter}$). Most of the remaining factor is the wet modal added mass of the free plate, which is smaller than the added mass $M_{f,\rho}(k_1,H)$ of a plane wave of the same wavenumber. Near the free edges, the fluid can flow round the plate.
+
+These results also bear on the three-dimensional estimate~\eqref{eq:mode_dilution}. Its wavenumber cut-off and its scaling are confirmed in the vertical section. Its absolute value should be read with a prefactor of order $1.5$, which the wet modal mass of the bare structure provides exactly. The ratio $\mu_{10}/\mu_{01}$ compares two modes of the same structure, so it depends on this prefactor only through its variation between the two modes.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/L2_5_splitting.png}
+    \caption{Splitting of the first elastic wet mode of a free plate by a tuned resonator population ($n_0m_{\rho,r}=0.01~\si{\meter}$, $a\simeq1~\si{\meter}$) against the plate length. Markers: finite element, equation~\eqref{eq:eigWet}; solid: two-mode value $\sqrt{\mu_\mathrm{mode}}$ with the wet modal mass of the bare mode; dashed: estimate $\sqrt{\mu_B}$ of Section~\ref{subsubsec:lat_long_wave}.}
+    \label{fig:num_L2_5}
+\end{figure}
+%%L2-6-PLACEHOLDER%%
 }

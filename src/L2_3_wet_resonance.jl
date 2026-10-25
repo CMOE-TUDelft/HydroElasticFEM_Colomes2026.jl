@@ -136,7 +136,11 @@ function wet_matrices(p, ω::Real; xs=[p.x1], resonators=[resonator(p)])
     M = (S1 - S2) ./ (3ω^2)                        # S(ω) = K − ω²M
     K = S1 + ω^2 .* M
     Aff = lu(b1.A[b1.f, b1.f])
-    Fs = Matrix(b1.A[b1.s, b1.f]) * (Aff \ Matrix(b1.A[b1.f, b1.s]))
+    Asf, Afs = b1.A[b1.s, b1.f], b1.A[b1.f, b1.s]
+    Fs = zeros(eltype(b1.A), length(b1.s), length(b1.s))
+    for c in Iterators.partition(1:length(b1.s), 64)   # column blocks: no dense n_f × n_s array
+        Fs[:, c] = Asf * (Aff \ Matrix(Afs[:, c]))
+    end
     Aadd = Fs ./ ω^2                               # −A_sf A_ff⁻¹ A_fs = −ω² A
     # HydroElasticFEM assembles the resonator rows dimensionally (×ρ) and the plate rows per unit ρ:
     # scale each resonator row so that its coupling to η equals the transposed column (symmetric

@@ -182,7 +182,7 @@ function radiation_state(ω, H, g; amplitude::Real=1e-3)
 end
 
 """
-    build(p; ω=p.ω, ω_mesh=ω, xs, resonators, incident=0.0)
+    build(p; ω=p.ω, ω_mesh=ω, xs, resonators, incident=0.0, zones=nothing)
 
 Assemble the configuration-B problem with one `ResonatorArray` entry per point
 `xs` (plate coordinates): `resonators[i]` (a `ResonatorSpec`; mass 0 for a
@@ -191,11 +191,13 @@ The mesh is sized at `ω_mesh` (default ω), so that a frequency sweep can use o
 With `incident` > 0 a regular wave of that amplitude enters through the left
 wall (Sommerfeld condition with incident traction, as HydroElasticFEM's
 floating-beam example); its load vector is returned as `b`.
+`zones(x0)`, if given, returns the plate's `StructuralDampingZone`s for the
+plate offset x0 (absolute coordinates; sponges of L2-6).
 Returns the matrix, the free index of every resonator DOF, the trial space,
 the field map, the mesh data and the plate offset.
 """
 function build(p; ω::Real=p.ω, ω_mesh::Real=ω, xs::AbstractVector{<:Real}, resonators::AbstractVector{ResonatorSpec},
-               incident::Real=0.0)
+               incident::Real=0.0, zones=nothing)
     length(xs) == length(resonators) || throw(DimensionMismatch("one resonator per point"))
     ms = mesh_size(p, ω_mesh)
     # plate edges on mesh nodes: an integer number of elements on the plate and in each open-water
@@ -230,7 +232,8 @@ function build(p; ω::Real=p.ω, ω_mesh::Real=ω, xs::AbstractVector{<:Real}, r
     fluid = P.PotentialFlow(g=p.g, ρw=p.ρ, sea_state=state, boundary_conditions=bcs, fe=fe(), space_domain_symbol=:Ω)
     fs = P.FreeSurface(ρw=p.ρ, g=p.g, βₕ=p.βₕ, fe=fe(), space_domain_symbol=:Γκ)
     plate = P.TensionedEulerBernoulliBeam(L=p.Lp, mᵨ=p.m_ρ, EIᵨ=p.C_ρ, Tᵨ=p.T_ρ, g=p.g, symbol=:η,
-                                          fe=fe(γ=p.γ_penalty), space_domain_symbol=:Γs)
+                                          fe=fe(γ=p.γ_penalty), space_domain_symbol=:Γs,
+                                          damping_zones=zones === nothing ? P.StructuralDampingZone[] : zones(x0))
     ents = P.PhysicsParameters[fluid, fs, plate]
     N > 0 && push!(ents, P.resonator_array(N, [r.m_ρ * p.ρ for r in resonators], [r.k_ρ * p.ρ for r in resonators],
                                            [r.c_ρ * p.ρ for r in resonators];

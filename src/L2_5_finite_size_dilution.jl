@@ -50,7 +50,7 @@ module L2_5
 
 using Gridap
 using Parameters
-using LinearAlgebra: eigen, Symmetric, dot, norm
+using LinearAlgebra: eigen, Symmetric, dot, norm, lu
 using ..References: ResonatorSpec, added_mass
 import ..L2_1
 import ..L2_3
@@ -86,7 +86,7 @@ export L2_5_Params, VARIABLE, fixed_hash, run_case
     ratio_elements::Int = 20
     γ_penalty::Float64 = 6.0
     βₕ::Float64 = 0.5
-    tol::Float64 = 1e-10
+    tol::Float64 = 1e-8                   # fixed point (relative ω); F(ω) has ~1e-9 round-off
     n_shape::Int = 81                     # samples along the plate to classify mode shapes
 end
 
@@ -124,7 +124,8 @@ end
 "Frozen-ω generalised eigenproblem of eq:eigWet (Re A) for attachment points `xs`."
 function frozen(q, ω; xs=Float64[], rs=ResonatorSpec[])
     W = L2_3.wet_matrices(q, ω; xs=xs, resonators=rs)
-    W.asym < 1e-10 || error("wet matrices not symmetric ($(W.asym))")
+    # round-off of M = (S(ω) − S(2ω))/3ω² grows as ‖K‖/(ω²‖M‖) (≲ 3e-8 here); unscaled resonator rows give O(1)
+    W.asym < 1e-6 || error("wet matrices not symmetric ($(W.asym))")
     e = eigen(Symmetric(real(W.K)), Symmetric(real(W.M + real(W.Aadd))))
     return (W=W, λ=e.values, V=e.vectors)
 end
@@ -132,29 +133,46 @@ end
 mac(u, v) = abs2(dot(u, v)) / (dot(u, u) * dot(v, v))
 
 """
-    bare_mode(p, q)
+    fixed_point(step, ω0; tol, maxiter)
 
-First elastic wet mode of the bare plate: fixed point of eq:eigWet, at each
-step the lowest mode with two sign changes (heave and pitch have zero and one).
+Fixed point ω = F(ω) of eq:eigWet, F(ω) the tracked eigenfrequency of the frozen
+problem at ω (`step(ω)` returns it and updates the tracked mode), accelerated by
+the secant method on F(ω) − ω (≈ 4 frozen solves instead of ≈ 10).
 """
-function bare_mode(q; maxiter=40)
-    ω = q.ω_mesh
-    v = nothing
-    local F, j
+function fixed_point(step, ω0; tol, maxiter=30)
+    ωa = ω0
+    ga = step(ωa) - ωa
+    ωb = ωa + ga
     for _ in 1:maxiter
-        F = frozen(q, ω)
-        if v === nothing
-            j = findfirst(i -> F.λ[i] > 0 && sign_changes(shape(q, F.W, F.V[:, i])) == 2, eachindex(F.λ))
-        else
-            j = argmax([mac(F.V[:, i], v) for i in eachindex(F.λ)])
-        end
-        v = F.V[:, j]
-        ωn = sqrt(F.λ[j])
-        conv = abs(ωn - ω) <= q.tol * ω
-        ω = ωn
-        conv && break
+        gb = step(ωb) - ωb
+        abs(gb) <= tol * ωb && return ωb + gb
+        # secant step; plain fixed-point step when the secant did not reduce |F(ω) − ω|
+        # (F carries round-off of ~1e-9 relative, see `frozen`)
+        ωn = abs(gb) < abs(ga) ? ωb - gb * (ωb - ωa) / (gb - ga) : ωb + gb
+        (ωa, ga, ωb) = (ωb, gb, ωn)
     end
-    return (omega=ω, v=v, W=F.W)
+    error("eq:eigWet fixed point not converged from ω₀ = $(ω0)")
+end
+
+"""
+    bare_mode(q)
+
+First elastic wet mode of the bare plate: fixed point of eq:eigWet, starting
+from the lowest frozen mode with two sign changes (heave and pitch have zero
+and one), tracked by MAC.
+"""
+function bare_mode(q)
+    F = frozen(q, q.ω_mesh)
+    j = findfirst(i -> F.λ[i] > 0 && sign_changes(shape(q, F.W, F.V[:, i])) == 2, eachindex(F.λ))
+    v, W, ωW = F.V[:, j], F.W, q.ω_mesh
+    function step(ω)
+        G = frozen(q, ω)
+        k = argmax([mac(G.V[:, i], v) for i in eachindex(G.λ)])
+        v, W, ωW = G.V[:, k], G.W, ω
+        return sqrt(G.λ[k])
+    end
+    ω = fixed_point(step, sqrt(F.λ[j]); tol=q.tol)
+    return (omega=ω, v=v, W=W, omega_W=ωW)       # W assembled at omega_W (within tol of omega)
 end
 
 """
@@ -164,7 +182,7 @@ The two hybridised wet modes: at ω₁ the two eigenvectors of largest projectio
 on the bare mode φ (one below, one above ω₁), then the fixed point of each with
 MAC tracking.
 """
-function hybrid_modes(q, ω1, φ, xs, rs; maxiter=40)
+function hybrid_modes(q, ω1, φ, xs, rs)
     F = frozen(q, ω1; xs=xs, rs=rs)
     nη = F.W.nη
     Mη = real(F.W.M + real(F.W.Aadd))[1:nη, 1:nη]
@@ -172,21 +190,31 @@ function hybrid_modes(q, ω1, φ, xs, rs; maxiter=40)
     below = [i for i in eachindex(F.λ) if 0 < F.λ[i] < ω1^2]
     above = [i for i in eachindex(F.λ) if F.λ[i] > ω1^2]
     starts = (below[argmax(proj[below])], above[argmax(proj[above])])
-    out = Float64[]
-    for j0 in starts
-        v, ω = F.V[:, j0], sqrt(F.λ[j0])
-        for _ in 1:maxiter
+    out = map(starts) do j0
+        v = F.V[:, j0]
+        function step(ω)
             G = frozen(q, ω; xs=xs, rs=rs)
-            j = argmax([mac(G.V[:, i], v) for i in eachindex(G.λ)])
-            v = G.V[:, j]
-            ωn = sqrt(G.λ[j])
-            conv = abs(ωn - ω) <= q.tol * ω
-            ω = ωn
-            conv && break
+            k = argmax([mac(G.V[:, i], v) for i in eachindex(G.λ)])
+            v = G.V[:, k]
+            return sqrt(G.λ[k])
         end
-        push!(out, ω)
+        fixed_point(step, sqrt(F.λ[j0]); tol=q.tol)
     end
     return (minus=out[1], plus=out[2], proj_minus=proj[starts[1]], proj_plus=proj[starts[2]])
+end
+
+"""
+    modal_mass(q, φ, ω)
+
+m_φ(ω) = φᵀ(M_η + Re A(ω))φ of the bare plate with one fluid solve:
+φᵀA_sf A_ff⁻¹ A_fs φ/ω² (the full matrix A(ω) needs one solve per structural unknown).
+"""
+function modal_mass(q, φ, ω)
+    b1 = L2_3.blocks(q, ω; xs=Float64[], resonators=ResonatorSpec[])
+    b2 = L2_3.blocks(q, 2ω; xs=Float64[], resonators=ResonatorSpec[])
+    Mφ = real(dot(φ, (b1.A[b1.s, b1.s] - b2.A[b2.s, b2.s]) * φ)) / (3ω^2)
+    Aφ = real(transpose(φ) * (b1.A[b1.s, b1.f] * (lu(b1.A[b1.f, b1.f]) \ (b1.A[b1.f, b1.s] * ComplexF64.(φ))))) / ω^2
+    return Mφ + Aφ
 end
 
 """
@@ -215,7 +243,7 @@ function run_case(p::L2_5_Params)
     μ_mode = mr * sum(abs2, φx) / Mφ
     Kφ = dot(φ, real(bm.W.K)[1:nη, 1:nη] * φ)
     meff = mr * sum(abs2, φx)
-    mφ(ω) = (W = L2_3.wet_matrices(q, ω; xs=Float64[], resonators=ResonatorSpec[]); dot(φ, real(W.M + real(W.Aadd))[1:nη, 1:nη] * φ))
+    mφ(ω) = modal_mass(q, φ, ω)
     galerkin(ω) = Kφ - ω^2 * mφ(ω) - ω^2 * meff * ω1^2 / (ω1^2 - ω^2)
     gm = secant_root(galerkin, hm.minus, hm.minus * (1 + 1e-3); xtol=1e-9)
     gp = secant_root(galerkin, hm.plus, hm.plus * (1 - 1e-3); xtol=1e-9)
@@ -227,7 +255,8 @@ function run_case(p::L2_5_Params)
         "omega_1" => ω1, "omega_minus" => hm.minus, "omega_plus" => hm.plus,
         "split" => (hm.plus - hm.minus) / ω1, "sqrt_mu_mode" => sqrt(μ_mode),
         "split_galerkin" => (gp.root - gm.root) / ω1, "galerkin_converged" => gm.converged && gp.converged,
-        "modal_mass_ratio" => (mφ(hm.minus) - mφ(hm.plus)) / Mφ, "sqrt_mu_local" => sqrt(μ_local),
+        "modal_mass_ratio" => (mφ(hm.minus) - mφ(hm.plus)) / Mφ,
+        "modal_mass_check" => abs(mφ(bm.omega_W) / Mφ - 1), "sqrt_mu_local" => sqrt(μ_local),
         "sqrt_mu_B" => sqrt(μ_B), "N" => N, "a" => a, "proj_minus" => hm.proj_minus, "proj_plus" => hm.proj_plus,
         "omega_estimate" => q.ω_mesh, "ndofs" => bm.W.ndofs, "element_size" => bm.W.he,
     )
