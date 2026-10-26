@@ -1,21 +1,26 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %================================================
-% Numerical results: verification of the monolithic FE formulation against the
-% Green-function theory of Section \ref{sec:discrete_lattice}, configuration A,
-% vertical section (tests L1-1, L1-2, L1-3 of the verification test matrix).
-% Source: HydroElasticFEM_xxx2026.jl (L1-1: commit 1ea6a27, L1-2: c87174c,
-% L1-3: 2026-10-16; L1-3b, L1-4, L1-5, L1-6, L1-8: commits dff545a, b7965bb,
-% 50b6643, 1cf39c4, 2026-10-23), records data/sims/L1-*, figures plots/L1-*.
-% Figures expected in figures/L1_*.png.
+% Numerical results (Sec. 6). Structure (plan 2026-10-22, Sec. 4):
+%   6.1 Verification: infinite structure, single resonator   L1-1..L1-3 (condensed), L1-3b
+%   6.2 Floating line lattices                               L1-4, L1-5, L1-6, L1-7 (pending), L1-8
+%   6.3 Finite structures in open water                      L2-1/L2-2 (summary), L2-3, L2-4, L2-5
+%   6.4 Graded arrays                                        L2-6
+%   6.5 Three-dimensional fluid with a plate                 L3-1..L3-3, L4-4, L4-8 (pending)
+%   App. C (appendix_verification.tex): L1-1/L1-2/L1-3 convergence, L2-1/L2-2 residuals, L0-3
+% Source: HydroElasticFEM_xxx2026.jl (L1-1: 1ea6a27, L1-2: c87174c, L1-3: 2026-10-16;
+% L1-3b..L1-8: dff545a, b7965bb, 50b6643, 1cf39c4; L2-1..L2-6: ac8d7bd, 6465248, 046889b),
+% records data/sims/<id>, figures plots/<id> -> figures/L*_*.png.
 %================================================
 \section{Numerical Results}\label{sec:numerical_results}
 
 The formulation of Section~\ref{sec:numerical_formulation} is implemented in the Julia package HydroElasticFEM.jl, built on the Gridap finite element library \cite{badia2020gridap,verdugo2022software}, following \cite{colomes2023monolithic,agarwal2024dynamic}. The weak forms are written almost verbatim in Gridap's high-level syntax, which supports integration on entities of four different dimensions: the fluid cells $\Omega_h$, the surface facets $\Gfh$ and $\Gmh$ (on which the elevation spaces are traces of the fluid mesh), the structural skeleton $\Lmh$ of the C/DG terms, and the attachment points $\xvec_i$, where Dirac measures evaluate $\eta_h$ and $u_h$. The resonator amplitudes are global scalar unknowns of the multi-field space $\mathcal{X}_h$. The frequency-domain system \eqref{eq:algebraic_system} is solved with a sparse direct solver, with one factorisation per frequency.
 
 {\color{red}
-\subsection{Verification against the Green-function theory: infinite structure in the vertical section}\label{subsec:num_verification_A}
+The results are organised as follows. Section~\ref{subsec:num_verification_A} verifies the formulation against the exact Green-function theory for an infinite structure with a single resonator. Section~\ref{subsec:num_lattices} compares it with the lattice sums and the multiple-scattering solution for floating line lattices; this settles the main contrast of Section~\ref{sec:discrete_lattice} between the homogenised and the discrete models. Section~\ref{subsec:num_configB} treats finite structures in open water, and Section~\ref{subsec:num_graded} graded arrays on a long plate. Section~\ref{subsec:num_3D} extends the analysis to a three-dimensional fluid. Convergence studies and identities that hold to round-off are collected in Appendix~\ref{app:verification}. Each test is reported in the same way: the \emph{Test description} gives the configuration and the reference, and the \emph{Results} give the errors against their tolerances.
 
-The finite element formulation of Section~\ref{sec:numerical_formulation} is verified here against the exact results of Section~\ref{sec:discrete_lattice} for an infinite structure, configuration~A, in the vertical section. The bare host is characterised by its symbol $\mathcal{D}_0$, equation~\eqref{eq:host_symbol}, and by the Green function~\eqref{eq:lat_green_1d}; a single resonator enters only through the combination $1/\alpha-G(0)$ of equation~\eqref{eq:single_force}. The verification therefore proceeds in three steps, each relying on the previous one: (i) the discrete propagating wavenumber and the discrete Green function of the bare host (Section~\ref{subsubsec:num_L1_1}); (ii) the radiative width $\gamma_r$ and the energy flux, which normalise every reflection, transmission and absorption coefficient computed from finite element wave amplitudes (Section~\ref{subsubsec:num_L1_2}); and (iii) the scattering by a single resonator, including the renormalised resonance, the half-power bandwidth and critical coupling (Section~\ref{subsubsec:num_L1_3}).
+\subsection{Verification: infinite structure and single resonator}\label{subsec:num_verification_A}
+
+The finite element formulation of Section~\ref{sec:numerical_formulation} is first verified against the exact results of Section~\ref{sec:discrete_lattice} for an infinite structure, configuration~A, in the vertical section. The bare host is characterised by its symbol $\mathcal{D}_0$, equation~\eqref{eq:host_symbol}, and by the Green function~\eqref{eq:lat_green_1d}. A single resonator enters only through the combination $1/\alpha-G(0)$ of equation~\eqref{eq:single_force}. The verification has three steps: (i) the discrete wavenumber, the Green function, the radiative width and the energy flux of the bare host (Section~\ref{subsubsec:num_L1_1}); (ii) the scattering by a single resonator, including the renormalised resonance, the half-power bandwidth and critical coupling (Section~\ref{subsubsec:num_L1_3}); and (iii) the optimal damping across frequency (Section~\ref{subsubsec:num_L1_3b}). The convergence studies are given in Appendix~\ref{app:verification}.
 
 \subsubsection{Numerical setup}\label{subsubsec:num_setup_A}
 
@@ -79,27 +84,24 @@ where $[x_a,x_b]$ is the probe window, $x_\mathrm{ref}$ the source or resonator 
 
 The C/DG plate discretisation converges at order $p-1$ in the energy norm, so that smooth functionals of the solution, such as the wavenumber, the radiated amplitude or the resonance frequency, are expected to converge at order $2(p-1)$. A test is passed when the error on the finest mesh is below $10^{-3}$ for every quantity, and, for $p=2$, when the observed order is at least $2(p-1)-0.3=1.7$. For $p=3$ the errors on the finest meshes reach values between round-off and $10^{-6}$, at which the observed order is no longer a meaningful measure of the discretisation; it is reported but not used as a criterion.
 
-\subsubsection{Bare host: dispersion and Green function}\label{subsubsec:num_L1_1}
+\subsubsection{Bare host: dispersion, Green function and energy flux}\label{subsubsec:num_L1_1}
 
-\paragraph{Test description.} A patch force $F$ is applied at the centre of the channel without resonators, and three quantities are compared with the theory: (i) the discrete propagating wavenumber $k_h$, fitted on both sides of the source, against the root $k_0$ of equation~\eqref{eq:host_symbol}; (ii) the radiative width obtained from the radiated amplitude $A$, $\gamma_h=A/(\mathrm{i}F\operatorname{sinc}(k_0b/2))$, against $\gamma_r=\operatorname{Im}G(0)=1/\mathcal{D}_0'(k_0)$, equation~\eqref{eq:lat_green_1d}; and (iii) the near field between the patch edge and one wavelength from the source, after subtraction of the waves returning from the sponges, against $FG_b(x)$, equation~\eqref{eq:num_patch_green}, with real and imaginary parts compared separately. The real part of $G$ sets the renormalised resonance of a resonator, equation~\eqref{eq:renorm_single}, and the imaginary part its radiation, equation~\eqref{eq:ImG}. The test is performed first at $\omega=10~\si{\radian\per\second}$ ($T_\rho=0$) on a wide range of meshes, and then for $30$ frequencies logarithmically spaced in $[0.3,15]~\si{\radian\per\second}$ and both pre-tensions. In the frequency sweep only the far-field quantities (i) and (ii) are considered: at low frequency the element size, about $10~\si{\meter}$ at $\omega=0.3~\si{\radian\per\second}$, is much larger than the decay lengths of the near field, which do not scale with the wavelength.
+\paragraph{Test description.} A patch force $F$ is applied at the centre of the channel without resonators. Three quantities are compared with the theory: (i) the discrete propagating wavenumber $k_h$, fitted on both sides of the source, against the root $k_0$ of equation~\eqref{eq:host_symbol}; (ii) the radiative width from the radiated amplitude $A$, $\gamma_h=A/(\mathrm{i}F\operatorname{sinc}(k_0b/2))$, against $\gamma_r=\operatorname{Im}G(0)=1/\mathcal{D}_0'(k_0)$, equation~\eqref{eq:lat_green_1d}; and (iii) the near field between the patch edge and one wavelength from the source, after subtraction of the waves returning from the sponges, against $FG_b(x)$, equation~\eqref{eq:num_patch_green}, with real and imaginary parts compared separately. The real part of $G$ sets the renormalised resonance of a resonator, equation~\eqref{eq:renorm_single}, and the imaginary part its radiation, equation~\eqref{eq:ImG}. The test is run at $\omega=10~\si{\radian\per\second}$ ($T_\rho=0$) on the mesh ladder. The far-field quantities (i) and (ii) are also computed for $30$ frequencies in $[0.3,15]~\si{\radian\per\second}$ and both pre-tensions. Finally, $\gamma_r$ is obtained in two further ways at $\omega\in\{2,5,10\}~\si{\radian\per\second}$: from the average response over the source patch, and from the balance between the work of the load and the net energy flux~\eqref{eq:energy_flux} (Appendix~\ref{app:ver_L1_2}).
 
-\paragraph{Results.} Table~\ref{tab:num_L1_1} and Figure~\ref{fig:num_L1_1_convergence} show the convergence at $\omega=10~\si{\radian\per\second}$. With $p=2$ all four quantities converge at order $2.0$ from $10$ elements per wavelength on, with the wavenumber about four times more accurate than the radiated amplitude and the near field. With five elements per wavelength the solution is not yet in the asymptotic range: the radiative width is in error by $28\%$. With $p=3$ the errors are three to five orders of magnitude smaller at equal mesh size and fall below $10^{-6}$ with $40$ elements per wavelength, where the real part of the near field and the radiative width level off at about $10^{-6}$ and $2.5\times10^{-7}$, respectively. The frequency sweep (Figures~\ref{fig:num_L1_1_sweep_k} and~\ref{fig:num_L1_1_sweep_gamma}) confirms this picture over the whole range: with $p=2$ the observed order of the wavenumber error is close to $4$ at low frequency, where the bending term is negligible and the wave is essentially a long gravity wave under an inertial plate, and decreases to the order $2$ of the C/DG bending discretisation above $\omega\approx3~\si{\radian\per\second}$, where bending controls the dispersion. The errors increase with frequency and are smaller with pre-tension; on the finest meshes they remain below $1.0\times10^{-4}$ (wavenumber) and $4.1\times10^{-4}$ (radiative width) for $p=2$, and below $2.5\times10^{-8}$ and $7\times10^{-7}$ for $p=3$. At $\omega\le1~\si{\radian\per\second}$ the sponges reflect all the incident energy, and the extraction of the amplitudes, which is exact under reflection, still gives errors between $10^{-10}$ and $10^{-6}$.
+\paragraph{Results.} Table~\ref{tab:num_L1_1} gives the errors at $\omega=10~\si{\radian\per\second}$. With $p=2$ all four quantities converge at order $2.0$, to errors below $5.7\times10^{-4}$ with $80$ elements per wavelength. With $p=3$ the errors are three to five orders of magnitude smaller at equal mesh size, and below $1.1\times10^{-6}$ with $40$ elements per wavelength. Over the frequency sweep the errors on the finest meshes stay below $1.0\times10^{-4}$ (wavenumber) and $4.1\times10^{-4}$ (radiative width) for $p=2$, and below $2.5\times10^{-8}$ and $7\times10^{-7}$ for $p=3$ (Appendix~\ref{app:ver_L1_1}). The three measures of $\gamma_r$ agree with each other and with $1/\mathcal{D}_0'(k_0)$ to $4.1\times10^{-4}$ ($p=2$) and $3.3\times10^{-7}$ ($p=3$). The work done by the load therefore equals the flux of the radiated waves: equation~\eqref{eq:energy_flux}, derived from the Green function, is the energy flux of the discrete coupled system. It normalises every reflection, transmission and absorption coefficient below.
 
 \begin{table}[t]
     \centering
-    \caption{Bare host at $\omega=10~\si{\radian\per\second}$, $T_\rho=0$: relative errors of the discrete wavenumber, of the radiative width obtained from the far field, and of the real and imaginary parts of the near field, against $k_0$, $\gamma_r=1/\mathcal{D}_0'(k_0)$ and $FG_b(x)$.}
+    \caption{Bare host at $\omega=10~\si{\radian\per\second}$, $T_\rho=0$: relative errors of the discrete wavenumber, of the radiative width obtained from the far field, and of the real and imaginary parts of the near field, against $k_0$, $\gamma_r=1/\mathcal{D}_0'(k_0)$ and $FG_b(x)$. Coarser meshes and the convergence plots are in Appendix~\ref{app:ver_L1_1}.}
     \label{tab:num_L1_1}
     \footnotesize
     \begin{tabular}{rrrcccc}
         \hline
         $p$ & $n_\lambda$ & DOFs & $k_h$ & $\gamma_h$ & $\operatorname{Re}\widehat{\eta}_h$ & $\operatorname{Im}\widehat{\eta}_h$ \\
         \hline
-        2 & 5  & 6\,480   & $6.3\times10^{-3}$ & $2.8\times10^{-1}$ & $8.2\times10^{-2}$ & $1.5\times10^{-1}$ \\
-        2 & 10 & 19\,368  & $6.2\times10^{-3}$ & $2.3\times10^{-2}$ & $3.0\times10^{-2}$ & $3.5\times10^{-2}$ \\
         2 & 20 & 67\,662  & $1.5\times10^{-3}$ & $6.4\times10^{-3}$ & $8.0\times10^{-3}$ & $9.2\times10^{-3}$ \\
         2 & 40 & 251\,238 & $3.9\times10^{-4}$ & $1.6\times10^{-3}$ & $2.1\times10^{-3}$ & $2.3\times10^{-3}$ \\
         2 & 80 & 966\,150 & $9.7\times10^{-5}$ & $4.1\times10^{-4}$ & $5.2\times10^{-4}$ & $5.7\times10^{-4}$ \\
-        3 & 5  & 13\,961  & $5.2\times10^{-4}$ & $7.4\times10^{-3}$ & $2.8\times10^{-3}$ & $2.5\times10^{-3}$ \\
         3 & 10 & 42\,350  & $9.0\times10^{-6}$ & $8.3\times10^{-5}$ & $1.7\times10^{-4}$ & $6.2\times10^{-5}$ \\
         3 & 20 & 149\,792 & $4.9\times10^{-7}$ & $7.2\times10^{-6}$ & $1.2\times10^{-5}$ & $3.4\times10^{-6}$ \\
         3 & 40 & 560\,396 & $4.3\times10^{-9}$ & $2.5\times10^{-7}$ & $1.1\times10^{-6}$ & $2.9\times10^{-7}$ \\
@@ -107,92 +109,15 @@ The C/DG plate discretisation converges at order $p-1$ in the energy norm, so th
     \end{tabular}
 \end{table}
 
-\begin{figure}[t]
-    \centering
-    \begin{subfigure}{0.49\linewidth}
-        \includegraphics[width=\linewidth]{figures/L1_1_convergence_p2.png}
-        \caption{$p=2$}
-    \end{subfigure}
-    \begin{subfigure}{0.49\linewidth}
-        \includegraphics[width=\linewidth]{figures/L1_1_convergence_p3.png}
-        \caption{$p=3$}
-    \end{subfigure}
-    \caption{Bare host at $\omega=10~\si{\radian\per\second}$, $T_\rho=0$: relative errors against the number of elements per wavelength. Dashed: order $2(p-1)$.}
-    \label{fig:num_L1_1_convergence}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=\linewidth]{figures/L1_1_sweep_k.png}
-    \caption{Discrete wavenumber over the frequency range, $T_\rho=0$ (left) and $T_\rho=9.8~\si{\meter\cubed\per\second\squared}$ (right). Top: relative error $|k_h/k_0-1|$ for $p=2$ (black) and $p=3$ (blue) on three meshes (dotted, dashed, solid from coarse to fine). Bottom: observed order between the two finest meshes; dashed lines at $2(p-1)$.}
-    \label{fig:num_L1_1_sweep_k}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=\linewidth]{figures/L1_1_sweep_gamma.png}
-    \caption{Radiative width from the far field over the frequency range; layout as in Figure~\ref{fig:num_L1_1_sweep_k}.}
-    \label{fig:num_L1_1_sweep_gamma}
-\end{figure}
-
-\subsubsection{Radiative width and energy flux}\label{subsubsec:num_L1_2}
-
-\paragraph{Test description.} The radiative width $\gamma_r=\operatorname{Im}G(0)$ controls the critical damping and the absorption of every resonator configuration (Section~\ref{subsubsec:energy_flux_single}), and the energy flux~\eqref{eq:energy_flux} normalises the reflection, transmission and absorption coefficients. Both are verified by computing $\gamma_r$ in three independent ways from the same finite element solution of the bare host forced by the patch:
-\begin{enumerate}
-    \item \emph{far field}: from the radiated amplitudes, as in Section~\ref{subsubsec:num_L1_1};
-    \item \emph{source patch}: in the non-dissipative case $\operatorname{Im}G(x)=\cos(k_0x)/\mathcal{D}_0'(k_0)$ for all $x$, equation~\eqref{eq:lat_green_1d}, so that the average of the patch response over the patch is $\operatorname{Im}\langle G_b\rangle=\operatorname{sinc}^2(k_0b/2)/\mathcal{D}_0'(k_0)$; the finite element average $\langle\widehat{\eta}_h\rangle$, computed by Gauss quadrature on the two patch elements and corrected for the waves returning from the sponges, gives $\gamma_h=\operatorname{Im}\langle\widehat{\eta}_h\rangle/(F\operatorname{sinc}^2(k_0b/2))$;
-    \item \emph{work--flux balance}: the work done by the load, $P=\tfrac12\omega\operatorname{Im}(\overline{F}\langle\widehat{\eta}_h\rangle)$, which is equation~\eqref{eq:point_power} for a distributed load, is compared with the net flux $\tfrac14\omega\mathcal{D}_0'(k_0)\sum(|A_\mathrm{out}|^2-|A_\mathrm{in}|^2)$ through both probe windows, equation~\eqref{eq:energy_flux}; the error is $|P/P_\mathrm{flux}-1|$.
-\end{enumerate}
-The test is performed at $\omega\in\{2,5,10\}~\si{\radian\per\second}$ for both pre-tensions.
-
-\paragraph{Results.} The three measures agree with each other and with $\gamma_r$ for all cases (Table~\ref{tab:num_L1_2} and Figure~\ref{fig:num_L1_2}). With $p=2$ they converge at order $2.0$ (observed orders $1.98$--$2.26$) to errors between $2.5\times10^{-6}$ and $4.1\times10^{-4}$ with $80$ elements per wavelength. The errors increase with frequency, as the bending term becomes dominant, and are two to eight times smaller with pre-tension. With $p=3$ all errors are below $3.3\times10^{-7}$ with $40$ elements per wavelength; at $\omega=10~\si{\radian\per\second}$ they reach the same level of $2$--$3\times10^{-7}$ found for the far field in Section~\ref{subsubsec:num_L1_1}. That the work done by the load equals the flux of the radiated waves to this accuracy confirms that equation~\eqref{eq:energy_flux}, derived from the Green function, is the energy flux of the discrete coupled fluid--structure system, and therefore that the reflection, transmission and absorption coefficients of Section~\ref{subsubsec:num_L1_3} are correctly normalised.
-
-\begin{table}[t]
-    \centering
-    \caption{Radiative width: exact value $\gamma_r=1/\mathcal{D}_0'(k_0)$ (density-normalised symbol) and relative errors of the three finite element measures on the finest mesh ($n_\lambda=80$ for $p=2$, $40$ for $p=3$). $T_\rho$ in \si{\meter\cubed\per\second\squared}, $\omega$ in \si{\radian\per\second}.}
-    \label{tab:num_L1_2}
-    \footnotesize
-    \begin{tabular}{rrcrccc}
-        \hline
-        $T_\rho$ & $\omega$ & $\gamma_r$ & $p$ & far field & source patch & work--flux \\
-        \hline
-        0   & 2  & 0.0415 & 2 & $5.9\times10^{-6}$ & $5.9\times10^{-6}$ & $5.9\times10^{-6}$ \\
-            &    &        & 3 & $4.8\times10^{-9}$ & $4.8\times10^{-9}$ & $1.4\times10^{-9}$ \\
-        0   & 5  & 0.0534 & 2 & $3.8\times10^{-4}$ & $3.8\times10^{-4}$ & $3.8\times10^{-4}$ \\
-            &    &        & 3 & $1.6\times10^{-7}$ & $4.9\times10^{-8}$ & $5.7\times10^{-8}$ \\
-        0   & 10 & 0.0186 & 2 & $4.1\times10^{-4}$ & $4.1\times10^{-4}$ & $4.1\times10^{-4}$ \\
-            &    &        & 3 & $2.5\times10^{-7}$ & $2.1\times10^{-7}$ & $2.6\times10^{-7}$ \\
-        9.8 & 2  & 0.0263 & 2 & $2.5\times10^{-6}$ & $2.5\times10^{-6}$ & $2.6\times10^{-6}$ \\
-            &    &        & 3 & $1.4\times10^{-8}$ & $1.3\times10^{-8}$ & $2.4\times10^{-9}$ \\
-        9.8 & 5  & 0.0224 & 2 & $4.9\times10^{-5}$ & $4.8\times10^{-5}$ & $4.9\times10^{-5}$ \\
-            &    &        & 3 & $1.4\times10^{-7}$ & $9.9\times10^{-8}$ & $2.1\times10^{-9}$ \\
-        9.8 & 10 & 0.0127 & 2 & $1.3\times10^{-4}$ & $1.3\times10^{-4}$ & $1.3\times10^{-4}$ \\
-            &    &        & 3 & $3.1\times10^{-7}$ & $3.2\times10^{-7}$ & $2.8\times10^{-7}$ \\
-        \hline
-    \end{tabular}
-\end{table}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=\linewidth]{figures/L1_2_convergence_p2.png}\\
-    \includegraphics[width=\linewidth]{figures/L1_2_convergence_p3.png}
-    \caption{Radiative width from the far field, from the source patch and from the work--flux balance, for $p=2$ (top) and $p=3$ (bottom); colour: frequency, marker: pre-tension. Dashed: order $2(p-1)$.}
-    \label{fig:num_L1_2}
-\end{figure}
-
 \subsubsection{Single resonator}\label{subsubsec:num_L1_3}
 
 \paragraph{Test description.} One resonator ($m_{\rho,r}=0.01~\si{\meter\squared}$, $\omega_r=10~\si{\radian\per\second}$) is attached to the plate four and a half wavelengths downstream of the source, between two probe windows of three wavelengths placed one wavelength from it on either side (Figure~\ref{fig:num_channel_A}). The mesh is sized with the wavelength at $\omega_r$, so that all frequencies of a case are computed on the same mesh. The resonator is placed either on a mesh node or at the midpoint of an element, which tests the point evaluations $\widehat{\eta}(\mathbf{x}_i)$, $u(\mathbf{x}_i)$ of the resonator terms in equation~\eqref{eq:Bilinear_freq}. The dashpot is $c_r=0$ (lossless) or $c_r=c_\mathrm{crit}$, the value that gives critical coupling, $\gamma_d=\gamma_r$, equation~\eqref{eq:critical_coupling}, at the renormalised resonance of the undamped resonator; this corresponds to $\zeta=0.0093$ ($T_\rho=0$) and $0.0064$ ($T_\rho=9.8~\si{\meter\cubed\per\second\squared}$), equation~\eqref{eq:zeta_opt}.
 
-Equation~\eqref{eq:single_force} states that the resonator force is $F_1=\widehat{\eta}_f(x_1)/(1/\alpha-G(0))$, where $\widehat{\eta}_f(x_1)$ is the field of the bare structure at the attachment point. In the computational setting $\widehat{\eta}_f$ contains, besides the incident wave of amplitude $A^+$ and the wave $B^-$ returning from the downstream sponge, the tail of the near field of the source, $E=FG_{b,\mathrm{near}}(x_1-x_s)$, where $G_{b,\mathrm{near}}$ denotes equation~\eqref{eq:num_patch_green} without the propagating term. Although small, about $2\times10^{-3}$ of the incident wave for the slowest evanescent mode at a distance of $10~\si{\meter}$, this contribution must be included: treating the incident wave as the only drive introduces a phase error of the same size in $\mathcal{R}$, which shifts the computed resonance by an amount proportional to the resonance width ($-1.8\times10^{-5}$ in relative terms for $T_\rho=0$) and independent of the mesh. The coefficients are therefore obtained as follows. The exact near fields of the source and of the resonator, $FG_{b,\mathrm{near}}(x-x_s)$ and $F_1G_\mathrm{near}(x-x_1)$ with $F_1=\omega^2m_{\rho,r}q_1$ from the computed resonator motion, are subtracted from the probe samples, which are then fitted by the two propagating waves of equation~\eqref{eq:num_wave_fit} only, with the discrete wavenumber measured on the bare plate. The resonator radiates the same amplitude $S$ to both sides, $S=B^+-A^+=A^--B^-$, so that
-\begin{equation}\label{eq:num_point_scattering}
-    \mathcal{R}=\frac{S}{A^++B^-+E},\qquad \mathcal{T}=1+\mathcal{R},\qquad \mathcal{A}=1-|\mathcal{R}|^2-|\mathcal{T}|^2,
-\end{equation}
-in agreement with equations~\eqref{eq:lat_RT} and~\eqref{eq:lat_energy_1d} for one resonator. The two estimates of $S$ agree to better than $10^{-6}$ relative, which provides an independent consistency check.
+The coefficients are extracted from probe samples from which the exact near fields of the source and of the resonator have been subtracted. The resonator force is $F_1=\omega^2m_{\rho,r}q_1$, from the computed resonator motion, and the drive $\widehat{\eta}_f(x_1)$ includes the tail of the near field of the source (Appendix~\ref{app:ver_L1_3}). The resulting $\mathcal{R}$, $\mathcal{T}=1+\mathcal{R}$ and $\mathcal{A}=1-|\mathcal{R}|^2-|\mathcal{T}|^2$, equation~\eqref{eq:num_point_scattering}, are compared with equations~\eqref{eq:lat_RT} and~\eqref{eq:lat_energy_1d} for one resonator.
 
 Since $\mathcal{R}=\mathrm{i}\gamma_r/(x-\mathrm{i}\Gamma)$, with $\Gamma=\gamma_r+\gamma_d$, holds for the discrete system with its own discrete Green function, $1/\mathcal{R}=-(\Gamma+\mathrm{i}x)/\gamma_r$ is a smooth function of frequency. The renormalised resonance $\widetilde{\omega}_r$, where the detuning vanishes, equation~\eqref{eq:renorm_single}, is the root of $\operatorname{Im}(1/\mathcal{R})$, and the half-power frequencies, where $x=\pm\Gamma$, are the roots of $\operatorname{Im}(1/\mathcal{R})\mp\operatorname{Re}(1/\mathcal{R})$. These roots are computed by secant iteration on finite element solutions (13 to 16 solutions per case) and compared with the same roots of the exact single-resonator solution, equation~\eqref{eq:single_force}, with the same resonator. In addition, $\mathcal{R}(\widetilde{\omega}_r)=-1$ and $\mathcal{T}(\widetilde{\omega}_r)=0$ are checked for the lossless resonator, and $\mathcal{A}(\widetilde{\omega}_r)=\tfrac12$ at critical coupling, equation~\eqref{eq:lat_absorbed_1d}. Finally, the response curves are computed at $41$ frequencies in $\omega_r(1\pm5/Q_\mathrm{rad})$, with $Q_\mathrm{rad}=\mathcal{D}_0'(k_0)/(\omega_r^2m_{\rho,r})=53.7$ ($T_\rho=0$) and $78.7$ ($T_\rho=9.8~\si{\meter\cubed\per\second\squared}$), for $c_r/c_\mathrm{crit}\in\{0,\tfrac12,1,2\}$, with $p=3$ and ten elements per wavelength.
 
-\paragraph{Results.} The renormalised resonance of the lossless resonator is $\widetilde{\omega}_r=10.0234~\si{\radian\per\second}$ for $T_\rho=0$ and $9.9889~\si{\radian\per\second}$ for $T_\rho=9.8~\si{\meter\cubed\per\second\squared}$, i.e.\ shifted from $\omega_r$ by $+0.23\%$ and $-0.11\%$ by the point compliance $\operatorname{Re}G(0)$ of the floating plate, whose sign changes with the pre-tension. Table~\ref{tab:num_L1_3} and Figure~\ref{fig:num_L1_3_convergence} show that the finite element reproduces this shift and the resonance bandwidth to high accuracy. With $p=2$ the relative errors of $\widetilde{\omega}_r$ and of the bandwidth converge at order $1.8$--$2.1$, to $5$--$7\times10^{-6}$ and $4\times10^{-5}$--$4\times10^{-4}$, respectively, with $80$ elements per wavelength, for both attachments and both dashpots. With $p=3$ and the resonator on a node, $\widetilde{\omega}_r$ is reproduced to $3\times10^{-11}$--$3\times10^{-9}$ and the bandwidth to $10^{-9}$--$4\times10^{-8}$. With the resonator at the midpoint of an element, the $p=3$ errors are larger, $0.7$--$1.8\times10^{-6}$ for $\widetilde{\omega}_r$, and converge at order $\approx3$: a point load inside an element reduces the regularity of the discrete solution within that element. At resonance, $|\mathcal{R}+1|$ is below $10^{-7}$ for the lossless resonator, and at critical coupling the absorbed fraction is $\tfrac12$ to within $10^{-7}$ ($2\times10^{-8}$ with $p=3$); the $p=3$ value is the difference between $\tfrac12$ and the exact $\mathcal{A}(\widetilde{\omega}_r)$, since $c_\mathrm{crit}$ is defined at the resonance of the undamped resonator. The resonator motion satisfies $q_1/\widehat{\eta}_1=k_{\rho,r}^\omega/(k_{\rho,r}^\omega-\omega^2m_{\rho,r})$, equation~\eqref{eq:resonator_motion}, to round-off.
+\paragraph{Results.} The renormalised resonance of the lossless resonator is $\widetilde{\omega}_r=10.0234~\si{\radian\per\second}$ for $T_\rho=0$ and $9.9889~\si{\radian\per\second}$ for $T_\rho=9.8~\si{\meter\cubed\per\second\squared}$, i.e.\ shifted from $\omega_r$ by $+0.23\%$ and $-0.11\%$ by the point compliance $\operatorname{Re}G(0)$ of the floating plate, whose sign changes with the pre-tension. Table~\ref{tab:num_L1_3} (convergence plots in Appendix~\ref{app:ver_L1_3}) shows that the finite element reproduces this shift and the resonance bandwidth to high accuracy. With $p=2$ the relative errors of $\widetilde{\omega}_r$ and of the bandwidth converge at order $1.8$--$2.1$, to $5$--$7\times10^{-6}$ and $4\times10^{-5}$--$4\times10^{-4}$, respectively, with $80$ elements per wavelength, for both attachments and both dashpots. With $p=3$ and the resonator on a node, $\widetilde{\omega}_r$ is reproduced to $3\times10^{-11}$--$3\times10^{-9}$ and the bandwidth to $10^{-9}$--$4\times10^{-8}$. With the resonator at the midpoint of an element, the $p=3$ errors are larger, $0.7$--$1.8\times10^{-6}$ for $\widetilde{\omega}_r$, and converge at order $\approx3$: a point load inside an element reduces the regularity of the discrete solution within that element. At resonance, $|\mathcal{R}+1|$ is below $10^{-7}$ for the lossless resonator, and at critical coupling the absorbed fraction is $\tfrac12$ to within $10^{-7}$ ($2\times10^{-8}$ with $p=3$); the $p=3$ value is the difference between $\tfrac12$ and the exact $\mathcal{A}(\widetilde{\omega}_r)$, since $c_\mathrm{crit}$ is defined at the resonance of the undamped resonator. The resonator motion satisfies $q_1/\widehat{\eta}_1=k_{\rho,r}^\omega/(k_{\rho,r}^\omega-\omega^2m_{\rho,r})$, equation~\eqref{eq:resonator_motion}, to round-off.
 
 The response curves of Figure~\ref{fig:num_L1_3_curves} lie on the exact ones for all dashpots. Total reflection occurs at $\widetilde{\omega}_r$ for the lossless resonator; the absorbed fraction reaches its bound of one half only at critical coupling, and the absorption peak broadens and decreases for $c_r=2c_\mathrm{crit}$, as predicted by equation~\eqref{eq:lat_absorbed_1d}. The computed half-power bandwidths, $\Delta\omega/\widetilde{\omega}_r=0.0186$ and $0.0373$ for $T_\rho=0$ and $0.0127$ and $0.0255$ for $T_\rho=9.8~\si{\meter\cubed\per\second\squared}$ (lossless and critically damped), agree within $0.3\%$ with the estimate $(1+c_r/c_\mathrm{crit})/Q_\mathrm{rad}$, i.e.\ $2/Q_\mathrm{rad}$ at critical coupling.
 
@@ -223,14 +148,6 @@ The response curves of Figure~\ref{fig:num_L1_3_curves} lie on the exact ones fo
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=\linewidth]{figures/L1_3_convergence_p2.png}\\
-    \includegraphics[width=\linewidth]{figures/L1_3_convergence_p3.png}
-    \caption{Single resonator: relative errors of the renormalised resonance, of the half-power bandwidth and of the peak response against the number of elements per wavelength, for $p=2$ (top) and $p=3$ (bottom); colour: dashpot and attachment, marker: pre-tension. Dashed: order $2(p-1)$.}
-    \label{fig:num_L1_3_convergence}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
     \includegraphics[width=\linewidth]{figures/L1_3_response_curves.png}
     \caption{Single resonator: reflection coefficient $|\mathcal{R}|$ (top) and absorbed fraction $\mathcal{A}$ (bottom) for $T_\rho=0$ (left) and $T_\rho=9.8~\si{\meter\cubed\per\second\squared}$ (right) and $c_r/c_\mathrm{crit}\in\{0,\tfrac12,1,2\}$. Lines: exact solution, equation~\eqref{eq:single_force}; markers: finite element ($p=3$, ten elements per wavelength). Dashed: bound $\mathcal{A}=\tfrac12$, equation~\eqref{eq:lat_absorbed_1d}.}
     \label{fig:num_L1_3_curves}
@@ -251,13 +168,9 @@ The response curves of Figure~\ref{fig:num_L1_3_curves} lie on the exact ones fo
 
 \subsubsection{Discussion}\label{subsubsec:num_discussion_A}
 
-The three tests show that the monolithic finite element formulation reproduces the Green-function theory of Section~\ref{sec:discrete_lattice} for an infinite floating structure, to an accuracy limited only by the discretisation. The propagating wavenumber, the radiated amplitude and the near field of the bare host converge at order $2(p-1)$, the order expected for smooth quantities with the C/DG treatment of the bending term, over a frequency range of almost two decades in which the host changes from a long gravity wave under an inertial plate to a bending-dominated flexural wave. With $p=2$, twenty elements per wavelength give errors below $1\%$ and forty below $0.25\%$; $p=3$ gives better accuracy with a quarter of the elements per wavelength ($10^{-4}$ with ten) and errors between $10^{-5}$ and $10^{-7}$ with twenty. The quadratic order of the bending discretisation is therefore the limiting factor for $p=2$, and $p=3$ is preferable whenever accurate near fields or resonance frequencies are required.
+The monolithic formulation reproduces the Green-function theory of Section~\ref{sec:discrete_lattice} for an infinite floating structure, to an accuracy limited only by the discretisation. Smooth quantities converge at order $2(p-1)$, the order of the C/DG bending discretisation, over almost two decades of frequency, in which the host changes from a long gravity wave under an inertial plate to a bending-dominated flexural wave. With $p=2$, twenty elements per wavelength give errors below $1\%$. With $p=3$, ten give $10^{-4}$ and twenty give $10^{-5}$--$10^{-7}$; $p=3$ is therefore preferable whenever accurate near fields or resonance frequencies are needed.
 
-The radiative width $\gamma_r$ obtained from the far field, from the force patch and from the balance between the work of the load and the energy flux of the radiated waves agree with $1/\mathcal{D}_0'(k_0)$ and with each other. This verifies, for the discrete coupled system, the two results on which the absorption analysis of Section~\ref{subsubsec:energy_flux_single} rests: that only the propagating root contributes to $\operatorname{Im}G(0)$, and that the energy flux of a flexural--gravity wave is $\tfrac14\omega\mathcal{D}_0'(k_0)|A|^2$, with the fluid kinetic energy contained in $\mathcal{D}_0'$.
-
-For a single resonator, the finite element reproduces the renormalisation of the resonance by the point compliance of the floating structure, $\operatorname{Re}G(0)$, the radiative and dissipative widths, total reflection at resonance and the absorption bound of one half at critical coupling. The accuracy of the resonance frequency, $10^{-5}$ with $p=2$ and $10^{-9}$ or better with $p=3$, is several orders of magnitude finer than the relative bandwidth $2/Q_\mathrm{rad}\approx0.03$, so that the resonance of a resonator coupled to the floating structure is resolved by the formulation without loss of accuracy at standard mesh resolutions. Attaching the resonator inside an element rather than at a node is admissible but reduces the convergence order with $p=3$; resonators are therefore best placed on mesh nodes.
-
-Two aspects of the computational setting deserve attention in applications of the formulation to unbounded structures. First, the evanescent fluid modes are not absorbed by sponge layers acting on the structure, and decay only over $1/\operatorname{Im}k_1\approx2H/\pi$; sources and scatterers must be kept at several decay lengths from the sponges and from each other, or their near fields must be accounted for explicitly, as in equation~\eqref{eq:num_point_scattering}. Second, sponge layers acting on bending do not absorb long waves; at low frequency the truncated domain behaves as a closed basin, and its length must be chosen away from the basin resonances. With these precautions the extraction of reflection, transmission and absorption from the finite element field is exact under any amount of reflection from the domain ends, and the verification extends from $\omega=0.3$ to $15~\si{\radian\per\second}$.
+For a single resonator, the finite element model reproduces the renormalisation of the resonance by the point compliance $\operatorname{Re}G(0)$, the radiative and dissipative widths, total reflection at resonance, the bound $\mathcal{A}=\tfrac12$ at critical coupling and the collapse of $\zeta_{\rm opt}$ at low frequency. The resonance frequency is resolved to $10^{-5}$ ($p=2$) and $10^{-9}$ or better ($p=3$), far below the relative bandwidth $2/Q_\mathrm{rad}\approx0.03$. A resonator inside an element lowers the $p=3$ order, so resonators are placed on mesh nodes. Two features of the truncated domain matter for unbounded structures. The evanescent fluid modes are not absorbed by sponges acting on the structure, so sources and scatterers are kept $5/\operatorname{Im}k_1$ from the sponges or their near fields are accounted for explicitly, as in equation~\eqref{eq:num_point_scattering}. Bending sponges are transparent to long waves, so the channel length is chosen away from the basin resonances. With these precautions the extraction of the coefficients is exact under any reflection from the domain ends, from $\omega=0.3$ to $15~\si{\radian\per\second}$.
 
 \subsection{Floating line lattices: finite arrays and band structure}\label{subsec:num_lattices}
 
@@ -353,9 +266,13 @@ The rate of this decrease is not set by a single Bloch wavenumber (Figure~\ref{f
     \label{fig:num_L1_8}
 \end{figure*}
 
+\subsubsection{Homogenised resonator field}\label{subsubsec:num_L1_7}
+
+\textbf{[PENDING L1-7, waits for the upstream \texttt{ResonatorField} of HydroElasticFEM.jl.] Test description: (i) finite element $k(\omega)$ of the homogenised floating plate against equation~\eqref{eq:omega_k_x_closed_form}; (i-b) a real root on one branch at every sampled $\omega\neq\omega_r$, i.e.\ no complete stop band (Section~\ref{subsubsec:fluid_dilution}); (ii) $\omega_{\Gamma}-\omega_r/\sqrt{1+\Pi_L}=O(\Pi_L^2)$ with the periodic cells of Section~\ref{subsubsec:num_setup_lattice}. Output: finite element markers on the figure of discrete and homogenised bands.}
+
 \subsubsection{Discussion}\label{subsubsec:num_discussion_lattice}
 
-The finite element model reproduces the band structure of the floating line lattice obtained from the lattice sums to $10^{-9}$ or better with $p=3$. The two models share no part of the solution: the lattice sums use the closed-form host symbol and Green function, the finite element model discretises the fluid in the whole depth, the C/DG plate and the point attachments, and sees the lattice only through the mesh. Their agreement therefore establishes, for the discrete hydroelastic lattice, the results of Section~\ref{sec:discrete_lattice} that the local effective-medium model cannot give. First, the complete stop band of a floating lattice is a discreteness effect: both of its edges are set by the attachment pattern, and the gap obtained by truncating the local branches at the zone boundary misplaces both edges and underestimates the width by a factor of $1.8$--$1.9$. Second, at fixed loading the gap vanishes as $a^4$ in the homogenisation limit, in contrast with the finite gap of a metaplate in vacuo. Third, the strength of the resonator--plate hybridisation is the fluid-diluted mass ratio $\sqrt{\mu(k_c)}$, independent of the depth beyond $k_cH\gtrsim1$, and is approached by the discrete lattice with a correction of order $\varepsilon_s^{4.5}$. The absence of a complete stop band in the homogenised model itself, Section~\ref{subsubsec:fluid_dilution}, is not tested here; it requires the homogenised resonator field in the finite element model.
+The finite element model reproduces the band structure of the floating line lattice obtained from the lattice sums to $10^{-9}$ or better with $p=3$. The two models share no part of the solution: the lattice sums use the closed-form host symbol and Green function, the finite element model discretises the fluid in the whole depth, the C/DG plate and the point attachments, and sees the lattice only through the mesh. Their agreement therefore establishes, for the discrete hydroelastic lattice, the results of Section~\ref{sec:discrete_lattice} that the local effective-medium model cannot give. First, the complete stop band of a floating lattice is a discreteness effect: both of its edges are set by the attachment pattern, and the gap obtained by truncating the local branches at the zone boundary misplaces both edges and underestimates the width by a factor of $1.8$--$1.9$. Second, at fixed loading the gap vanishes as $a^4$ in the homogenisation limit, in contrast with the finite gap of a metaplate in vacuo. Third, the strength of the resonator--plate hybridisation is the fluid-diluted mass ratio $\sqrt{\mu(k_c)}$, independent of the depth beyond $k_cH\gtrsim1$, and is approached by the discrete lattice with a correction of order $\varepsilon_s^{4.5}$. The absence of a complete stop band in the homogenised model itself, Section~\ref{subsubsec:fluid_dilution}, is tested in Section~\ref{subsubsec:num_L1_7} [pending].
 
 For finite arrays, the finite element model and the Foldy solution agree on reflection, transmission and absorption, with the energy balance satisfied by both. The decay of the transmission inside the stop band reveals that a floating lattice of finite depth has, besides the Bloch mode that continues the propagating branch, a weakly attenuated Bloch mode that continues the slowest evanescent fluid mode. Its attenuation, close to $\kappa_1\simeq\pi/(2H)$, bounds the attenuation per unit length of long arrays and is not affected by the resonators. A long floating array therefore cannot be made more opaque than the evanescent tunnelling through the fluid allows, which limits the use of equation~\eqref{eq:lat_decay} to estimating the transmission of short arrays or of arrays with spacing large compared with $H/\pi$.
 
@@ -363,7 +280,8 @@ On the numerical side, the Bloch-phased loading of periodic supercells provides 
 
 \subsection{Finite structures in open water}\label{subsec:num_configB}
 
-For a finite structure in open water, configuration~B, the Green function of the host is replaced by the transfer compliance $G_B$ of the bare structure (Section~\ref{sec:finite_domain}). It has no closed form, and the finite element model is the only way to obtain it. The tests of this section therefore verify the identities that relate the monolithic model to $G_B$: reciprocity, the Woodbury equivalence~\eqref{eq:lat_woodbury} and the absorption bound~\eqref{eq:lat_absorbed_B}. They also verify the wet modal analysis~\eqref{eq:eigWet} against the resonance condition written with $G_B$. They then use $G_B$ to test two predictions of the local model on finite structures: the mode dilution~\eqref{eq:mode_dilution} and the footprint of graded arrays~\eqref{eq:footprint_lin_exp}.
+For a finite structure in open water, configuration~B, the Green function of the host is replaced by the transfer compliance $G_B$ of the bare structure (Section~\ref{sec:finite_domain}). It has no closed form, and the finite element model is the only way to obtain it. The identities that relate the monolithic model to $G_B$, reciprocity and the Woodbury equivalence~\eqref{eq:lat_woodbury}, hold to round-off (Section~\ref{subsubsec:num_L2_1} and Appendix~\ref{app:ver_configB}). This section then uses $G_B$ to verify the wet modal analysis~\eqref{eq:eigWet} against the resonance condition written with $G_B$, to verify the absorption bound~\eqref{eq:lat_absorbed_B}, and to test the mode dilution~\eqref{eq:mode_dilution} on finite structures. Section~\ref{subsec:num_graded} applies the same machinery to graded arrays.
+
 
 \subsubsection{Numerical setup}\label{subsubsec:num_setup_B}
 
@@ -375,30 +293,17 @@ The columns of $\mathbf{G}_{B,h}$ are computed from one factorisation per freque
 \end{equation}
 with the derivative from central differences at $\omega(1\pm10^{-6})$.
 
-\subsubsection{Transfer compliance}\label{subsubsec:num_L2_1}
+\subsubsection{Transfer compliance and Woodbury equivalence}\label{subsubsec:num_L2_1}\label{subsubsec:num_L2_2}
 
-\paragraph{Test description.} $\mathbf{G}_{B,h}$ is computed for $L_p=20~\si{\meter}$ at $25$ points: $20$ regular points at $x=0.5,1.5,\ldots,19.5~\si{\meter}$ and $5$ random points. The frequencies are $\omega\in\{2,5,9.8,10,10.2\}~\si{\radian\per\second}$, i.e.\ from $\lambda_p\approx L_p$ down to $\lambda_p\approx L_p/9$. The meshes have $n\in\{4,8,16\}$, plus $n=32$ at $\omega\in\{2,5\}$. The open-water length is varied between $4$, $6$ and $8$ decay lengths $1/\kappa_1$.
+\paragraph{Test description.} $\mathbf{G}_{B,h}$ is computed for a free plate of length $L_p=20~\si{\meter}$ at $25$ points ($20$ regular points at $x=0.5,1.5,\ldots,19.5~\si{\meter}$ and $5$ random points) for $\omega\in\{2,5,9.8,10,10.2\}~\si{\radian\per\second}$, i.e.\ from $\lambda_p\approx L_p$ down to $\lambda_p\approx L_p/9$, with three meshes and three open-water lengths. With $20$ resonators at the regular points (identical, random and graded frequencies), the monolithic solution is compared with equation~\eqref{eq:lat_woodbury} at $12$ frequencies in $[2,12]~\si{\radian\per\second}$ (Appendix~\ref{app:ver_configB}).
 
-\paragraph{Results.} Reciprocity, $\|\mathbf{G}_{B,h}-\mathbf{G}_{B,h}^{\mathsf T}\|/\|\mathbf{G}_{B,h}\|$, holds to between $10^{-14}$ and $1.7\times10^{-9}$ in all $42$ cases. The mirror symmetry of the regular block about the plate centre holds to $4\times10^{-9}$. These residuals grow with the number of unknowns as round-off does, so they confirm that the discrete problem with the Sommerfeld condition is complex-symmetric. On the two finest meshes the equivalent frequency shift~\eqref{eq:num_freq_equivalent} is $\delta\omega/\omega\le1.4\times10^{-5}$ at every frequency, at an observed order between $2.0$ and $2.7$. Increasing the open water from $6$ to $8$ decay lengths changes $\mathbf{G}_{B,h}$ by $\delta\omega/\omega\le1.8\times10^{-8}$, between $2\%$ and $10\%$ of the change from $4$ to $6$, consistent with the evanescent decay $\mathrm{e}^{-2\kappa_1\Delta}$. Figure~\ref{fig:num_L2_1} shows the diagonal $G_B(x,x)$. At $\omega=2~\si{\radian\per\second}$ the plate is short compared with the wavelength. The point compliance and the radiative width $\gamma_r=\operatorname{Im}G_B(x,x)$ are then nearly uniform, with an increase of the compliance within one metre of the free edges. At $\omega\simeq10~\si{\radian\per\second}$ both vary along the plate with the standing-wave pattern of the wet modes, and $\gamma_r$ changes by a factor of up to six between nodes and antinodes. A resonator on a finite structure therefore has a renormalised frequency and a radiative width that depend on its position, as stated in Section~\ref{sec:finite_domain}.
+\paragraph{Results.} Reciprocity, $\|\mathbf{G}_{B,h}-\mathbf{G}_{B,h}^{\mathsf T}\|/\|\mathbf{G}_{B,h}\|$, holds to between $10^{-14}$ and $1.7\times10^{-9}$ in all $42$ cases, so the discrete problem with the Sommerfeld condition is complex-symmetric (Remark~\ref{rem:discrete_reciprocity}). On the two finest meshes the equivalent frequency shift~\eqref{eq:num_freq_equivalent} is $\delta\omega/\omega\le1.4\times10^{-5}$, and the open-water truncation contributes at most $1.8\times10^{-8}$. The Woodbury and monolithic solutions agree to between $9\times10^{-13}$ and $2.6\times10^{-10}$ in all $36$ cases, the level of round-off. Equation~\eqref{eq:lat_woodbury} is therefore an identity of the discrete model and not an approximation: any resonator set can be evaluated from one bare factorisation and an $N\times N$ solve per frequency, which Sections~\ref{subsubsec:num_L2_4}--\ref{subsec:num_graded} use. Figure~\ref{fig:num_L2_1} shows the diagonal $G_B(x,x)$. At $\omega=2~\si{\radian\per\second}$ the plate is short compared with the wavelength. The point compliance and the radiative width $\gamma_r=\operatorname{Im}G_B(x,x)$ are then nearly uniform, with an increase of the compliance within one metre of the free edges. At $\omega\simeq10~\si{\radian\per\second}$ both vary along the plate with the standing-wave pattern of the wet modes, and $\gamma_r$ changes by a factor of up to six between nodes and antinodes. A resonator on a finite structure therefore has a renormalised frequency and a radiative width that depend on its position, as stated in Section~\ref{sec:finite_domain}.
 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/L2_1_diagonal.png}
     \caption{Diagonal of the transfer compliance of a free plate ($L_p=20~\si{\meter}$, $T_\rho=0$, $H=10~\si{\meter}$) in open water: point compliance $\operatorname{Re}G_B(x,x)$ (left) and radiative width $\gamma_r(x)=\operatorname{Im}G_B(x,x)$ (right), finite element with $p=3$ and $16$ elements per wavelength.}
     \label{fig:num_L2_1}
-\end{figure*}
-
-\subsubsection{Woodbury equivalence}\label{subsubsec:num_L2_2}
-
-\paragraph{Test description.} Resonators are attached at the $20$ regular points of Section~\ref{subsubsec:num_L2_1}, and the plate is loaded by a point force at $x=7.25~\si{\meter}$. Three resonator sets are considered: identical resonators, random resonator frequencies, and graded resonator frequencies. The frequencies are $12$ values of $\omega$ in $[2,12]~\si{\radian\per\second}$, refined around $\omega_r=10~\si{\radian\per\second}$, with $n=8$. The plate deflections $\boldsymbol{\eta}_a$ and resonator displacements $\qvec$ of the monolithic solution, with the resonators as unknowns, are compared with the solution of equation~\eqref{eq:lat_woodbury}, with $\mathbf{G}_{B,h}$ and $\boldsymbol{\eta}_a^\mathrm{inc}$ from the bare model on the same mesh.
-
-\paragraph{Results.} The two solutions agree to between $9\times10^{-13}$ and $2.6\times10^{-10}$ (relative) in all $36$ cases, for both $\boldsymbol{\eta}_a$ and $\qvec$ (Figure~\ref{fig:num_L2_2}). This is the level of the reciprocity residual on the same systems, at most $8.9\times10^{-11}$, which is a pure round-off measure. Equation~\eqref{eq:lat_woodbury} is therefore an identity of the discrete model and not an approximation. Any resonator set can be evaluated from one bare factorisation and an $N\times N$ solve per frequency, which Sections~\ref{subsubsec:num_L2_4}--\ref{subsubsec:num_L2_6} use.
-
-\begin{figure*}[t]
-    \centering
-    \includegraphics[width=0.9\linewidth]{figures/L2_2_woodbury.png}
-    \caption{Woodbury equivalence for $20$ resonators on a free plate ($L_p=20~\si{\meter}$). Left: relative difference between the monolithic solution and equation~\eqref{eq:lat_woodbury} with the finite element transfer compliance, for the three resonator sets; dashed: tolerance $10^{-8}$. Right: plate deflection at the attachment points at $\omega=10~\si{\radian\per\second}$.}
-    \label{fig:num_L2_2}
 \end{figure*}
 
 \subsubsection{Wet resonance of a single resonator}\label{subsubsec:num_L2_3}
@@ -446,8 +351,6 @@ The meshes have $n=8$, and $n=16$ for $L_p=5~\si{\meter}$ and for two positions 
     \label{fig:num_L2_4_sweep}
 \end{figure}
 
-% L2-5 (finite-size dilution, eq:mode_dilution) and L2-6 (graded arrays,
-% eq:footprint_lin_exp, eq:density_grade): see subsubsections below.
 \subsubsection{Finite-size cut-off of the fluid dilution}\label{subsubsec:num_L2_5}
 
 \paragraph{Test description.} Section~\ref{subsubsec:lat_long_wave} states that the finite length $L$ of a structure cuts off the divergence of the added mass at $k\sim\pi/L$. The attainable mass ratio is then $\mu_B\sim n_0m_{\rho,r}\pi\tanh(\pi H/L)/L$, so that the hybridisation decreases as $L^{-1/2}$ in deep water and as $L^{-1}$ in shallow water. The same mechanism underlies the estimate~\eqref{eq:mode_dilution}. The test uses free plates of length $L\in\{2.3,4.6,11.5,23,46\}~\si{\meter}$ in water of depth $H\in\{3,10,30\}~\si{\meter}$, except $L=46~\si{\meter}$ at $H=30~\si{\meter}$. The procedure for each case is:
@@ -474,7 +377,8 @@ These results also bear on the three-dimensional estimate~\eqref{eq:mode_dilutio
     \caption{Splitting of the first elastic wet mode of a free plate by a tuned resonator population ($n_0m_{\rho,r}=0.01~\si{\meter}$, $a\simeq1~\si{\meter}$) against the plate length. Markers: finite element, equation~\eqref{eq:eigWet}; solid: two-mode value $\sqrt{\mu_\mathrm{mode}}$ with the wet modal mass of the bare mode; dashed: estimate $\sqrt{\mu_B}$ of Section~\ref{subsubsec:lat_long_wave}.}
     \label{fig:num_L2_5}
 \end{figure}
-\subsubsection{Graded arrays}\label{subsubsec:num_L2_6}
+
+\subsection{Graded arrays}\label{subsec:num_graded}\label{subsubsec:num_L2_6}
 
 \paragraph{Test description.} Section~\ref{sec:dispersion_relation} maps each frequency to the turning point $x^*(\omega)$ of the grading law, equations~\eqref{eq:x_star_linear} and~\eqref{eq:x_star_exp}, with the footprint~\eqref{eq:footprint_general}, and proposes the density taper~\eqref{eq:density_grade} to reduce the reflection at the entrance of an array. These are local estimates. The test checks them on a long floating plate ($T_\rho=0$, $H=10~\si{\meter}$) that carries the full discrete array. Incidence from open water is not suitable here: at the free edge of the plate $|R|>0.99$ at these frequencies, and almost no power enters the plate. The incident plate wave is instead generated by a point source on a bare lead-in, and viscous sponges of length $6\lambda_p$ absorb the waves at both ends of the plate. Their reflection is at most $1.4\times10^{-3}$. The amplitudes $A^\pm$ are fitted in two bare windows, $W_1$ upstream and $W_2$ downstream of the array. Since the left sponge re-reflects part of $R$ towards the array, the energy check uses the net plate-wave flux into the array, $(|A^+_1|^2-|A^-_1|^2-|A^+_2|^2+|A^-_2|^2)/|A^+_{1,0}|^2$, against the sum of the dashpot powers; this balance is exact. All arrays are evaluated with equation~\eqref{eq:lat_woodbury} from one factorisation per frequency, with the bare compliance at the attachment points assembled from an evaluation matrix. Two sets of arrays are computed:
 \begin{itemize}
@@ -511,4 +415,8 @@ The graded-array estimates should therefore be stated as follows. Equations~\eqr
     \caption{Reflection coefficient $|R|$ of exponential density tapers ($n=n_0e^{-x/L_g}$, solid) and of abrupt arrays with the same number of resonators (dashed) against frequency ($\omega_r=10~\si{\radian\per\second}$, $a=1~\si{\meter}$), for $L_g\in\{1,5,20,100\}\lambda$; left: $\zeta=0$, right: $\zeta=0.02$.}
     \label{fig:num_L2_6_density}
 \end{figure}
+
+\subsection{Three-dimensional fluid with a plate}\label{subsec:num_3D}
+
+\textbf{[PENDING Phase 4.] L3-1: bare plate under oblique incidence (port of VT3D-A); L3-2: point-resonator regularisation (port of VT3D-B, set P3, with the $C_\rho$ and attachment-location variants); L3-3: single resonator with quarter symmetry, $\sigma_\mathrm{abs}\le1/k_0$ and the optical theorem~\eqref{eq:lat_optical}; L4-4: anisotropic resonator island with the three-dimensional resonator field (Section~\ref{subsubsec:aniso_rays}); L4-8: forced response of a finite plate against equation~\eqref{eq:mode_dilution}, with the prefactor found in Section~\ref{subsubsec:num_L2_5}. Memory sizing: card L3-0.}
 }

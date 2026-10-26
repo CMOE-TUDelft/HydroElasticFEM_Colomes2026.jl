@@ -1,0 +1,293 @@
+%% 
+%% Copyright 2019-2020 Elsevier Ltd
+%% 
+%% This file is part of the 'CAS Bundle'
+%% --------------------------------------
+%% 
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%% 
+%% The list of all files belonging to the 'CAS Bundle' is
+%% given in the file `manifest.txt'.
+%% 
+%% Template article for cas-sc documentclass for 
+%% double column output.
+
+%\documentclass[a4paper,fleqn,longmktitle]{cas-sc}
+\documentclass[a4paper,fleqn,twocolum]{cas-sc}
+
+\usepackage[numbers]{natbib}
+% \usepackage[authoryear]{natbib}
+% \usepackage[authoryear,longnamesfirst]{natbib}
+
+
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{amsmath} 
+\usepackage{makecell}
+\usepackage{multirow}
+\usepackage{nomencl}
+\usepackage{etoolbox}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{lineno}
+\usepackage{multicol}
+
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{soul}
+
+\usepackage{mathrsfs}  
+\usepackage{esvect}
+\usepackage{amsfonts}
+\usepackage{cleveref}
+\usepackage{placeins}
+
+\usepackage{tikz}
+\usetikzlibrary{
+    arrows.meta,
+    calc,
+    decorations.pathmorphing,
+    positioning,
+    shapes.geometric
+}
+
+\modulolinenumbers[5]
+
+%%%Author definitions
+\def\tsc#1{\csdef{#1}{\textsc{\lowercase{#1}}\xspace}}
+\tsc{FEM}
+
+% \newcommand{\todo}[1]{\textcolor{red}{(??) #1}}
+\newcommand{\todo}[1]{\hl{(??) #1}}
+\newcommand{\ignore}[1]{}
+
+\renewcommand*{\figureautorefname}{Fig.}
+\renewcommand*{\equationautorefname}{Eq.}
+\renewcommand*{\sectionautorefname}{Section}
+\renewcommand*{\subsectionautorefname}{Section}
+\renewcommand*{\subsubsectionautorefname}{Section}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+\newtheorem{corollary}{Corollary}
+
+
+\def\Of{\Omega_{\mbox{\scriptsize f}}}
+\def\Gf{\Gamma_{\mbox{\scriptsize fs}}}
+\def\Gm{\Gamma_{\mbox{s}}}
+\def\Gin{\Gamma_{\mbox{\scriptsize in}}}
+\def\Gout{\Gamma_{\mbox{\scriptsize out}}}
+\def\Gb{\Gamma_{\mbox{\scriptsize b}}}
+\def\Gfh{\Gamma_{\mbox{\scriptsize fs,h}}}
+\def\Gmh{\Gamma_{\mbox{\scriptsize s,h}}}
+\def\Ginh{\Gamma_{\mbox{\scriptsize in,h}}}
+\def\Gouth{\Gamma_{\mbox{\scriptsize out,h}}}
+\def\Gbh{\Gamma_{\mbox{\scriptsize b,h}}}
+\def\Lm{\Lambda_{\mbox{\scriptsize m}}}
+\def\Lmh{\Lambda_{\mbox{\scriptsize s,h}}}
+\def\V{\mathcal{V}}
+\def\Q{\mathcal{Q}}
+\def\hatV{\hat{\V}}
+\def\VGf{\V_{\Gf}}
+\def\VGm{\V_{\Gm}}
+\def\uvec{\mathbf{u}}
+\def\nvec{\mathbf{n}}
+\def\xvec{\mathbf{x}}
+\def\qvec{\mathbf{q}}
+\def\Ekf{E_{\mbox{\scriptsize kin,flow}}}
+\def\Epf{E_{\mbox{\scriptsize pot,flow}}}
+\def\Eks{E_{\mbox{\scriptsize kin,str}}}
+\def\Ees{E_{\mbox{\scriptsize ela,str}}}
+\def\Eeb{E_{\mbox{\scriptsize bend,str}}}
+\def\Pds{P_{\mbox{\scriptsize str}}}
+\def\Ekr{E_{\mbox{\scriptsize kin,res}}}
+\def\Eer{E_{\mbox{\scriptsize ela,res}}}
+\def\Pdr{P_{\mbox{\scriptsize res}}}
+\def\Et{E_{\mbox{\scriptsize total}}}
+\def\Pt{P_{\mbox{\scriptsize total}}}
+\def\Eth{E_{\mbox{\scriptsize total,h}}}
+
+\def \utrps{\ensuremath \, \si{\radian \, s^{-1}}}
+\def \utm{\ensuremath \, \si{\meter}}
+\def \uthertz{\ensuremath \, \si{\hertz}}
+\def \utMPa{\ensuremath \, \si{\mega \pascal}}
+\def \utMN{\ensuremath \, \si{\mega \newton}}
+\def \utPa{\ensuremath \, \si{\pascal}}
+\def \utdensity{\ensuremath \, \si{\kilo \gram \per \meter \cubed}}
+\def \utkgbym{\ensuremath \, \si{\kilo \gram \per \meter}}
+\def \utmsq{\ensuremath \, \si{\meter \squared}}
+\def \uin{u_{\text{\scriptsize in}}}
+\def \uout{u_{\text{\scriptsize out}}}
+\def \thetavec{\boldsymbol{\theta}}
+
+
+
+% Uncomment and use as if needed
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newdefinition{rmk}{Remark}
+%\newproof{pf}{Proof}
+%\newproof{pot}{Proof of Theorem \ref{thm}}
+
+\begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+% Short title
+\shorttitle{LRMM on floating membrane}
+
+% Short author
+\shortauthors{Agarwal, Gómez, Colomés}
+
+% Main title of the paper
+\title[mode = title]{Locally resonant hydroelastic structures}                      
+% Title footnote mark
+% eg: \tnotemark[1]
+% \tnotemark[1,2]
+
+% Title footnote 1.
+% eg: \tnotetext[1]{Title footnote text}
+% \tnotetext[<tnote number>]{<tnote text>} 
+% \tnotetext[1]{This document is the results of the research
+   % project funded by the Dutch Research Council.}
+
+% \tnotetext[2]{The second title footnote which is a longer text matter
+%    to fill through the whole text width and overflow into
+%    another line in the footnotes area of the first page.}
+
+
+% First author
+%
+% Options: Use if required
+% eg: \author[1,3]{Author Name}[type=editor,
+%       style=chinese,
+%       auid=000,
+%       bioid=1,
+%       prefix=Sir,
+%       orcid=0000-0000-0000-0000,
+%       facebook=<facebook id>,
+%       twitter=<twitter id>,
+%       linkedin=<linkedin id>,
+%       gplus=<gplus id>]
+\author[1]{Shagun Agarwal}[
+    orcid=0000-0003-1922-4242]
+
+% Corresponding author indication
+\cormark[1]
+
+% Email id of the first author
+\ead{s.agarwal@tudelft.nl}
+
+%  Credit authorship
+\credit{Writing - Original Draft, Conceptualization, Methodology, Software, Formal analysis, Investigation, Visualization}
+
+
+% Second author
+\author[1]{Andrei B. Fărăgău}[
+    orcid=0000-0001-6397-1961]
+    
+\ead{a.b.faragau@tudelft.nl}
+\credit{Writing - Review \& Editing, Methodology}
+
+
+% Next author
+\author[1]{Oriol Colomés}[
+    orcid=0000-0002-5552-9695]
+    
+\ead{j.o.colomesgene@tudelft.nl}
+\credit{Writing - Review \& Editing, Conceptualization, Methodology, Software, Funding acquisition}
+
+
+% Address/affiliation
+\affiliation[1]{organization={Delft University of Technology},
+    addressline={Stevinweg 1}, 
+    city={Delft},    
+    postcode={2628 CN},     
+    country={The Netherlands}}
+
+
+% Corresponding author text
+\cortext[cor1]{Corresponding author}
+
+% Footnote text
+
+
+% Here goes the abstract
+\begin{abstract}
+Floating flexible plates with attached resonators couple water-wave radiation
+to the modes of the host structure and its local oscillators. We formulate
+this interaction using a monolithic finite-element model for linear potential
+flow coupled to a pre-tensioned plate and discrete mass--spring--damper
+resonators. We also derive a local effective-medium dispersion relation for
+spatially varying resonator populations. For identical lossless resonators,
+the homogeneous relation reduces to a quadratic equation in squared
+frequency, which gives two coupled dispersion branches. Deep- and shallow-water
+limits and frequency- and density-graded populations are examined, and the
+finite-element formulation is used to compute coupled modes of a finite plate.
+The effective-medium relation is local and relies on scale separation; it is
+not, by itself, a prediction of reflection, transmission, or absorption by a
+finite array. The analysis is restricted to linear waves and linear structural
+and resonator response.
+\end{abstract}
+
+% Use if graphical abstract is present
+% \begin{graphicalabstract}
+% \includegraphics{figs/grabs.pdf}
+% \end{graphicalabstract}
+
+% Research highlights
+% \input{skb_highlights}
+
+% Keywords
+% Each keyword is seperated by \sep
+\begin{keywords}
+Monolithic \sep FEM \sep Resonator \sep Floating membrane \sep Hydroelasticity
+\end{keywords}
+
+
+    
+
+\maketitle
+
+\linenumbers
+
+\input{introduction}
+\input{problem_setting}
+\input{dispersion_theory}
+\input{discrete_lattices}
+% \input{lrmm_content}
+% \input{lrmm_numerical.tex} % previous draft of Section 5
+\input{numerical_formulation}
+\input{numerical_results}
+\input{conclusions} % Sec. 7 Discussion, Sec. 8 Conclusions
+
+\printcredits
+
+\section{Acknowledgement}
+NWO grant
+
+\input{lrmm_appen_case1}
+\input{appendix_verification} % Appendix C
+
+
+%% Loading bibliography style file
+% \bibliographystyle{model1-num-names}
+% \bibliographystyle{cas-model2-names}
+\bibliographystyle{elsarticle-num}
+
+% Loading bibliography database
+\bibliography{mybib}
+
+\end{document}
+

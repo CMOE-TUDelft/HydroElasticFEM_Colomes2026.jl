@@ -1,0 +1,56 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%================================================
+% Sec. 7 Discussion and Sec. 8 Conclusions (WP 0.1 skeleton, 2026-10-26).
+% Outline from numerical_tests_plan_2026-10-22.md Sec. 4 and agent_handoff_2026-10-26.md Sec. 4.
+% Text in red until the final pass; [TODO] items are to be written once Sec. 6.2 (L1-7)
+% and Sec. 6.5 (3D) have landed.
+%================================================
+{\color{red}
+\section{Discussion}\label{sec:discussion}
+
+\subsection{Validity of the local theory}\label{subsec:disc_validity}
+% Control parameters: eps_s = d/lambda, Pi_L, mu(k_c). Evidence: L1-6, L1-7, L1-8, L2-6.
+\textbf{[TODO]} The local effective-medium model of Section~\ref{sec:dispersion_relation} is controlled by three parameters: the scale separation $\varepsilon_s$, the near-field loading $\Pi_L$ and the fluid-diluted mass ratio $\mu(k_c)$. The finite element results show where it holds and where it fails:
+\begin{itemize}
+    \item the hybridisation at $k_c$ is $\sqrt{\mu(k_c)}$, reached by the discrete lattice with a correction of order $\varepsilon_s^{4.5}$ (Section~\ref{subsubsec:num_L1_8});
+    \item the complete stop band is a discreteness effect, of width $\propto a^4$ at fixed loading, which the local model cannot give (Sections~\ref{subsubsec:num_L1_5}--\ref{subsubsec:num_L1_6}); the homogenised model has no complete stop band (Section~\ref{subsubsec:num_L1_7}, pending);
+    \item for graded arrays the turning point $x^*$ is confirmed, but the width of the absorption zone is set by the damping and broadened by the depletion of the wave, not by $\sqrt{\mu}$ (Section~\ref{subsec:num_graded}). The paragraph after equation~\eqref{eq:footprint_lin_exp} is to be reworded accordingly;
+    \item the size law of finite structures holds in its exponents, $-\tfrac12$ in deep water and towards $-1$ in shallow water, but $\sqrt{\mu_B}$ underestimates the splitting by a factor $1.7$--$1.8$; the wet modal mass of the bare mode gives it to $1$--$6.5\%$ (Section~\ref{subsubsec:num_L2_5}). The prefactor of equation~\eqref{eq:mode_dilution} is of order $1.5$ [3D check: L4-8].
+\end{itemize}
+
+\subsection{Design consequences}\label{subsec:disc_design}
+\textbf{[TODO]}
+\begin{itemize}
+    \item The resonator mass is to be compared with a fluid layer of thickness $1/k_c$, not with the plate mass (Sections~\ref{subsubsec:fluid_dilution} and~\ref{subsubsec:num_L1_8}).
+    \item The optimal damping collapses at low frequency, from $\zeta_{\rm opt}\approx10^{-2}$ at $\omega_r=10~\si{\radian\per\second}$ to $4\times10^{-5}$ at $\omega_r=1~\si{\radian\per\second}$ (Section~\ref{subsubsec:num_L1_3b}).
+    \item A single resonator absorbs more than one half of the incident power only where the structure radiates asymmetrically; on a finite plate this position follows from $G_B$ alone (Section~\ref{subsubsec:num_L2_4}).
+    \item The hybridisation available on a finite plate decreases with its length (Section~\ref{subsubsec:num_L2_5}).
+    \item A density taper reflects less than an abrupt array, by $8$--$23\%$ without damping and $1$--$21\%$ at $\zeta=0.02$ for $L_g\ge5\lambda$; the gain is modest and shrinks with $L_g$ (Section~\ref{subsec:num_graded}).
+    \item The attenuation per unit length of a long floating array is bounded by the slowest evanescent fluid mode, $\kappa_1\simeq\pi/(2H)$ (Section~\ref{subsubsec:num_L1_4}).
+    \item Plane waves incident from open water on a free plate are almost totally reflected at the free edge ($|R|>0.99$ for $\omega\gtrsim2~\si{\radian\per\second}$ in Section~\ref{subsec:num_graded}), which limits the power that reaches resonators on the plate.
+\end{itemize}
+
+\subsection{Numerical aspects}\label{subsec:disc_numerics}
+\textbf{[TODO]}
+\begin{itemize}
+    \item Evanescent fluid modes are not absorbed by structural sponges: buffers of $5/\kappa_1$ are needed between sources, scatterers and sponges (Section~\ref{subsubsec:num_setup_A}).
+    \item Bending sponges are transparent to long waves, so basin resonances appear at low frequency; viscous dashpot layers absorb all wavelengths (Section~\ref{subsubsec:num_L1_3b}).
+    \item A resonator attached inside an element lowers the $p=3$ convergence rate (Section~\ref{subsubsec:num_L1_3}).
+    \item Band edges at small spacing require $p=3$ and meshes sized with the cell (Section~\ref{subsubsec:num_L1_6}).
+    \item Bloch-phased loading of periodic supercells gives band frequencies without quasi-periodic boundary conditions or an eigenvalue solver (Section~\ref{subsubsec:num_setup_lattice}); the Woodbury identity evaluates any resonator set from one bare factorisation (Section~\ref{subsubsec:num_L2_1}).
+\end{itemize}
+
+\subsection{Limitations}\label{subsec:disc_limitations}
+\textbf{[TODO]} Linear theory; point attachments; the cost of three-dimensional computations (Section~\ref{subsec:num_3D}, memory sizing pending).
+
+\section{Conclusions}\label{sec:conclusions}
+\textbf{[TODO: one paragraph per contribution.]}
+
+\paragraph{Formulation.} \textbf{[TODO]} Monolithic frequency- and time-domain formulation of a floating pre-tensioned plate with point resonators; energy identity; discrete reciprocity; wet modal analysis.
+
+\paragraph{Local theory.} \textbf{[TODO]} Fluid dilution $\mu(k)$; no complete stop band in the homogenised floating plate; optimal damping and its collapse at low frequency; graded arrays.
+
+\paragraph{Discrete lattices.} \textbf{[TODO]} Complete stop band set by the discrete geometry, $\propto a^4$; Foldy and lattice sums; transfer compliance $G_B$ and the Woodbury identity; absorption bound for finite structures.
+
+\paragraph{Finite element evidence.} \textbf{[TODO]} Summary of Section~\ref{sec:numerical_results}, with the accuracies achieved and the three-dimensional results.
+}

@@ -1,0 +1,328 @@
+\section{Numerical formulation}\label{sec:numerical_formulation}
+In this section we describe the numerical formulation used to solve the LRH problem introduced in Section~\ref{sec:problem_setting}. Here we use a monolithic finite element method, i.e.\ all unknowns are obtained from a single fully coupled algebraic system. The numerical formulation proposed in this section allows for the solution of the LRH problem on general geometries and extends the formulation originally proposed for floating Euler--Bernoulli beams and Poisson--Kirchhoff plates in \cite{colomes2023monolithic}, later extended to pre-tensioned viscoelastic membranes in \cite{agarwal2024dynamic} andto spatially varying material properties in \cite{el4911089optimization}. A similar framework has been recently proposed for a unified Midlin-Timoshenko plate model \cite{pradnyanata7048246unified} and for submerged plates in \cite{wegert2026discontinuous}. The new ingredients are the simultaneous treatment of pre-tension and bending, the point attachments of the resonators, and the additional resonator unknowns. Contrary to the local and Green-function models of Sections~\ref{sec:dispersion_relation} and \ref{sec:discrete_lattice}, the finite element model retains the exact attachment positions, finite structures, open-water radiation and variable bathymetry.
+
+We first state the continuous weak form (Section~\ref{subsec:weak_form}) and its continuous/discontinuous Galerkin (C/DG) discretisation (Section~\ref{subsec:discrete_form}). We then prove consistency, an energy identity in the time domain and a power balance in the frequency domain (Section~\ref{subsec:num_analysis}). Finally, we describe the structure of the resulting algebraic system and the computation of the coupled wet modes (Section~\ref{subsec:algebraic_system}). The frequency-domain problem \eqref{eq:strong_form_freq} is the main object of this work; the time-domain counterpart is given for completeness.
+
+\subsection{Weak form}\label{subsec:weak_form}
+
+Let us first introduce some notation. Abusing notation, for a given domain $\Omega$, either interor or part of a boundary, we denote by $L^2(\Omega)$ the space of square-integrable complex-valued functions and by $H^m(\Omega)$, $m\geq1$, the Sobolev space of functions whose distributional derivatives up to order $m$ are in $L^2(\Omega)$. In the frequency domain all pairings are sesquilinear, with the complex conjugate (denoted by an over-bar) applied to the second argument, and in the time domain all pairings are bilinear.
+\begin{equation}\label{eq:inner_product}
+    (a,b)_\Omega := \int_\Omega a(\xvec)\,\overline{b(\xvec)}\,\mathrm{d}\Omega,
+    \qquad \|a\|_\Omega := (a,a)_\Omega^{1/2}.
+\end{equation}
+The same symbol is used for scalar, vector and tensor fields, with the corresponding contraction, and for the integral of the product of two functions that are not necessarily in $L^2(\Omega)$. For the zero-dimensional resonator unknowns we write $(a,b):=a\overline{b}$. The time-domain formulation is real-valued, so the conjugate plays no role there.
+
+To shorten the expressions, we introduce the complex moduli
+\begin{equation}\label{eq:complex_moduli}
+    T_\rho^\omega := T_\rho\,\chi_\tau,\quad
+    \mathbf{C}_\rho^\omega := \mathbf{C}_\rho\,\chi_b,\quad
+    \chi_\tau := 1-i\omega\tau,\quad
+    \chi_b := 1-i\omega\tau_b,\qquad
+    k_{\rho,i}^\omega := k_{\rho,i}-i\omega c_{\rho,i},\quad i=1,\ldots,N,
+\end{equation}
+where $k_{\rho,i}^\omega$ is the complex stiffness of the spring--dashpot of the $i$-th resonator, consistent with the dimensional $k_r^\omega$ of Section~\ref{sec:discrete_lattice}. The material parameters $m_\rho$, $T_\rho$, $\mathbf{C}_\rho$, $\tau$ and $\tau_b$ may be functions of $\xvec\in\Gm$, as in \cite{el4911089optimization}. This is used, for example, in the definition of numerical sponge layers to generate/damp waves, see Section~\ref{sec:numerical_results}, where $\tau_b=\tau_b(\xvec)$. We also collect the the vector of unknowns, $\mathcal{U}$, and the vector of test functions, $\mathcal{W}$, to simplfy notation hereinafter, i.e. 
+\begin{equation*}
+    \mathcal{U}=[\phi,\kappa,\eta,\qvec],\qquad \mathcal{W}=[w,v,u,\mathbf{r}],\quad \mbox{with}\quad\qvec=[q_1,\ldots,q_N],\quad\mbox{and}\quad \mathbf{r}=[r_1,\ldots,r_N].
+\end{equation*}
+
+Let $\V=H^1(\Of)$ be the space for the velocity potential, and let $\VGf=\{v|_{\Gf}:v\in\V\}$ and $\VGm=\{v|_{\Gm}:v\in\V\}\cap H^2(\Gm)$ be the spaces for the free-surface elevation and for the structure deflection, respectively. The potential is defined in $\Of$, while the elevations are defined on the boundary components $\Gf$ and $\Gm$, which leads to a mixed-dimensional problem. Note that the $H^2$ regularity of the deflection is required by the bending operator, if this is not present, e.g. membrane-only structure, the regularity requirement may be relaxed. The $H^2$ regularity also makes the point evaluations $\eta(\xvec_i)$ continuous, since $H^2(\Gm)\subset\mathcal{C}^0(\overline{\Gm})$ for a two-dimensional structure, see the Remark in Section~\ref{subsec:governing_eqs_time}. In the vertical section ($\Gm$ one-dimensional) the same embedding holds already for $H^1(\Gm)$, which is why a membrane with $\mathbf{C}_\rho=\mathbf{0}$ can carry point (line) resonators only in that case. The amplitude of the $i$-th resonator and its test function belong to $\Q_i=\mathbb{C}$. We denote the product space by $\mathcal{X}=\V\times\VGf\times\VGm\times\Q_1\times\cdots\times\Q_N$.
+
+The weak form of problem~\eqref{eq:strong_form_freq} reads: \textit{find $\mathcal{U}\in\mathcal{X}$ such that}
+\begin{equation}\label{eq:weakform_freq}
+    B_\omega(\mathcal{U},\mathcal{W}) = L_\omega(\mathcal{W})\qquad\forall\,\mathcal{W}\in\mathcal{X},
+\end{equation}
+where $B_\omega$ is the sesquilinear form
+\begin{align}
+    \label{eq:Bilinear_freq}
+    B_\omega(\mathcal{U},\mathcal{W}) ={}&
+    (\nabla\phi,\nabla w)_{\Of}
+    -(ik_{\mathrm{out}}\phi,w)_{\Gout}
+    +(i\omega\kappa,w)_{\Gf}
+    +(i\omega\eta,w)_{\Gm}
+    +\beta_f\left(-i\omega\phi+g\kappa,\,v+\alpha_f w\right)_{\Gf}\\\nonumber
+    &+\left(-i\omega\phi+(g-\omega^2m_\rho)\eta,\,u\right)_{\Gm}
+    +\left(T_\rho^\omega\nabla\eta,\nabla u\right)_{\Gm}
+    +\left(\mathbf{C}_\rho^\omega:\nabla^2\eta,\nabla^2u\right)_{\Gm}\\\nonumber
+    &+\sum_{i=1}^N k_{\rho,i}^\omega\left(\eta(\xvec_i)-q_i\right)\overline{u(\xvec_i)}
+    +\sum_{i=1}^N\left[-\omega^2m_{\rho,i}\,q_i+k_{\rho,i}^\omega\left(q_i-\eta(\xvec_i)\right)\right]\overline{r_i},
+\end{align}
+and $L_\omega$ is the antilinear functional
+\begin{equation}\label{eq:Linear_freq}
+    L_\omega(\mathcal{W}) = (\uin, w)_{\Gin} + (f_\rho,u)_{\Gm} + \sum_{j=1}^{N_F}F_{\rho,j}\,\overline{u(\xvec_j^F)}.
+\end{equation}
+In \eqref{eq:Linear_freq}, $f_\rho=p_{\mathrm{ext}}/\rho$ is an external pressure acting on the structure and $F_{\rho,j}$ are external point forces (per unit fluid density) applied at $\xvec_j^F\in\Gm$. Both vanish in the free-wave problem \eqref{eq:strong_form_freq}. They are included because they are the forcings used in Sections~\ref{sec:finite_domain} and \ref{sec:numerical_results}: a unit point force gives one column of the transfer compliance $\mathbf{G}_B$, and a pressure patch is the source used in the verification tests.
+
+In the derivation of the weak form \eqref{eq:weakform_freq}, the following steps are taken. First, multiplying the Laplace equation \eqref{eq:laplacian_freq} by $\overline{w}$, integrating over $\Of$ and integrating by parts gives the first term of \eqref{eq:Bilinear_freq} and the boundary flux $-(\nvec\cdot\nabla\phi,w)_{\partial\Of}$. In the boundary flux we insert the kinematic conditions \eqref{eq:kinematic_bc_bottom_freq}--\eqref{eq:kinematic_bc_m_freq}. 
+
+On $\Gout$ we use the Sommerfeld radiation condition $\nvec\cdot\nabla\phi=ik_{\mathrm{out}}\phi$, with $k_{\mathrm{out}}$ the propagating wavenumber at the outlet, i.e.\ $\uout=ik_{\mathrm{out}}\phi$ in \eqref{eq:kinematic_bc_outlet_freq}. The radiation condition is moved to the left-hand side, which gives the second term. A prescribed outflow $\uout$ would instead appear in $L_\omega$, as $\uin$ does. The Sommerfeld condition is used only on $\Gout$, where the field is purely outgoing, and not on the inlet $\Gin$, for three reasons. On $\Gin$, instead, the wave reflected towards $\Gin$ is absorbed by a damping zone adjacent to the inlet, see below. This works for any direction of propagation and any frequency, and is used identically in the frequency and time domains. For the same reasons, when the structure covers the boundary of the computational domain (configuration~A of Section~\ref{sec:discrete_lattice}), the radiation condition is replaced by structural sponges and rigid walls.
+%
+The dynamic condition on the free surface, \eqref{eq:dynamic_bc_fs_freq}, is tested against the modified test function $\beta_f(v+\alpha_f w)$, following \cite{akkerman2020isogeometric,colomes2023monolithic}. The parameter $0<\beta_f<1$ weights this contribution. The parameter $\alpha_f$ is chosen so that the $w$--$\kappa$ terms on $\Gf$ combine into a coercive form (see Remark~\ref{rem:alpha_f}).
+%
+The dynamic condition on the structure, \eqref{eq:dynamic_bc_m_freq}, is tested against $\overline{u}$ and integrated over $\Gm$. The tension term is integrated by parts once and the bending term twice. The resulting boundary integrals on $\Lm$ are the work of the edge shear and of the normal moment. They vanish because of the free-edge conditions \eqref{eq:membrane_bc_freq}, including the corner condition $[\![\nvec\cdot\mathbf{M}_\omega\mathbf{t}]\!]=0$.
+%
+The Dirac terms in \eqref{eq:dynamic_bc_m_freq} yield the point evaluations $\eta(\xvec_i)$ and $u(\xvec_i)$.
+%
+Finally, each resonator equation \eqref{eq:resonators_freq} is tested against the scalar $\overline{r_i}$.
+
+
+\begin{remark}[Choice of $\alpha_f$]\label{rem:alpha_f}
+In \cite{colomes2023monolithic} the forms are bilinear and the time-domain parameter is $\alpha_f=\delta_t(1-\beta_f)/(\beta_f g)$, with $\delta_t$ the factor that the time integrator assigns to the first time derivative. In the frequency domain $\delta_t\to-i\omega$. Since here the test function is conjugated, the same cancellation is obtained with the conjugate value,
+\begin{equation}\label{eq:alpha_f}
+    \alpha_f = \frac{i\omega(1-\beta_f)}{\beta_f\,g},
+    \qquad\text{so that}\qquad
+    (i\omega\kappa,w)_{\Gf}+\beta_f\left(-i\omega\phi+g\kappa,\alpha_f w\right)_{\Gf}
+    =i\omega\beta_f(\kappa,w)_{\Gf}-\frac{\omega^2(1-\beta_f)}{g}(\phi,w)_{\Gf}.
+\end{equation}
+This is the frequency-domain counterpart of Corollary~3 in \cite{colomes2023monolithic}.
+\end{remark}
+
+Outgoing waves can also be absorbed inside the computational domain. On the free surface we use damping zones, see \cite{colomes2023monolithic,agarwal2024dynamic} on a portion $\Gamma_d\subset\Gf$. There, the kinematic and dynamic conditions are relaxed towards prescribed target fields $(\kappa^*,\phi^*)$. The damped dynamic condition is tested against the same modified test function $\beta_f(v+\alpha_f w)$, thus, it adds terms on $\Gamma_d$ to $B_\omega$ and to $L_\omega$ without altering the structure of \eqref{eq:Bilinear_freq}. In the case of an infinite structure, the bending damping factor is raised smoothly towards the boundary of the domain, $\omega\tau_b(\xvec)=s(\xvec)$. This is the structural sponge used in Section~\ref{sec:numerical_results}. For a periodic domain, $\Gin$ and $\Gout$ are identified, the corresponding boundary terms disappear, and the spaces are restricted to periodic functions.
+
+For the sake of completeness we include the time-domain formulation, which reads: \textit{find $\mathcal{U}(t)\in\mathcal{X}$ such that $B(\mathcal{U},\mathcal{W})=L(\mathcal{W})$ for all $\mathcal{W}\in\mathcal{X}$}, with
+\begin{align}
+    \label{eq:Bilinear_time}
+    B(\mathcal{U},\mathcal{W}) ={}&
+    (\nabla\phi,\nabla w)_{\Of}
+    -(\kappa_t,w)_{\Gf}
+    -(\eta_t,w)_{\Gm}
+    +\beta_f\left(\phi_t+g\kappa,\,v+\alpha_f w\right)_{\Gf}\\\nonumber
+    &+\left(\phi_t+m_\rho\eta_{tt}+g\eta,\,u\right)_{\Gm}
+    +\left(T_\rho\nabla(\eta+\tau\eta_t),\nabla u\right)_{\Gm}
+    +\left(\mathbf{C}_\rho:\nabla^2(\eta+\tau_b\eta_t),\nabla^2u\right)_{\Gm}\\\nonumber
+    &+\sum_{i=1}^N\left[k_{\rho,i}\left(\eta(\xvec_i)-q_i\right)+c_{\rho,i}\left(\eta_t(\xvec_i)-q_{i,t}\right)\right]u(\xvec_i)\\\nonumber
+    &+\sum_{i=1}^N\left[m_{\rho,i}q_{i,tt}+k_{\rho,i}\left(q_i-\eta(\xvec_i)\right)+c_{\rho,i}\left(q_{i,t}-\eta_t(\xvec_i)\right)\right]r_i,\\
+    \label{eq:Linear_time}
+    L(\mathcal{W}) ={}& (\uin,w)_{\Gin}+(\uout,w)_{\Gout}+(f_\rho,u)_{\Gm}+\sum_{j=1}^{N_F}F_{\rho,j}\,u(\xvec_j^F).
+\end{align}
+Once discretized in space, the semi-discrete system resulting from \eqref{eq:Bilinear_time} is a second-order system of ordinary differential equations. It is integrated with the Newmark-$\beta$ scheme ($\gamma_{\mathrm{NB}}=1/2$, $\beta_{\mathrm{NB}}=1/4$) or with the generalised-$\alpha$ family. With either scheme, $\alpha_f=\delta_t(1-\beta_f)/(\beta_fg)$ and $\delta_t=\gamma_{\mathrm{NB}}/(\beta_{\mathrm{NB}}\Delta t)$, see \cite{colomes2023monolithic}.
+
+%------------------------------------------------
+\subsection{Discrete formulation}\label{subsec:discrete_form}
+
+Let $\Omega_h$ be a conforming triangulation of $\Of$ with characteristic element size $h$, and let $\Gfh$, $\Gmh$, $\Ginh$, $\Gouth$ and $\Gbh$ be the induced conforming triangulations of the boundary components, made of facets $E$ of dimension $d-1$ (Figure~\ref{fig:finite_element_mesh}). We denote by $\Lmh$ the interior skeleton of $\Gmh$. These are the entities of dimension $d-2$ shared by two facets of $\Gmh$, excluding the structure boundary $\Lm$, i.e. edges for a two-dimensional structure and points for a one-dimensional one. For each $\Lambda\in\Lmh$, shared by the facets $E^+$ and $E^-$, $\nvec_\Lambda$ is the unit normal to $\Lambda$ lying in the tangent plane of $\Gm$ and pointing from $E^+$ to $E^-$. We use the jump and mean operators
+\begin{equation}\label{eq:jump_mean}
+    [\![a]\!] := a^+-a^-,\qquad
+    \langle\mathbf{a}\rangle := \tfrac12\left(\mathbf{a}^++\mathbf{a}^-\right),
+\end{equation}
+and $h_\Lambda$ for the characteristicsize of the facets adjacent to $\Lambda$.
+
+\input{figures/fig_fe_mesh}
+
+Using all these definitions, the finite element spaces can be defined as follows:
+\begin{align}
+    \label{eq:Vh}
+    \V_h&=\left\{w_h\in\mathcal{C}^0(\overline{\Of}):\ w_h|_K\in\mathbb{P}_r(K)\ \forall K\in\Omega_h\right\},\\
+    \label{eq:VGfh}
+    \V_{\Gf,h}&=\left\{v_h\in\mathcal{C}^0(\overline{\Gf}):\ v_h|_E\in\mathbb{P}_{r_s}(E)\ \forall E\in\Gfh\right\},\\
+    \label{eq:VGmh}
+    \V_{\Gm,h}&=\left\{u_h\in\mathcal{C}^0(\overline{\Gm}):\ u_h|_E\in\mathbb{P}_{r_s}(E)\ \forall E\in\Gmh\right\},
+\end{align}
+where $\mathbb{P}_r(K)$ is the space of Lagrange polynomials of degree $r$ in $K$ and $r_s\geq\max(r,2)$. The basis functions are real-valued and the degrees of freedom complex-valued. The choice $r_s>r$ allows a higher order for the elevations than for the potential, which reduces the cost in three dimensions \cite{colomes2023monolithic}. The only requirement is the compatibility condition
+\begin{equation}\label{eq:trace_compatibility}
+    \gamma_{\Gf}(\V_h)\subseteq\V_{\Gf,h},
+\end{equation}
+with $\gamma_{\Gf}$ the trace operator on $\Gf$. When $r_s=r$, \eqref{eq:VGfh} and \eqref{eq:VGmh} are the trace spaces of $\V_h$. The resonator spaces $\Q_i=\mathbb{C}$ are not discretised. The attachment points $\xvec_i$ can lie anywhere on $\Gmh$, at mesh nodes or inside a facet; the mesh does not need to be adapted to them. Since $\V_{\Gm,h}\subset\mathcal{C}^0(\overline{\Gm})$, the point evaluations $u_h(\xvec_i)$ are single-valued, and can be computed in any facet that contains $\xvec_i$.
+
+
+The space $\V_{\Gm,h}$ is only $\mathcal{C}^0$, so $\V_{\Gm,h}\not\subset H^2(\Gm)$, and the bending term of \eqref{eq:Bilinear_freq} is not well defined on it. Following \cite{engel2002continuous,colomes2023monolithic}, we evaluate the Hessians elementwise and enforce the continuity of the slope weakly on $\Lmh$. This replaces the bending term by the C/DG form
+\begin{align}\label{eq:cdg_form}
+    a_{b,h}(\eta_h,u_h;\chi) ={}&
+    \sum_{E\in\Gmh}\left(\chi\,\mathbf{C}_\rho:\nabla^2\eta_h,\nabla^2u_h\right)_E
+    -\left(\langle\chi\,\mathbf{C}_\rho:\nabla^2\eta_h\rangle\,\nvec_\Lambda,[\![\nabla u_h]\!]\right)_{\Lmh}\\\nonumber
+    &-\left([\![\nabla\eta_h]\!],\langle\overline{\chi}\,\mathbf{C}_\rho:\nabla^2u_h\rangle\,\nvec_\Lambda\right)_{\Lmh}
+    +\left(\frac{\gamma_p\,\langle\chi \hat D_\rho\rangle}{h_\Lambda}[\![\nabla\eta_h]\!],[\![\nabla u_h]\!]\right)_{\Lmh},
+\end{align}
+with $\chi=\chi_b$ in the frequency domain and $\chi=1$ (bending stiffness) or $\chi=\tau_b$ (bending damping) in the time domain. The first skeleton term comes from integrating the bending operator by parts elementwise. It is needed for consistency. The second is its adjoint, which makes the form symmetric (and Hermitian for real $\chi$). The last term is an interior-penalty term. It controls the jump of the slopes.
+%
+Here $\hat D_\rho$ is a representative flexural rigidity per unit fluid density, e.g.\ $\hat D_\rho=D/\rho$ for an isotropic plate. The penalty $\gamma_p$ is a dimensionless constant; we use $\gamma_p=10\,r_s^2$. The conjugate on $\chi$ in the adjoint term, together with the sesquilinear pairing, makes the algebraic matrix of \eqref{eq:cdg_form} symmetric for any $\chi$. Moreover, $a_{b,h}$ is linear in $\chi$; for uniform $\chi$, $a_{b,h}(\eta_h,u_h;\chi)=\chi\,a_{b,h}(\eta_h,u_h;1)$.
+
+In the vertical section ($d=2$), $\Lmh$ is the set of interior nodes of $\Gmh$, the integrals over $\Lmh$ are point evaluations, $\mathbf{C}_\rho:\nabla^2\eta\to D_\rho\,\partial_{xx}\eta$, and $[\![\nabla u]\!]\to[\![\partial_x u]\!]$. Equation~\eqref{eq:cdg_form} then reduces to the C/DG Euler--Bernoulli form of \cite[Appendix~A]{colomes2023monolithic}.
+
+Let $\mathcal{X}_h=\V_h\times\V_{\Gf,h}\times\V_{\Gm,h}\times\Q_1\times\cdots\times\Q_N$. The discrete problem in the frequency domain reads: \textit{find $\mathcal{U}_h=[\phi_h,\kappa_h,\eta_h,\qvec]\in\mathcal{X}_h$ such that}
+\begin{equation}\label{eq:discreteform_freq}
+    B_{\omega,h}(\mathcal{U}_h,\mathcal{W}_h) = L_\omega(\mathcal{W}_h)\qquad\forall\,\mathcal{W}_h=[w_h,v_h,u_h,\mathbf{r}]\in\mathcal{X}_h,
+\end{equation}
+where $B_{\omega,h}$ is obtained from \eqref{eq:Bilinear_freq} by replacing the bending term with $a_{b,h}(\eta_h,u_h;\chi_b)$, and $L_\omega$ is given by \eqref{eq:Linear_freq}. The time-domain counterpart is obtained in the same way from \eqref{eq:Bilinear_time}, replacing the bending term with $a_{b,h}(\eta_h,u_h;1)+a_{b,h}(\eta_{h,t},u_h;\tau_b)$.
+
+%------------------------------------------------
+\subsection{Numerical analysis}\label{subsec:num_analysis}
+In this section we analyse the discrete problem \eqref{eq:discreteform_freq}. We first show that the C/DG formulation is consistent, i.e.\ that the exact solution satisfies the discrete equations. We then show that the semi-discrete time-domain problem satisfies an energy identity, meaning that the total energy of the fluid, the structure and the resonators changes only through the dissipation in the structure and in the resonators. In the frequency domain this becomes a balance between time-averaged powers, which links the discrete model to the power balance of Section~\ref{sec:discrete_lattice}. It also provides the check of the reflection, transmission and absorption coefficients used in Section~\ref{sec:numerical_results}. 
+
+\begin{proposition}[Consistency]\label{prop:consistency}
+Let $\mathcal{U}=[\phi,\kappa,\eta,\qvec]$ be the solution of \eqref{eq:strong_form_freq}, with $\eta\in H^2(\Gm)$ and $\eta|_E\in H^3(E)$ for every $E\in\Gmh$. Then $B_{\omega,h}(\mathcal{U},\mathcal{W}_h)=L_\omega(\mathcal{W}_h)$ for all $\mathcal{W}_h\in\mathcal{X}_h$.
+\end{proposition}
+\begin{proof}
+The fluid, free-surface, tension and resonator terms of $B_{\omega,h}$ coincide with those of $B_\omega$, and $\mathcal{X}_h\subset\V\times\VGf\times H^1(\Gm)\times\mathbb{C}^N$, so for these terms the statement follows from the derivation of \eqref{eq:weakform_freq}. For the bending term, $\nabla\eta$ is continuous across $\Lmh$, so the second and fourth terms of \eqref{eq:cdg_form} vanish for $\eta_h=\eta$. Integrating the remaining elementwise term by parts on each facet $E$ gives the following set of terms: \textit{a}) the strong bending operator, which is balanced in \eqref{eq:dynamic_bc_m_freq}; \textit{b}) the moment terms $\left(\langle\mathbf{M}_\omega\rangle\nvec_\Lambda,[\![\nabla u_h]\!]\right)_{\Lmh}$, which cancel the first skeleton term of \eqref{eq:cdg_form} because the normal moment of the exact solution is continuous across $\Lmh$; and \textit{c}) the shear terms $\left([\![(\nabla\cdot\mathbf{M}_\omega)\cdot\nvec_\Lambda]\!],u_h\right)_{\Lmh}$,  which vanish where the shear is continuous. If an attachment point $\xvec_i$ lies on $\Lmh$, the shear jump equals the concentrated resonator force, which is recovered by the point evaluation in \eqref{eq:Bilinear_freq}.
+The boundary terms on $\Lm$ vanish because of \eqref{eq:membrane_bc_freq}.
+\end{proof}
+
+We next state the energy identity of the semi-discrete time-domain problem. This is the counterpart, with resonators, pre-tension and C/DG bending, of Proposition~2 in \cite{colomes2023monolithic}. We define the discrete bending energy as $\Eeb=\tfrac12 a_{b,h}(\eta_h,\eta_h;1)$. It is non-negative, and equivalent to the broken $H^2$ seminorm plus the penalty term, provided that $\gamma_p$ is larger than a constant that depends only on the inverse-inequality constant of $\V_{\Gm,h}$ \cite{engel2002continuous}.
+
+\begin{proposition}[Energy identity]\label{prop:energy}
+Let $0<\beta_f<1$, assume \eqref{eq:trace_compatibility} and consider the semi-discrete time-domain problem with $\uin=\uout=0$, $f_\rho=0$, $F_{\rho,j}=0$ and no damping zones. Then
+\begin{equation}\label{eq:energy}
+    \frac{\mathrm{d}\Et}{\mathrm{d}t} = -\Pt,
+\end{equation}
+where $\Et$ is the total energy and $\Pt$ is the total power dissipated, given by
+\begin{equation}\label{eq:energy_total}
+    \Et=\Ekf+\Epf+\Eks+\Ees+\Eeb+\Ekr+\Eer,
+    \qquad
+    \Pt=\Pds+\Pdr,
+\end{equation}
+with
+\begin{subequations}\label{eq:energies}
+\begin{align}
+    \Ekf&=\tfrac12\|\nabla\phi_h\|^2_{\Of}, &
+    \Epf&=\tfrac{g}{2}\left(\|\kappa_h\|^2_{\Gf}+\|\eta_h\|^2_{\Gm}\right),\\
+    \Eks&=\tfrac12\|m_\rho^{1/2}\eta_{h,t}\|^2_{\Gm}, &
+    \Ees&=\tfrac12\|T_\rho^{1/2}\nabla\eta_h\|^2_{\Gm},\\
+    \Eeb&=\tfrac12 a_{b,h}(\eta_h,\eta_h;1), &
+    \Ekr&=\tfrac12\sum_{i=1}^Nm_{\rho,i}\,q_{i,t}^2,\\
+    \Eer&=\tfrac12\sum_{i=1}^Nk_{\rho,i}\left(\eta_h(\xvec_i)-q_i\right)^2, &
+    \Pdr&=\sum_{i=1}^Nc_{\rho,i}\left(\eta_{h,t}(\xvec_i)-q_{i,t}\right)^2,\\
+    \Pds&=\|(\tau T_\rho)^{1/2}\nabla\eta_{h,t}\|^2_{\Gm}+a_{b,h}(\eta_{h,t},\eta_{h,t};\tau_b). \label{eq:powDissTime}
+\end{align}
+\end{subequations}
+The quantities in \eqref{eq:energies} are energies and powers per unit fluid density, and per unit width in the vertical section.
+\end{proposition}
+\begin{proof}
+Take $\mathcal{W}_h=\left[\phi_{h,t},\ \beta_f^{-1}\kappa_{h,t}-\alpha_f\phi_{h,t},\ \eta_{h,t},\ \qvec_t\right]$, which belongs to $\mathcal{X}_h$ thanks to \eqref{eq:trace_compatibility}. With this choice:
+\begin{itemize}
+    \item The free-surface terms give
+    \begin{equation*}
+        -(\kappa_{h,t},\phi_{h,t})_{\Gf}+\beta_f\left(\phi_{h,t}+g\kappa_h,\beta_f^{-1}\kappa_{h,t}\right)_{\Gf}=\frac{g}{2}\frac{\mathrm{d}}{\mathrm{d}t}\|\kappa_h\|^2_{\Gf}.
+    \end{equation*}
+    \item The fluid--structure coupling terms $-(\eta_{h,t},\phi_{h,t})_{\Gm}+(\phi_{h,t},\eta_{h,t})_{\Gm}$ cancel.
+    \item The structural terms give $\frac{\mathrm{d}}{\mathrm{d}t}(\Eks+\Ees+\Eeb)+\frac{g}{2}\frac{\mathrm{d}}{\mathrm{d}t}\|\eta_h\|^2_{\Gm}+\Pds$, where we used the symmetry of $a_{b,h}(\cdot,\cdot;1)$.
+    \item For the resonators, the plate-side and resonator-side terms combine into
+    \begin{equation*}
+        \sum_i\left[m_{\rho,i}q_{i,tt}q_{i,t}+k_{\rho,i}(\eta_h(\xvec_i)-q_i)(\eta_{h,t}(\xvec_i)-q_{i,t})+c_{\rho,i}(\eta_{h,t}(\xvec_i)-q_{i,t})^2\right]=\frac{\mathrm{d}}{\mathrm{d}t}(\Ekr+\Eer)+\Pdr.
+    \end{equation*}
+\end{itemize}
+Adding $(\nabla\phi_h,\nabla\phi_{h,t})_{\Of}=\frac{\mathrm{d}}{\mathrm{d}t}\Ekf$ proves \eqref{eq:energy}.
+\end{proof}
+
+In the frequency domain the energy is constant on average over a period, and Proposition~\ref{prop:energy} becomes a balance between the time-averaged powers. For real signals $a(t)=\mathrm{Re}(\hat a e^{-i\omega t})$ and $b(t)$, the period average of $a\,b$ is $\tfrac12\mathrm{Re}(\hat a\,\overline{\hat b})$, which is why the sesquilinear pairing is the natural one here.
+
+\begin{corollary}[Power balance]\label{cor:power_balance}
+Let $\mathcal{U}_h$ be the solution of \eqref{eq:discreteform_freq} with $0<\beta_f<1$, \eqref{eq:alpha_f} and \eqref{eq:trace_compatibility}, and without damping zones. Then
+\begin{align}\label{eq:power_balance}
+    &\underbrace{\frac{\rho\,\omega}{2}\,\mathrm{Re}\Big[i\left(\uin,\phi_h\right)_{\Gin}+i\left(f_\rho,\eta_h\right)_{\Gm}+i\sum_jF_{\rho,j}\overline{\eta_h(\xvec_j^F)}\Big]}_{\displaystyle P_{\mathrm{in}}}
+    =\\\nonumber
+    &\qquad\underbrace{\frac{\rho\,\omega\,k_{\mathrm{out}}}{2}\|\phi_h\|^2_{\Gout}}_{\displaystyle P_{\mathrm{rad}}}
+    +\underbrace{\frac{\rho\,\omega^2}{2}\left[\|(\tau T_\rho)^{1/2}\nabla\eta_h\|^2_{\Gm}+a_{b,h}(\eta_h,\eta_h;\tau_b)\right]}_{\displaystyle \langle\Pds\rangle}
+    +\underbrace{\frac{\rho\,\omega^2}{2}\sum_{i=1}^Nc_{\rho,i}\left|\eta_h(\xvec_i)-q_i\right|^2}_{\displaystyle \langle\Pdr\rangle}.
+\end{align}
+\end{corollary}
+\begin{proof}
+Take $\mathcal{W}_h=-i\omega\left[\phi_h,\ \beta_f^{-1}\kappa_h-\alpha_f\phi_h,\ \eta_h,\ \qvec\right]$, which is the frequency-domain image of the test function of Proposition~\ref{prop:energy}, and take the real part of \eqref{eq:discreteform_freq}. With this choice $v_h+\alpha_fw_h=-i\omega\beta_f^{-1}\kappa_h$, so that:
+\begin{itemize}
+    \item the free-surface and fluid--structure coupling terms add up to $-\omega^2[(\kappa_h,\phi_h)_{\Gf}-\overline{(\kappa_h,\phi_h)_{\Gf}}]-\omega^2[(\eta_h,\phi_h)_{\Gm}-\overline{(\eta_h,\phi_h)_{\Gm}}]$, which is purely imaginary;
+    \item the conservative terms ($\|\nabla\phi_h\|^2$, $g\|\kappa_h\|^2$, $(g-\omega^2m_\rho)\|\eta_h\|^2$, $T_\rho\|\nabla\eta_h\|^2$, $a_{b,h}(\eta_h,\eta_h;1)$, $k_{\rho,i}|\eta_h(\xvec_i)-q_i|^2$ and $\omega^2m_{\rho,i}|q_i|^2$) are multiplied by $\pm i\omega$ and are also purely imaginary, since $a_{b,h}(\cdot,\cdot;1)$ is Hermitian;
+    \item the radiation term gives $\mathrm{Re}[-ik_{\mathrm{out}}\,\overline{(-i\omega)}\|\phi_h\|^2_{\Gout}]=\omega k_{\mathrm{out}}\|\phi_h\|^2_{\Gout}$;
+    \item the damping terms give the two dissipated powers.
+\end{itemize}
+Multiplying by $\rho/2$ gives \eqref{eq:power_balance}.
+\end{proof}
+
+Equation~\eqref{eq:power_balance} is the discrete version of the power balance \eqref{eq:lat_power_balance} of Section~\ref{sec:discrete_lattice}. The work done by the incident field and the applied loads is either radiated or dissipated in the structure and the resonators. It holds for any mesh and polynomial degree. It is therefore used in Section~\ref{sec:numerical_results} to check the normalisation of the reflection, transmission and absorption coefficients, $\mathcal{R}+\mathcal{T}+\mathcal{A}=1$, up to the error of the extraction of the wave amplitudes. The free-surface damping zones and the structural sponges add non-negative sink terms to the right-hand side of \eqref{eq:power_balance}, which can be evaluated in the same way.
+
+\begin{remark}[Well-posedness]\label{rem:well_posedness}
+For the fully discrete time-domain problem with $\alpha_f=\delta_t(1-\beta_f)/(\beta_fg)$, the coercivity and boundedness proofs of \cite[Propositions~3--7]{colomes2023monolithic} carry over. The tension and the resonators only add the non-negative terms $T_\rho\|\nabla u_h\|^2$ and $\sum_i[\delta_{tt}m_{\rho,i}r_i^2+k_{\rho,i}(u_h(\xvec_i)-r_i)^2]$ to the diagonal of the form, and the C/DG part requires $\gamma_p$ larger than twice the inverse-inequality constant. In the frequency domain, $B_{\omega,h}$ is not coercive and the discrete problem is solvable except at isolated frequencies. Equation~\eqref{eq:power_balance} shows that a homogeneous solution radiates and dissipates no power. Such solutions, and hence non-uniqueness, can only occur at undamped resonances of closed or trapping configurations.
+\end{remark}
+
+%------------------------------------------------
+\subsection{Algebraic system and eigenvalue analysis}\label{subsec:algebraic_system}\label{sec:modalAnalysis}
+
+Let $\boldsymbol{\phi}$, $\boldsymbol{\kappa}$ and $\boldsymbol{\eta}$ be the vectors of degrees of freedom of $\phi_h$, $\kappa_h$ and $\eta_h$, and $\qvec\in\mathbb{C}^N$ the resonator amplitudes. Using \eqref{eq:alpha_f}, the system reads
+\begin{equation}\label{eq:algebraic_system}
+    \left[\begin{array}{cccc}
+        \mathbf{S}_{\phi}(\omega) & i\omega\beta_f\mathbf{M}_{\phi\kappa} & i\omega\mathbf{M}_{\phi\eta} & \mathbf{0}\\
+        -i\omega\beta_f\mathbf{M}_{\phi\kappa}^{\mathsf T} & g\beta_f\mathbf{M}_{\kappa\kappa} & \mathbf{0} & \mathbf{0}\\
+        -i\omega\mathbf{M}_{\phi\eta}^{\mathsf T} & \mathbf{0} & \mathbf{K}_{\eta}(\omega)-\omega^2\mathbf{M}_{\eta}+\mathbf{P}_\eta\mathbf{K}_r^\omega\mathbf{P}_\eta^{\mathsf T} & -\mathbf{P}_\eta\mathbf{K}_r^\omega\\
+        \mathbf{0} & \mathbf{0} & -\mathbf{K}_r^\omega\mathbf{P}_\eta^{\mathsf T} & \mathbf{K}_r^\omega-\omega^2\mathbf{M}_r
+    \end{array}\right]
+    \left[\begin{array}{c}\boldsymbol{\phi}\\ \boldsymbol{\kappa}\\ \boldsymbol{\eta}\\ \qvec\end{array}\right]
+    =
+    \left[\begin{array}{c}\mathbf{f}_\phi\\ \mathbf{0}\\ \mathbf{f}_\eta\\ \mathbf{0}\end{array}\right].
+\end{equation}
+Using $\{\psi^\phi_j\}$, $\{\psi^\kappa_j\}$ and $\{\psi^\eta_j\}$ to denote the real bases of $\V_h$, $\V_{\Gf,h}$ and $\V_{\Gm,h}$, respectively, the $(i,j)$ entries of the matrices are
+\begin{linenomath}
+\begin{equation}\label{eq:algebraic_matrices}
+\begin{array}{lll}
+    \mathbf{K}_{\Of}=(\nabla\psi^\phi_j,\nabla\psi^\phi_i)_{\Of}, &
+    \mathbf{M}_{\Gout}=(\psi^\phi_j,\psi^\phi_i)_{\Gout}, &
+    \mathbf{M}_{\Gf}=(\psi^\phi_j,\psi^\phi_i)_{\Gf}, \\[4pt]
+    \mathbf{M}_{\phi\kappa}=(\psi^\kappa_j,\psi^\phi_i)_{\Gf}, &
+    \mathbf{M}_{\kappa\kappa}=(\psi^\kappa_j,\psi^\kappa_i)_{\Gf}, &
+    \mathbf{M}_{\phi\eta}=(\psi^\eta_j,\psi^\phi_i)_{\Gm}, \\[4pt]
+    \mathbf{M}_{\eta}=(m_\rho\psi^\eta_j,\psi^\eta_i)_{\Gm}, &
+    \mathbf{P}_\eta=\psi^\eta_j(\xvec_i), &
+    \mathbf{M}_r=\mathrm{diag}(m_{\rho,i}), \\[4pt]
+    \multicolumn{2}{l}{\mathbf{K}_\eta(\omega)=g(\psi^\eta_j,\psi^\eta_i)_{\Gm}+(T_\rho^\omega\nabla\psi^\eta_j,\nabla\psi^\eta_i)_{\Gm}+a_{b,h}(\psi^\eta_j,\psi^\eta_i;\chi_b),} &
+    \mathbf{K}_r^\omega=\mathrm{diag}(k_{\rho,i}^\omega),
+\end{array}
+\end{equation}
+\end{linenomath}
+and $\mathbf{S}_\phi(\omega)=\mathbf{K}_{\Of}-ik_{\mathrm{out}}\mathbf{M}_{\Gout}-\frac{\omega^2(1-\beta_f)}{g}\mathbf{M}_{\Gf}$ collects the potential--potential terms. The point-evaluation matrix $\mathbf{P}_\eta\in\mathbb{R}^{n_\eta\times N}$, whose entry $(j,i)$ is $\psi^\eta_j(\xvec_i)$, has as $i$-th column the vector $\mathbf{p}_i$ that evaluates the structural trace at $\xvec_i$. The load vectors $\mathbf{f}_\phi$ and $\mathbf{f}_\eta$ follow from \eqref{eq:Linear_freq}.  Extending $\mathbf{P}_\eta$ by zero rows to all fluid--structure unknowns gives the matrix $\mathbf{P}$ used in Section~\ref{sec:finite_domain}.
+
+\begin{remark}[Discrete reciprocity]\label{rem:discrete_reciprocity}
+The matrix in \eqref{eq:algebraic_system} is not symmetric, because the off-diagonal blocks in the first block column carry the factor $-i\omega$ instead of $i\omega$. Changing the sign of the first block row, which does not modify the solution, makes it complex-symmetric. The $\eta$--$\eta$ block of its inverse, and in particular the discrete transfer compliance $\mathbf{G}_{B,h}$ of \eqref{eq:lat_woodbury}, is therefore symmetric to round-off, for any mesh. This holds as long as no free-surface damping zone is used: the terms of the damping zone that involve $\nvec\cdot\nabla\phi$ are not symmetric. The residual $\|\mathbf{G}_{B,h}-\mathbf{G}_{B,h}^{\mathsf T}\|$ hence diagnoses the damping zones rather than the discretisation; with the Sommerfeld condition it is at round-off level (Section~\ref{subsubsec:num_L2_1}).
+\end{remark}
+
+Note that the last block row of \eqref{eq:algebraic_system} gives $\qvec=(\mathbf{K}_r^\omega-\omega^2\mathbf{M}_r)^{-1}\mathbf{K}_r^\omega\mathbf{P}_\eta^{\mathsf T}\boldsymbol{\eta}$, which is the discrete form of \eqref{eq:resonator_motion}. Substituting it into the structural row replaces the resonator blocks by
+\begin{equation}\label{eq:resonator_condensation}
+    \mathbf{P}_\eta\left[\mathbf{K}_r^\omega-\mathbf{K}_r^\omega(\mathbf{K}_r^\omega-\omega^2\mathbf{M}_r)^{-1}\mathbf{K}_r^\omega\right]\mathbf{P}_\eta^{\mathsf T}
+    =-\mathbf{P}_\eta\boldsymbol{\alpha}\mathbf{P}_\eta^{\mathsf T},
+    \qquad
+    \boldsymbol{\alpha}=\mathrm{diag}\left(\omega^2m_{\mathrm{eff},\rho,i}(\omega)\right),
+\end{equation}
+with $m_{\mathrm{eff},\rho,i}$ the effective dynamic mass of Section~\ref{sec:dispersion_relation}. The condensed matrix is therefore $\mathbf{K}_h(\omega)-\mathbf{P}\boldsymbol{\alpha}\mathbf{P}^{\mathsf T}$, where $\mathbf{K}_h$ is the matrix of the bare host. This is the rank-$N$ update used in Section~\ref{sec:finite_domain}, and equation~\eqref{eq:lat_woodbury} follows from it. In practice we solve the full system \eqref{eq:algebraic_system}, because the resonator rows only add $N$ unknowns and $3N$ nonzero entries per row.
+
+For the modal analysis we consider the un-damped case without external forcing, i.e. we set $\tau=\tau_b=0$, $c_{\rho,i}=0$ and no forcing terms. The dry modes of the structure with its resonators, i.e.\ in vacuo, solve the linear generalised eigenvalue problem
+\begin{equation}\label{eq:eigDry}
+    \left(\mathbf{K}^{\mathrm{dry}}-\omega^2\mathbf{M}^{\mathrm{dry}}\right)
+    \left[\begin{array}{c}\boldsymbol{\eta}\\ \qvec\end{array}\right]=\mathbf{0},
+    \qquad
+    \mathbf{K}^{\mathrm{dry}}=
+    \left[\begin{array}{cc}
+        \mathbf{K}_\eta^{e}+\mathbf{P}_\eta\mathbf{K}_r\mathbf{P}_\eta^{\mathsf T} & -\mathbf{P}_\eta\mathbf{K}_r\\
+        -\mathbf{K}_r\mathbf{P}_\eta^{\mathsf T} & \mathbf{K}_r
+    \end{array}\right],
+    \quad
+    \mathbf{M}^{\mathrm{dry}}=
+    \left[\begin{array}{cc}\mathbf{M}_\eta & \mathbf{0}\\ \mathbf{0} & \mathbf{M}_r\end{array}\right],
+\end{equation}
+where $\mathbf{K}_\eta^e$ is $\mathbf{K}_\eta$ without the hydrostatic part and $\mathbf{K}_r=\mathrm{diag}(k_{\rho,i})$ is $\mathbf{K}_r^\omega$ for $c_{\rho,i}=0$. The wet modes are obtained by eliminating the fluid unknowns. The second block row gives $\boldsymbol{\kappa}=\frac{i\omega}{g}\mathbf{M}_{\kappa\kappa}^{-1}\mathbf{M}_{\phi\kappa}^{\mathsf T}\boldsymbol{\phi}$, and the first block row then gives $\boldsymbol{\phi}=-i\omega\,\mathbf{S}_{\mathrm{f}}(\omega)^{-1}\mathbf{M}_{\phi\eta}\boldsymbol{\eta}$, with
+\begin{equation}\label{eq:fluid_schur}
+    \mathbf{S}_{\mathrm{f}}(\omega)=\mathbf{S}_\phi(\omega)-\frac{\omega^2\beta_f}{g}\mathbf{M}_{\phi\kappa}\mathbf{M}_{\kappa\kappa}^{-1}\mathbf{M}_{\phi\kappa}^{\mathsf T}.
+\end{equation}
+When the free-surface space is the trace space of $\V_h$, $\mathbf{M}_{\phi\kappa}\mathbf{M}_{\kappa\kappa}^{-1}\mathbf{M}_{\phi\kappa}^{\mathsf T}=\mathbf{M}_{\Gf}$ and $\mathbf{S}_{\mathrm{f}}=\mathbf{K}_{\Of}-ik_{\mathrm{out}}\mathbf{M}_{\Gout}-\frac{\omega^2}{g}\mathbf{M}_{\Gf}$, independently of $\beta_f$. Substituting $\boldsymbol{\phi}$ into the structural row yields the wet eigenvalue problem
+\begin{equation}\label{eq:eigWet}
+    \left(\mathbf{K}^{\mathrm{wet}}-\omega^2\left(\mathbf{M}^{\mathrm{dry}}+\left[\begin{array}{cc}\mathbf{A}(\omega) & \mathbf{0}\\ \mathbf{0} & \mathbf{0}\end{array}\right]\right)\right)
+    \left[\begin{array}{c}\boldsymbol{\eta}\\ \qvec\end{array}\right]=\mathbf{0},
+    \qquad
+    \mathbf{A}(\omega)=\mathbf{M}_{\phi\eta}^{\mathsf T}\,\mathbf{S}_{\mathrm{f}}(\omega)^{-1}\,\mathbf{M}_{\phi\eta},
+\end{equation}
+where $\mathbf{K}^{\mathrm{wet}}$ is $\mathbf{K}^{\mathrm{dry}}$ plus the hydrostatic stiffness $g(\psi^\eta_j,\psi^\eta_i)_{\Gm}$ in the $\eta$--$\eta$ block and $\mathbf{A}(\omega)$ is the hydrodynamic added-mass matrix. Its real part is the added mass, and its imaginary part, which is nonzero only through the radiation term, is the radiation damping. This is the discrete counterpart of the frequency-dependent hydrodynamic operator discussed in Section~\ref{sec:dispersion_relation}.
+
+It is important to highlight that the resonator blocks in \eqref{eq:eigWet} are linear in $\omega^2$. Therefore, the only nonlinearity in $\omega$ comes from $\mathbf{A}(\omega)$, through $k_{\mathrm{out}}(\omega)$ and the free-surface term. Condensing the resonators instead would introduce poles at $\omega=\omega_{r,i}$ in the stiffness. As done in \cite{agarwal2024dynamic}, we define the wet natural frequencies from the undamped problem, i.e.\ with $\mathbf{A}$ replaced by $\mathrm{Re}\,\mathbf{A}$. The real eigenproblem \eqref{eq:eigWet} at fixed $\omega$ is then symmetric.
+
+For each mode $n$, the nonlinear problem is solved by the fixed-point iteration described in Figure~\ref{fig:modal_iteration}. It is initialised with the dry frequency $\omega_n^{(0)}=\omega_n^{\mathrm{dry}}$. At iteration $k$, the generalised eigenvalue problem \eqref{eq:eigWet} is solved with $\mathbf{A}(\omega_n^{(k)})$ frozen, and $\omega_n^{(k+1)}$ is the square root of the eigenvalue whose eigenvector is closest, in the modal assurance criterion, to that of the previous iterate. The iteration stops when $|\omega_n^{(k+1)}-\omega_n^{(k)}|\leq\epsilon\,\omega_n^{(k)}$. Sections~\ref{subsubsec:num_L2_3} and~\ref{subsubsec:num_L2_5} use it for the coupled wet modes of a finite structure with resonators.
+
+\input{figures/fig_modal_iteration}
+
+% %------------------------------------------------
+% \subsection{Implementation}\label{subsec:implementation}
+% The formulation is implemented in the Julia package HydroElasticFEM.jl, built on the Gridap finite element library \cite{badia2020gridap,verdugo2022software}, following \cite{colomes2023monolithic,agarwal2024dynamic}. The weak forms \eqref{eq:Bilinear_freq}, \eqref{eq:Linear_freq} and \eqref{eq:cdg_form} are written almost verbatim in Gridap's high-level syntax. The monolithic formulation requires integration on entities of four different dimensions:
+% \begin{itemize}
+%     \item the fluid cells $\Omega_h$ (dimension $d$);
+%     \item the surface facets $\Gfh$ and $\Gmh$, on which the elevation spaces are defined as traces of the fluid mesh ($d-1$);
+%     \item the structural skeleton $\Lmh$ of the C/DG terms ($d-2$);
+%     \item the attachment points $\xvec_i$, on which Dirac measures evaluate $\eta_h$ and $u_h$ (dimension $0$).
+% \end{itemize}
+% The resonator amplitudes are global scalar unknowns, i.e.\ zero-dimensional fields of the multi-field space $\mathcal{X}_h$. The frequency-domain system \eqref{eq:algebraic_system} is solved with a sparse direct solver, one factorisation per frequency. The time-domain problem is integrated with the Newmark or generalised-$\alpha$ schemes.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%================================================

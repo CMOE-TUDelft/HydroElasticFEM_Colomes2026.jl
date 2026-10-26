@@ -1,0 +1,75 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%================================================
+\section{Introduction}
+
+\begin{itemize}
+    {\color{red} \item background, application of vlfs and flexible structures (membranes) for offshore}
+The use of very large floating structures (VLFS) in offshore engineering applications is gaining interest in the recent years \cite{lamas2015review}. This interest is mainly driven by the increase of offshore renewable energy technologies, such as wave energy converters \cite{cheng2024wave,renzi2021niche} or floating solar platforms  \cite{liu2024review,huang2023comprehensive}, and floating structures for coastal protection \cite{samuel2025motion,peng2023computational}. Among these, very flexible structures, such as membranes or hinged many-platform, have emerged as a promising solution due to their unique properties, e.g. low mass and potential for deployment over large areas \cite{zhang2022review,koley2022performance}. 
+%
+Their interaction with waves can be used for wave amplitude attenuation or for energy conversion through
+structural and/or added damping \cite{venkateswarlu2021wave,michele2020wave,
+collins2021flexible,boren2021distributed,kargar2022atlas,moretti2022high}.
+
+{\color{red}The response of a floating flexible structure depends on the coupling between the fluid, the host structure, and any attached devices. Local resonators
+introduce a frequency-dependent impedance and can therefore alter this coupled
+response. A local effective-medium dispersion relation describes the response
+under scale separation, but by itself it does not establish the scattering
+behaviour of a finite structure. In particular, attenuation inferred from a
+local complex wavenumber must be distinguished from reflection, transmission,
+and absorption calculated for a discrete finite array.
+
+This work formulates a monolithic finite-element model for linear potential
+flow coupled to a flexible floating plate and discrete mass--spring--damper
+resonators. We derive a local effective-medium dispersion relation for spatially
+varying resonator populations and examine homogeneous and graded configurations.
+We use the coupled formulation to study modal properties and wave-energy
+response, while stating separately the assumptions and scope of the local
+dispersion approximation. The analysis is restricted to linear waves and
+linear structural and resonator response; nonlinear effects and experimental
+validation are outside its scope.}
+
+    {\color{red}\item Explain use of floating membrane as floating breakwaters, wave energy converters or platforms for floating solar or similar applications. Concept of flexibility as key point.}
+    Among VLFS, the use of membranes is gaining attention for their benefits in terms of lightweight, reduced cost, easy deployment and serviceability \cite{zhang2022review,koley2022performance}. 
+%The key benefit of using flexible membranes is their capacity to attenuate waves by taking advantage of inherent structural damping or added viscous damping when using porous materials, see for example \cite{venkateswarlu2021wave}. Flexible membranes are also being studied for their wave energy harvesting potential, see \cite{michele2020wave,collins2021flexible,boren2021distributed}, converting wave motion to energy through embedded viscoelastic (pietzoelectric or dielectric) power-take-off systems \cite{kargar2022atlas,moretti2022high} or damped mooring systems. The primary advantage of floating viscoelastic membranes (or equivalent flexible structures) lies in their ability to harvest or dissipate energy from a broad range of ocean wave frequencies, leading to increased operational bandwidth and efficiency, as motivated in \cite{agarwal2024dynamic}. %% W-BODY-03 (02 P-02-BIB-01 sec.1, L33): 'as demonstrated in' -> 'as motivated in'.
+
+    {\color{red}
+    \item research gap: damping at frequencies outside of natural freqs of the structure}
+    Flexible floating structures can be optimized to maximize target quantities of interest, see for example \cite{yao2025optimization,michailides2015optimization}. It has also been recently shown that space-dependent properties of a floating flexible membrane, e.g. mass, can be optimized to maximize wave energy absorption \cite{el4911089optimization}. However, in the viscoelastic membrane of \cite{agarwal2024dynamic} the absorption of wave energy is concentrated in narrow local peaks around the wet natural frequencies of the membrane, since away from them the membrane either heaves almost rigidly (low frequencies) or largely reflects the waves (high frequencies).
+%% W-BODY-03 (R-MAP-02 MAJOR-4(d); 02 P-02-BIB-01 sec.1, L37): Agarwal characterisation replaced by 02's verified wording (map B-5: 02 verification).
+
+
+    %% W-BODY-03 (D-l, D-ac (a); R-MAP-02 MAJOR-4): T-HARV-02 Candidate D, D-now with variant (a), replaces B9 (Candidate A).
+    %%   Edits to the 08 text: (1) "A single resonator ... introduces" -> resonator *tuned below* (design condition, MAJOR-4(c));
+    %%   (2) "first wet natural frequency" -> "first elastic (non-heave) wet natural frequency" (W-BODY-03b, R-MAP-03 m-N7: was "flexural"): the eq:eigWet heave fixed point
+    %%   0.428742-0.273605i (EV-0043, EV-0076) is excluded by name; (3) the 1/2 bound scoped to the two-dimensional particular case
+    %%   and a single resonator at the centre of a symmetric membrane (EV-0117, Evans 1976); no 3D analogue given (MAJOR-4(a));
+    %%   (4) bandwidth labelled reduced-order (EV-0040, EV-0166: RO 1D zero-draft free-free membrane, no FEM) (MAJOR-4(b));
+    %%   (5) Garnaud & Mei re-attributed per 02 P-02-BIB-01 sec.2 ("arrays of small buoys as an alternative to single resonant devices").
+    %% TODO-GATED 06 BP-23 (DL-0051) + bare-membrane eq:eigWet fixed-point sweep (R-MAP-02 MAJOR-4 test): confirm which computed root
+    %%   is the "first elastic (non-heave) wet natural frequency" of the bare baseline membrane, and that the heave point is correctly excluded.
+    %% TODO-GATED D-ad runs (VT-ENERGY-F/VC-02 first; N-1b-H1/H2/H3; RO-ARR-U1/G1; N-ARR-U1/G1; NX-C1 secondary): the closing
+    %%   clause "we quantify this in Section~\ref{sec:absorption}" is provisional (D-ac); if the runs fail, fall back to variant (b).
+%% W-BODY-03b (R-MAP-03 MAJOR-N1): two-resonator sentence replaced by 12's wording; "unequal damping" is a program reduced-order
+%%   result (EV-0113/0147, BP-03) and appears only in subsubsec:absorption_two, labelled reduced-order, until N-1b-H3 passes.
+%%   Evans 1976 (two modes each tuned), Merkel 2015 (detuned pair), Jimenez 2017 (asymmetric graded panel) cited for what they show.
+%% W-BODY-03b (R-MAP-03 m-N4): closing clause in red until R-H3/R-H4 pass (D-ac); variant (b) fall-back stands.
+%%   "identical" arrays: red CITE NEEDED for 02 (candidates per 12: Merkel 2015 N-resonator, Garnaud & Mei 2009); else write "graded" only.
+%% W-BODY-03b (R-MAP-03 m-N7): "flexural" -> "elastic (non-heave)" / "elastic": the baseline host is a tensioned membrane, C_rho = 0.
+%% W-BODY-04 (R-MAP-03 MAJOR-N1): sentence 4 = 08 T-HARV-02_candidate_D sec.1.1-v2 block verbatim (each source cited for its own
+%%   asymmetric route; "narrow bands" scoped to a single pair, not to the Jimenez rainbow panel; Merkel narrow peak per 02 P-02-BIB-02 item 3).
+%% W-BODY-04 (R-MAP-03 m-N4): sentence 5 = 08 sec.1.1-v2 drop-"identical" fallback; 02 P-02-BIB-02 item 2: no source for identical arrays.
+%%   Garnaud & Mei 2010 is not cited for any entrance-reflection floor (02 item 4). Optional westcott2024broadband (02 item 2) not added: PI/12.
+%% W-BODY-05 (D-aq (3), R-BODY-04 m-B2): Evans clause = 12's wording (symmetric and antisymmetric modes, each optimally tuned).
+%% W-BODY-05b (D-aq (2)): westcott2024broadband cited next to wilks2022rainbow (02 verified, P-02-BIB-03; graded PTO stiffness, identical buoys).
+In this work we propose the integration of damped local resonators into a floating membrane, i.e.\ mass--spring--dashpot units whose dashpot acts as an idealised linear power take-off. A single resonator tuned below the first elastic (non-heave) wet natural frequency of the bare membrane introduces a resonator-dominated wet mode near its own natural frequency. When the resonator damping matches the radiation damping of that mode, the dashpot absorbs incident wave energy at frequencies where the bare membrane has no elastic resonance. In the two-dimensional setting of a vertical section, and for a single resonator at the centre of a symmetric membrane, the absorbed fraction is at most one half, the classical limit for a symmetric absorber radiating to both sides \cite{evans1976theory}; reduced-order models of the membrane give a relative absorption bandwidth of about $2/Q_{\rm rad}$, with $Q_{\rm rad}$ the radiative quality factor of that mode. Two resonators can exceed one half: when the absorber is made asymmetric, absorption of waves incident from one side can approach unity, as for a body whose symmetric and antisymmetric modes of motion are each optimally tuned \cite{evans1976theory}, for a detuned pair of acoustic resonators \cite{merkel2015control} and for asymmetric acoustic panels \cite{jimenez2017rainbow}, although, for a single pair, only within narrow frequency bands. Arrays of resonators graded in natural frequency have been used to extend the working frequency range of acoustic and water-wave absorbers \cite{jimenez2017rainbow,wilks2022rainbow,westcott2024broadband}, and arrays of small buoys have been proposed as an alternative to single resonant wave-energy devices \cite{garnaud2009wave}{\color{red}; for a floating membrane we quantify this in Sections~\ref{subsubsec:num_L2_4} and~\ref{subsec:num_graded} [PROVISIONAL: L2-4 and L2-6 are done; settle the wording in the final pass]}.
+    
+    {\color{red}\item review of structures with local resonators.}
+    
+    {\color{red}\item research gap: interaction with hydroelastic structures. There is a need to understand the interaction of these large floating platforms with waves.}
+    
+    {\color{red}\item objectives of the paper: modeling, assessing performance and parametric study. We are primarily interested in the reflection, transmission and absorption of the wave energy.}
+
+    {\color{red} novelty}
+    
+    {\color{red}\item organization of the paper.}
+\end{itemize}
