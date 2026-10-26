@@ -128,6 +128,8 @@ function footprint_table(cs, records)
             push!(rows, (ω=p.ω, n=p.elements_per_wavelength, id=id, family=r["family"], a=r["a"], zeta=r["zeta"],
                          mass=r["mass"], x_peak=fp.x_peak, fwhm=fp.fwhm, x_star=pr.x_star, dx_pred=pr.Δx,
                          sqrt_mu=pr.sqrt_mu, absorbed=sum(r["absorbed"]), R=abs(r["R"]), T=abs(r["T"]),
+                         # width in units of the damping-only footprint 2ζ ω|dx*/dω|
+                         fwhm_2zeta=fp.fwhm / (pr.Δx / max(2r["zeta"], pr.sqrt_mu) * 2r["zeta"]),
                          balance=r["balance"]))
         end
     end
@@ -142,7 +144,8 @@ function density_table(cs, records)
         for (id, r) in d["arrays"]
             push!(rows, (ω=p.ω, n=p.elements_per_wavelength, id=id, family=r["family"], Lg_lambda=round(r["Lg"] / λ),
                          zeta=r["zeta"], N=length(r["x"]), R=abs(r["R"]), T=abs(r["T"]), absorbed=sum(r["absorbed"]),
-                         balance=r["balance"]))
+                         balance=r["balance"], balance_RT=get(r, "balance_RT", NaN),
+                         incident_change=get(r, "incident_change", NaN)))
         end
     end
     return DataFrame(rows)

@@ -368,10 +368,16 @@ function run_case(p::L2_6_Params)
         R = (t1.Aminus - w1.Aminus) / w1.Aplus
         T = t2.Aplus / w2.Aplus
         absorbed = power ./ flux
+        # Exact balance: net plate-wave flux into the array (W1 minus W2, total field) against
+        # the dashpot power; independent of the re-reflection of R by the left sponge, which
+        # changes the wave incident on the array by O(sponge reflection × |R|) and enters the
+        # R/T balance below at that order.
+        net = (abs2(t1.Aplus) - abs2(t1.Aminus) - abs2(t2.Aplus) + abs2(t2.Aminus)) / abs2(w1.Aplus)
         results[arr.id] = Dict{String,Any}(
             "family" => String(arr.family), "a" => arr.a, "zeta" => arr.ζ, "mass" => String(arr.mass), "Lg" => arr.Lg,
             "x" => xs[arr.idx], "absorbed" => absorbed, "R" => R, "T" => T,
-            "balance" => abs2(R) + abs2(T) + sum(absorbed) - 1, "fit_residual" => max(t1.residual, t2.residual),
+            "balance" => net - sum(absorbed), "balance_RT" => abs2(R) + abs2(T) + sum(absorbed) - 1,
+            "incident_change" => abs(t1.Aplus / w1.Aplus) - 1, "fit_residual" => max(t1.residual, t2.residual),
         )
     end
     return Dict{String,Any}(
