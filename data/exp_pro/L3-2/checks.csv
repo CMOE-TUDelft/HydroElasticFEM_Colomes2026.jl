@@ -1,0 +1,137 @@
+name,kind,value,tolerance,passed
+"residual, max over solves, C=0.05g, L1",I,2.0503167626381607e-10,1.0e-8,true
+"incident wave in the RHS only: |A(η₀) − A(0)|₁/|A|₁, C=0.05g, L1",I,0.0,1.0e-14,true
+"incident wave in the RHS only: |b(η₀ = 0)|, C=0.05g, L1",I,0.0,1.0e-14,true
+"load sign: |Σ b_η − f| + Σ|b_other|, C=0.05g, L1",I,0.0,1.0e-10,true
+"load sign: |A_ηη·1/((g − ω²m_ρ)|Γη|) − 1|, C=0.05g, L1",I,5.218048215738236e-14,1.0e-8,true
+"METIS ordering used by UMFPACK, C=0.05g, L1",I,1.0,1.0,true
+"peak RSS < 4 GiB, max over the processes of the case (GiB), C=0.05g, L1",R,3.701873779296875,4.0,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at node, C=0.05g, L1",I,0.0,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, node, C=0.05g, L1",I,9.69850436156127e-13,1.0e-8,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at edge, C=0.05g, L1",I,0.0,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, edge, C=0.05g, L1",I,7.585665375040024e-12,1.0e-8,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at interior, C=0.05g, L1",I,2.479377237400524e-17,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, interior, C=0.05g, L1",I,9.757290630403932e-11,1.0e-8,true
+"B-P2 Sherman–Morrison η(x_r) at 0.9ω_r, ζ = 0.02, C=0.05g, L1",I,2.7638718795057226e-11,1.0e-8,true
+"residual, max over solves, C=0.05g, L2",I,1.3873142361965325e-10,1.0e-8,true
+"load sign: |Σ b_η − f| + Σ|b_other|, C=0.05g, L2",I,8.881784197001252e-16,1.0e-10,true
+"load sign: |A_ηη·1/((g − ω²m_ρ)|Γη|) − 1|, C=0.05g, L2",I,2.2100099528188366e-12,1.0e-8,true
+"METIS ordering used by UMFPACK, C=0.05g, L2",I,1.0,1.0,true
+"peak RSS < 4 GiB, max over the processes of the case (GiB), C=0.05g, L2",R,3.960693359375,4.0,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at node, C=0.05g, L2",I,1.0320616051364021e-29,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, node, C=0.05g, L2",I,7.169431350660564e-12,1.0e-8,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at edge, C=0.05g, L2",I,7.190911658352878e-31,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, edge, C=0.05g, L2",I,1.4488108965867662e-11,1.0e-8,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at interior, C=0.05g, L2",I,3.0788402398950432e-18,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, interior, C=0.05g, L2",I,7.048779318850266e-12,1.0e-8,true
+"B-P2 Sherman–Morrison η(x_r) at 0.9ω_r, ζ = 0.02, C=0.05g, L2",I,7.294332087634011e-11,1.0e-8,true
+"residual, max over solves, C=0.05g, L3",I,1.2852217952548503e-9,1.0e-8,true
+"load sign: |Σ b_η − f| + Σ|b_other|, C=0.05g, L3",I,0.0,1.0e-10,true
+"load sign: |A_ηη·1/((g − ω²m_ρ)|Γη|) − 1|, C=0.05g, L3",I,3.2920555170790067e-11,1.0e-8,true
+"METIS ordering used by UMFPACK, C=0.05g, L3",I,1.0,1.0,true
+"peak RSS < 4 GiB, max over the processes of the case (GiB), C=0.05g, L3",R,3.911529541015625,4.0,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at node, C=0.05g, L3",I,3.374709054305234e-27,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, node, C=0.05g, L3",I,2.4220828762445067e-10,1.0e-8,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at edge, C=0.05g, L3",I,1.2750490296207023e-26,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, edge, C=0.05g, L3",I,2.3440231168898296e-11,1.0e-8,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at interior, C=0.05g, L3",I,0.0,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, interior, C=0.05g, L3",I,7.040198936369879e-12,1.0e-8,true
+"B-P2 Sherman–Morrison η(x_r) at 0.9ω_r, ζ = 0.02, C=0.05g, L3",I,2.0264044801228731e-10,1.0e-8,true
+"residual, max over solves, C=0.005g, L1",I,2.018393786681051e-12,1.0e-8,true
+"incident wave in the RHS only: |A(η₀) − A(0)|₁/|A|₁, C=0.005g, L1",I,0.0,1.0e-14,true
+"incident wave in the RHS only: |b(η₀ = 0)|, C=0.005g, L1",I,0.0,1.0e-14,true
+"load sign: |Σ b_η − f| + Σ|b_other|, C=0.005g, L1",I,0.0,1.0e-10,true
+"load sign: |A_ηη·1/((g − ω²m_ρ)|Γη|) − 1|, C=0.005g, L1",I,4.67847982577041e-13,1.0e-8,true
+"METIS ordering used by UMFPACK, C=0.005g, L1",I,1.0,1.0,true
+"peak RSS < 4 GiB, max over the processes of the case (GiB), C=0.005g, L1",R,3.6319122314453125,4.0,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at node, C=0.005g, L1",I,2.8152484233673152e-30,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, node, C=0.005g, L1",I,1.2610468449024009e-12,1.0e-8,true
+"residual, max over solves, C=0.005g, L2",I,9.598221015464248e-12,1.0e-8,true
+"load sign: |Σ b_η − f| + Σ|b_other|, C=0.005g, L2",I,0.0,1.0e-10,true
+"load sign: |A_ηη·1/((g − ω²m_ρ)|Γη|) − 1|, C=0.005g, L2",I,2.73181477439266e-12,1.0e-8,true
+"METIS ordering used by UMFPACK, C=0.005g, L2",I,1.0,1.0,true
+"peak RSS < 4 GiB, max over the processes of the case (GiB), C=0.005g, L2",R,3.8109283447265625,4.0,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at node, C=0.005g, L2",I,1.7438537000606533e-29,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, node, C=0.005g, L2",I,1.506222483090961e-11,1.0e-8,true
+"residual, max over solves, C=0.005g, L3",I,7.788372110995562e-11,1.0e-8,true
+"load sign: |Σ b_η − f| + Σ|b_other|, C=0.005g, L3",I,8.881784197001252e-16,1.0e-10,true
+"load sign: |A_ηη·1/((g − ω²m_ρ)|Γη|) − 1|, C=0.005g, L3",I,2.5639490530693365e-12,1.0e-8,true
+"METIS ordering used by UMFPACK, C=0.005g, L3",I,1.0,1.0,true
+"peak RSS < 4 GiB, max over the processes of the case (GiB), C=0.005g, L3",R,3.7908477783203125,4.0,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at node, C=0.005g, L3",I,2.956766408385205e-28,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, node, C=0.005g, L3",I,3.944165045817584e-11,1.0e-8,true
+"residual, max over solves, C=0.0005g, L1",I,2.714051680733295e-12,1.0e-8,true
+"incident wave in the RHS only: |A(η₀) − A(0)|₁/|A|₁, C=0.0005g, L1",I,0.0,1.0e-14,true
+"incident wave in the RHS only: |b(η₀ = 0)|, C=0.0005g, L1",I,0.0,1.0e-14,true
+"load sign: |Σ b_η − f| + Σ|b_other|, C=0.0005g, L1",I,0.0,1.0e-10,true
+"load sign: |A_ηη·1/((g − ω²m_ρ)|Γη|) − 1|, C=0.0005g, L1",I,8.526512829121202e-14,1.0e-8,true
+"METIS ordering used by UMFPACK, C=0.0005g, L1",I,1.0,1.0,true
+"peak RSS < 4 GiB, max over the processes of the case (GiB), C=0.0005g, L1",R,3.624664306640625,4.0,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at node, C=0.0005g, L1",I,3.3043541929703947e-31,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, node, C=0.0005g, L1",I,4.5211344372439683e-13,1.0e-8,true
+"residual, max over solves, C=0.0005g, L2",I,4.5717599861444775e-11,1.0e-8,true
+"load sign: |Σ b_η − f| + Σ|b_other|, C=0.0005g, L2",I,0.0,1.0e-10,true
+"load sign: |A_ηη·1/((g − ω²m_ρ)|Γη|) − 1|, C=0.0005g, L2",I,7.573941473992818e-13,1.0e-8,true
+"METIS ordering used by UMFPACK, C=0.0005g, L2",I,1.0,1.0,true
+"peak RSS < 4 GiB, max over the processes of the case (GiB), C=0.0005g, L2",R,3.8662261962890625,4.0,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at node, C=0.0005g, L2",I,1.0555878051052117e-29,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, node, C=0.0005g, L2",I,2.0913328019825012e-11,1.0e-8,true
+"residual, max over solves, C=0.0005g, L3",I,8.342126421346109e-11,1.0e-8,true
+"load sign: |Σ b_η − f| + Σ|b_other|, C=0.0005g, L3",I,0.0,1.0e-10,true
+"load sign: |A_ηη·1/((g − ω²m_ρ)|Γη|) − 1|, C=0.0005g, L3",I,1.8551826741486366e-12,1.0e-8,true
+"METIS ordering used by UMFPACK, C=0.0005g, L3",I,1.0,1.0,true
+"peak RSS < 4 GiB, max over the processes of the case (GiB), C=0.0005g, L3",R,3.556396484375,4.0,true
+"B-P1 |η_S3(x)|/|η_S1(x)| at node, C=0.0005g, L3",I,1.4288372249385382e-33,1.0e-8,true
+"B-P2 Sherman–Morrison q at ω_r, node, C=0.0005g, L3",I,2.965576563305341e-11,1.0e-8,true
+"B-P3 G_h(x_r, x_r) rate p_obs, C=0.05g",D,-0.7035516663734459,1.0,false
+"B-P3 G_h(x_r, x_r) d₂₃/|L3|, C=0.05g",D,0.05231074940737948,0.02,false
+"B-P3 |q_h| rate p_obs, C=0.05g",D,-0.5806271688545737,1.0,false
+"B-P3 |q_h| d₂₃/|L3|, C=0.05g",D,0.0482703478606379,0.02,false
+"attachment: G_h at edge, rate p_obs, C=0.05g",D,-0.44705547212343555,1.0,false
+"attachment: G_h at edge, d₂₃/|L3|, C=0.05g",D,0.05428088820459571,0.02,false
+"attachment: |G_h(edge)/G_h(node) − 1| at L1 (reported), C=0.05g",R,0.02112536424019684,Inf,true
+"attachment: |G_h(edge)/G_h(node) − 1| at L2 (reported), C=0.05g",R,0.005332409567022328,Inf,true
+"attachment: |G_h(edge)/G_h(node) − 1| at L3, C=0.05g",D,0.0012929424168044029,0.02,true
+"attachment: G_h at interior, rate p_obs, C=0.05g",D,-0.1217606970644324,1.0,false
+"attachment: G_h at interior, d₂₃/|L3|, C=0.05g",D,0.057891641694127464,0.02,false
+"attachment: |G_h(interior)/G_h(node) − 1| at L1 (reported), C=0.05g",R,0.031109362107197037,Inf,true
+"attachment: |G_h(interior)/G_h(node) − 1| at L2 (reported), C=0.05g",R,0.007919094541519867,Inf,true
+"attachment: |G_h(interior)/G_h(node) − 1| at L3, C=0.05g",D,0.001988116750925954,0.02,true
+"P-γ |G_h(γ h_min/h_far) − G_h|/|G_h| at L2, C=0.05g",D,0.0075087473029926246,0.02,true
+"B-P4 S3 near field L²(B_R) rate p_obs, C=0.05g",D,0.30432714480995887,1.0,false
+"B-P4 S3 near field L²(B_R) d₂₃, C=0.05g",D,0.013233899867235431,0.02,true
+"B-P4 S3 near field H¹(B_R) rate p_obs, C=0.05g",D,0.10372413097127967,0.5,false
+"B-P4 S3 near field H¹(B_R) d₂₃, C=0.05g",D,0.02113299867272826,0.05,true
+"B-P5 |c_h·8πC_ρ/f_h − 1| (S3, free a₀) at L3, C=0.05g",A,0.013168643065992703,0.1,true
+"B-P5 |c_h·8πC_ρ/f_h − 1| (S2, free a₀) at L3, C=0.05g",A,0.021018813505723204,0.1,true
+"B-P3 G_h(x_r, x_r) rate p_obs, C=0.005g",D,-0.4255144303982351,1.0,false
+"B-P3 G_h(x_r, x_r) d₂₃/|L3|, C=0.005g",D,0.03633747901807348,0.02,false
+"B-P3 |q_h| rate p_obs, C=0.005g",D,-0.4690979808029967,1.0,false
+"B-P3 |q_h| d₂₃/|L3|, C=0.005g",D,0.029506561450457755,0.02,false
+"B-P4 S3 near field L²(B_R) rate p_obs, C=0.005g",D,0.33870772566871643,1.0,false
+"B-P4 S3 near field L²(B_R) d₂₃, C=0.005g",D,0.012909696536170516,0.02,true
+"B-P4 S3 near field H¹(B_R) rate p_obs, C=0.005g",D,0.17765698385353576,0.5,false
+"B-P4 S3 near field H¹(B_R) d₂₃, C=0.005g",D,0.022077874205115276,0.05,true
+"B-P5 |c_h·8πC_ρ/f_h − 1| (S3, free a₀) at L3, C=0.005g",A,0.019260724268688356,0.1,true
+"B-P5 |c_h·8πC_ρ/f_h − 1| (S2, free a₀) at L3, C=0.005g",A,0.0191820014743175,0.1,true
+"B-P3 G_h(x_r, x_r) rate p_obs, C=0.0005g",D,-0.7965000921218703,1.0,false
+"B-P3 G_h(x_r, x_r) d₂₃/|L3|, C=0.0005g",D,0.047847461537496756,0.02,false
+"B-P3 |q_h| rate p_obs, C=0.0005g",D,-1.1394703381653077,1.0,false
+"B-P3 |q_h| d₂₃/|L3|, C=0.0005g",D,0.026873112784360203,0.02,false
+"B-P4 S3 near field L²(B_R) rate p_obs, C=0.0005g",D,-0.25395216239286506,1.0,false
+"B-P4 S3 near field L²(B_R) d₂₃, C=0.0005g",D,0.02414362753604931,0.02,false
+"B-P4 S3 near field H¹(B_R) rate p_obs, C=0.0005g",D,-0.0637749961945257,0.5,false
+"B-P4 S3 near field H¹(B_R) d₂₃, C=0.0005g",D,0.024728720237437284,0.05,true
+"B-P5 |c_h·8πC_ρ/f_h − 1| (S3, free a₀) at L3, C=0.0005g",A,0.031031694836747333,0.1,true
+"B-P5 |c_h·8πC_ρ/f_h − 1| (S2, free a₀) at L3, C=0.0005g",A,0.034975829553063637,0.1,true
+C_ρ scaling: slope d ln|G_h|/d ln C_ρ at L3 vs infinite plate (-0.623),A,0.11833999165565512,0.15,true
+C_ρ scaling: slope d ln|G_h|/d ln C_ρ at L3 (reported; Hertz −1/2),R,-0.5044370527363137,Inf,true
+"D-W load sign |Σb − 1|, h_min = l_c/8",I,0.0,1.0e-10,true
+"D-W load sign |A·1/(g area) − 1|, h_min = l_c/8",I,3.4199310050553322e-12,1.0e-8,true
+"D-W load sign |Σb − 1|, h_min = l_c/16",I,1.7763568394002505e-15,1.0e-10,true
+"D-W load sign |A·1/(g area) − 1|, h_min = l_c/16",I,3.17552650841435e-11,1.0e-8,true
+"D-W load sign |Σb − 1|, h_min = l_c/32",I,0.0,1.0e-10,true
+"D-W load sign |A·1/(g area) − 1|, h_min = l_c/32",I,1.6065604402371036e-10,1.0e-8,true
+B-W1 |w_h(0)/w(0) − 1| at l_c/32,A,0.0066949292056242005,0.01,true
+B-W1 rate p_obs of w_h(0),D,1.0270366817104117,1.0,true
+B-W2 |c_h/c_pred − 1| (same sign) at l_c/32,A,0.026803741801450065,0.1,true

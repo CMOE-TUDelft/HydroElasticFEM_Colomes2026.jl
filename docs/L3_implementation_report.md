@@ -331,3 +331,101 @@ which has no fill record. Output: `data/exp_pro/L3-0b/metis_solver.csv`.
     julia --project -O1 -e 'using Test, HydroElasticFEM_xxx2026; include("test/test_solvers.jl")'
     bash Loop_Framework/tools/run_limited.sh -- julia --project=<repo> -O1 scripts/L3-3D-flat-bottom/L3-0b_metis_solver.jl --case <1..4>
     julia --project scripts/L3-3D-flat-bottom/L3-0b_metis_solver.jl      # table
+
+---
+
+## L3-2: point resonator on the 3D plate (port of VT3D-B, set P3)
+
+**Sources.** Code: `src/L3_2_point_resonator.jl` (module `L3_2`),
+[scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl](../scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl).
+Legacy: `code/scripts/VT3D_B_{point,winkler,nearfield}.jl` and prereg VT-3D-CONV-B v2 (+ A1 draft)
+in the LRH folder. Matrix row L3.2 of `verification_test_matrix_2026-10-22.md`, frozen
+before the binding run. Outputs: `data/exp_pro/L3-2/` (`points.csv`, `convergence.csv`,
+`fits.csv`, `winkler.csv`, `checks.csv`), `plots/L3-2/point_resonator.{pdf,png}`.
+
+### Test description
+
+Set P3 unchanged. A channel 2 m wide and 10 m deep holds a damping zone (4λ₀), a gap
+(λ₀/2), a Kirchhoff–Love plate (4λ_p long, the full width, free lateral edges, ν = 0,
+C_ρ = 0.05g, m_ρ = 0.01), a gap and a zone. The incident wave comes from a velocity inlet and
+the zone forcing. One resonator sits at the plate centre x_r (M_ρ = 0.01 m³, ω_r = 10). φ, κ
+and η are Q2, with plate penalty γ = 6. The far field has Δx ≤ λ₀/6.4 in open water, λ_p/8 on
+the plate, Δy ≤ W/7 and nz = 8. Towards x_r the cells grow from h_min by a ratio of 1.5, with
+h_min = λ_p/12, λ_p/24 and λ_p/48 (L1, L2, L3; N = 57.9 k, 73.0 k and 102.9 k).
+
+Solves per level. The bare plate at ω_r is factorised once and gives S1 (incident wave) and S2
+(unit point load) at the node x_r, at the edge point x_r + (h_min/2, 0) and at the interior
+point x_r + (h_min/3, h_min/3). S3 (resonator, ζ = 0, incident wave) is solved at the same three
+points. S1_09 and S2_09 are the bare plate at 0.9ω_r, and S4 the resonator with ζ = 0.02 there.
+PG (at L2) is S2 with the penalty γh_min/h_far. The C_ρ variant (0.005g, 5e-4g) runs S1, S2 and
+S3 at x_r. All plate lengths and the channel width scale with λ_p there (W = 1.31 m and 0.88 m),
+so the meshes keep the P3 DOF counts. D-W is the static Winkler limit: the plate alone,
+[−10l_c, 10l_c]², h_min = l_c/{8, 16, 32}. The point load uses the package `DiracDelta`. The
+solver is `MetisLUSolver`.
+
+Compute: one process per (C_ρ, level, solve group), each with one assembly and one
+factorisation, inside `run_limited` (4 GB, 1 thread), `-O0`, `--heap-size-hint=2500M`, 32
+processes. The first attempt ran several solves per process and loaded CairoMakie (about
+0.7 GB) at `-O1`. Its processes reached 3.8–4.8 GiB, so they were stopped and redone (same
+values). The table and checks come from the lean runs only.
+
+### Results (113/136 checks; 23 failures, all convergence rates)
+
+| C_ρ | level | N | \|G_h(x_r,x_r)\| | \|q_h\| | peak RSS GiB (max over processes) |
+|---|---|---|---|---|---|
+| 0.05g | L1 / L2 / L3 | 57.9 k / 73.0 k / 102.9 k | 0.0805 / 0.0834 / 0.0880 | 0.0269 / 0.0261 / 0.0249 | 3.70 / 3.96 / 3.91 |
+| 0.005g | L1 / L2 / L3 | same | 0.2213 / 0.2270 / 0.2349 | 0.01449 / 0.01419 / 0.01379 | 3.63 / 3.81 / 3.79 |
+| 5e-4g | L1 / L2 / L3 | same | 0.9250 / 0.9187 / 0.8977 | 0.00504 / 0.00511 / 0.00525 | 3.62 / 3.87 / 3.56 |
+
+Infinite plate on the fluid (`green_2d_integral`): \|G\| = 0.0274, 0.1135 and 0.4817.
+
+- **Identities (72 rows, all pass).** The residual is ≤ 1.3e-9. The incident wave enters the
+  right-hand side only (matrix difference 0, incidence-free RHS 0). The load sign holds
+  (Σb_η = f to 9e-16; A_ηη·1 matches (g − ω²m_ρ)|Γη| to 3e-11). UMFPACK uses METIS. B-P1
+  holds: η_h vanishes at the attachment point of a resonator at resonance, to ≤ 2.5e-17 of
+  η_bare, at the node, edge and interior points. B-P2 (Sherman–Morrison) holds to ≤ 2.4e-10 at
+  ω_r and at 0.9ω_r. The point coupling is therefore exact at any location in a cell.
+- **Memory.** Every process stays below 4 GiB (3.36–3.96 GiB), L3 included, with METIS.
+- **Local singularity (B-P5, pass).** The r² ln r coefficient of the azimuthal mean at L3 gives
+  c_h·8πC_ρ/f_h = 1 within 1.3 % (S3) and 2.1 % (S2) for P3, 1.9 % for 0.005g and 3.1–3.5 % for
+  5e-4g (tolerance 10 %). The plate field near a point resonator is the biharmonic Green function.
+- **Static limit (pass).** w_h(0)/w(0) − 1 = −1.15 %, −0.83 % and −0.67 % (tolerance 1 % at
+  l_c/32), with p_obs = 1.03. The r² ln r coefficient is within 2.7 % of f/(8πC_ρ), with the
+  same sign.
+- **Attachment location (pass).** G_h at the edge and interior points differs from G_h at the
+  node by 2.1 % and 3.1 % (L1), 0.5 % and 0.8 % (L2), and 0.13 % and 0.20 % (L3; tolerance 2 %).
+  The difference falls 4× per halving of h_min.
+- **Penalty (P-γ, pass).** γ → γh_min/h_far changes G_h by 0.75 % at L2 (tolerance 2 %).
+- **C_ρ scaling (pass).** d ln|G_h|/d ln C_ρ = −0.504 at L3. The infinite plate gives −0.623
+  (tolerance 0.15) and Hertz −1/2. The driving-point response stays bounded and grows as
+  C_ρ^{-1/2}.
+- **Convergence of the point values (B-P3 and the G_h ladders at the edge and interior
+  points, 16 failures) and of the near field (B-P4, 7 failures).** The L2–L3 differences of G_h are 5.2 %, 3.6 % and 4.8 % of the L3 value (tolerance
+  2 %). They are larger than the L1–L2 differences, so p_obs < 0 (−0.4 to −0.8). |q_h| behaves the
+  same way (2.7–4.8 %). The near field passes its d₂₃ tolerances (L² 1.3–2.4 %, H¹ 2.1–2.5 %),
+  except L² at 5e-4g (2.4 % > 2 %), but its rates are below 1 (and 0.5). These are findings:
+  1. They are not the ln(1/h) growth of a membrane. |G_h| increases with refinement for 0.05g
+     and 0.005g but decreases for 5e-4g. The local structure (B-P5) and the static limit
+     converge.
+  2. The "fixed far field" premise of the legacy prereg does not hold. The grading from h_min
+     with ratio 1.5 reaches the far-field size further out at each level, so ny = 8, 10 and 14
+     and the cells next to the graded zone change with the level. The plate strip is narrower
+     than λ_p (W/λ_p = 0.87), so G_h is a global quantity of the strip (3.2× the infinite-plate
+     value). Its far-field discretisation error (Q2 at λ_p/8 across the width) changes by a few
+     per cent between levels.
+  3. The legacy stop rule (a finite footprint) therefore does not apply. A conclusive ladder
+     needs the far field refined with h_min (e.g. h_far = λ_p/16, ny_base = 14) or a nested
+     grading that keeps every far cell. That is N ≈ 2× P3 L3, beyond the 4 GB cap: it needs the
+     24 GB machine.
+
+### Deviations from the frozen row (post-run, compute only)
+
+- One process per solve group, `-O0`, heap hint 2.5 GB (lower than the default) and CairoMakie
+  loaded only for post-processing. The first attempt exceeded 4 GiB at L3 and was redone.
+- The incidence check (matrix independent of η₀) is run at L1 for each C_ρ, as frozen.
+
+### Reproduce
+
+    julia --project -O0 scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl --list
+    bash Loop_Framework/tools/run_limited.sh -- julia --project=<repo> -O0 --heap-size-hint=2500M scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl --case <1..32>
+    julia --project scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl     # tables, checks, figure
