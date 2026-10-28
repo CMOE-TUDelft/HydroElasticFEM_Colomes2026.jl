@@ -1,0 +1,129 @@
+name,value,tolerance,passed
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=2 128×16×8 default",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=2 128×16×8 default",3.56060791015625,4.0,true
+"solution finite and LU residual, p=2 128×16×8 default",8.456114683736193e-11,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=2 16×16×8 default",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=2 16×16×8 default",2.213134765625,4.0,true
+"solution finite and LU residual, p=2 16×16×8 default",1.4859449382481455e-12,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=2 20×20×8 default",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=2 20×20×8 default",2.23138427734375,4.0,true
+"solution finite and LU residual, p=2 20×20×8 default",2.1319683441153068e-12,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=2 24×24×8 default",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=2 24×24×8 default",2.9581451416015625,4.0,true
+"solution finite and LU residual, p=2 24×24×8 default",2.15347144398911e-12,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=2 28×28×8 default",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=2 28×28×8 default",2.6973724365234375,4.0,true
+"solution finite and LU residual, p=2 28×28×8 default",1.216701678702019e-12,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=2 32×32×8 default",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=2 32×32×8 default",3.465057373046875,4.0,true
+"solution finite and LU residual, p=2 32×32×8 default",5.988602000772191e-12,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=2 12×12×16 default",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=2 12×12×16 default",2.37738037109375,4.0,true
+"solution finite and LU residual, p=2 12×12×16 default",6.842153394602654e-13,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=2 16×16×16 default",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=2 16×16×16 default",2.6967926025390625,4.0,true
+"solution finite and LU residual, p=2 16×16×16 default",1.6854347360069775e-12,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=2 20×20×16 default",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=2 20×20×16 default",3.87890625,4.0,true
+"solution finite and LU residual, p=2 20×20×16 default",2.4989345741338328e-12,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=3 8×8×8 default",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=3 8×8×8 default",2.51605224609375,4.0,true
+"solution finite and LU residual, p=3 8×8×8 default",3.56039044632414e-12,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=3 10×10×8 default",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=3 10×10×8 default",2.8929290771484375,4.0,true
+"solution finite and LU residual, p=3 10×10×8 default",1.527149904165383e-11,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=3 12×12×8 default",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=3 12×12×8 default",2.8945465087890625,4.0,true
+"solution finite and LU residual, p=3 12×12×8 default",6.285414718054992e-12,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=3 14×14×8 default",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=3 14×14×8 default",3.1884307861328125,4.0,true
+"solution finite and LU residual, p=3 14×14×8 default",2.625128362698126e-11,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=3 16×16×8 default",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=3 16×16×8 default",3.8931427001953125,4.0,true
+"solution finite and LU residual, p=3 16×16×8 default",1.054756705015526e-11,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=2 24×24×8 metis",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=2 24×24×8 metis",2.985504150390625,4.0,true
+"solution finite and LU residual, p=2 24×24×8 metis",2.0061894267675864e-12,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=2 32×32×8 metis",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=2 32×32×8 metis",3.81231689453125,4.0,true
+"solution finite and LU residual, p=2 32×32×8 metis",1.659384232133627e-11,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=3 12×12×8 metis",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=3 12×12×8 metis",3.192840576171875,4.0,true
+"solution finite and LU residual, p=3 12×12×8 metis",6.895998506362819e-12,1.0e-10,true
+"DOFs = (p·nx+1)(p·ny+1)(p·nz+1) + (p·nx+1)(p·ny+1), p=3 16×16×8 metis",0.0,0.0,true
+"peak RSS under the 4 GB cap, p=3 16×16×8 metis",3.4693603515625,4.0,true
+"solution finite and LU residual, p=3 16×16×8 metis",1.327192997277011e-11,1.0e-10,true
+"DOFs = tensor-product formula, p=2 256×16×8 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=2 256×16×8 (analysis)",3.7151947021484375,4.0,true
+"DOFs = tensor-product formula, p=2 333×16×8 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=2 333×16×8 (analysis)",4.1175994873046875,4.0,false
+"DOFs = tensor-product formula, p=2 76×35×8 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=2 76×35×8 (analysis)",3.1702880859375,4.0,true
+"DOFs = tensor-product formula, p=2 91×38×8 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=2 91×38×8 (analysis)",3.6443023681640625,4.0,true
+"DOFs = tensor-product formula, p=2 108×51×8 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=2 108×51×8 (analysis)",3.9403228759765625,4.0,true
+"DOFs = tensor-product formula, p=2 76×35×16 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=2 76×35×16 (analysis)",3.64849853515625,4.0,true
+"DOFs = tensor-product formula, p=2 91×38×16 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=2 91×38×16 (analysis)",4.266815185546875,4.0,false
+"DOFs = tensor-product formula, p=2 48×48×8 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=2 48×48×8 (analysis)",2.997955322265625,4.0,true
+"DOFs = tensor-product formula, p=2 64×64×8 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=2 64×64×8 (analysis)",3.868896484375,4.0,true
+"DOFs = tensor-product formula, p=2 80×80×8 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=2 80×80×8 (analysis)",4.2710418701171875,4.0,false
+"DOFs = tensor-product formula, p=2 32×32×16 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=2 32×32×16 (analysis)",2.8011016845703125,4.0,true
+"DOFs = tensor-product formula, p=2 48×48×16 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=2 48×48×16 (analysis)",3.24224853515625,4.0,true
+"DOFs = tensor-product formula, p=3 24×24×8 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=3 24×24×8 (analysis)",2.5558319091796875,4.0,true
+"DOFs = tensor-product formula, p=3 32×32×8 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=3 32×32×8 (analysis)",3.074432373046875,4.0,true
+"DOFs = tensor-product formula, p=3 40×40×8 (analysis)",0.0,0.0,true
+"peak RSS (Sys.maxrss) under the 4 GB cap, p=3 40×40×8 (analysis)",3.9317169189453125,4.0,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=2 16×16×8 default",1.0009633430971578,1.6,true
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=2 16×16×8 default",0.9681492627898333,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=2 20×20×8 default",1.12526788105064,1.6,true
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=2 20×20×8 default",0.9851716332693781,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=2 24×24×8 default",1.0177461795817813,1.6,true
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=2 24×24×8 default",1.000432284176765,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=2 28×28×8 default",1.3483408459765585,1.6,true
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=2 28×28×8 default",1.0117590057503913,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=2 32×32×8 default",1.228003056391323,1.6,true
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=2 32×32×8 default",0.9968331802891828,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=2 12×12×16 default",0.9410575850326954,1.6,true
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=2 12×12×16 default",0.9534135862603212,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=2 16×16×16 default",1.0187567053330016,1.6,true
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=2 16×16×16 default",0.9649840617931988,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=2 20×20×16 default",0.9227294037856972,1.6,true
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=2 20×20×16 default",1.0418116551751404,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=3 8×8×8 default",0.8361206286637571,1.6,false
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=3 8×8×8 default",0.8918485452168701,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=3 10×10×8 default",0.8142621937200799,1.6,false
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=3 10×10×8 default",0.8811148350196931,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=3 12×12×8 default",0.9333182443649714,1.6,true
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=3 12×12×8 default",0.9834963108347393,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=3 14×14×8 default",0.9735385892014302,1.6,true
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=3 14×14×8 default",1.0,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=3 16×16×8 default",0.9568252859252366,1.6,true
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=3 16×16×8 default",1.0012488439149765,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=2 24×24×8 metis",0.8257573434566308,1.6,false
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=2 24×24×8 metis",0.9076732684832473,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=2 32×32×8 metis",0.8126041895021159,1.6,false
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=2 32×32×8 metis",1.02130067318409,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=3 12×12×8 metis",0.7550873215621472,1.6,false
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=3 12×12×8 metis",0.9786993268159101,1.4,true
+"model peak RSS / measured ∈ [0.9, 1.6], p=3 16×16×8 metis",0.8653007608604739,1.6,false
+"model fact.+solve time / measured ∈ [0.7, 1.4], p=3 16×16×8 metis",1.1153455493581996,1.4,true
+"|k_h/k₀ − 1| on the centreline, p=2 128×16×8 default (h=λp/8, window 10.2 λp)",0.00925351578847744,0.01,true
+"y-uniformity of η (ν = 0, free edges), p=2 128×16×8 default (h=λp/8, window 10.2 λp)",3.1563858794787077e-12,1.0e-6,true
+calibration spread of kappa_L (default ordering),0.0003429334497906389,0.3,true
+calibration spread of beta_bytes_per_entry (default ordering),0.1669049748001925,0.3,true
+calibration spread of rate_flops_per_s (default ordering),0.07961540135613765,0.3,true
+square fill law on rectangle p=2 76×35×8: |pred/actual − 1| of nnz(L),0.2646810451806525,0.3,true
+square fill law on rectangle p=2 91×38×8: |pred/actual − 1| of nnz(L),0.1521063098452753,0.3,true
+square fill law on rectangle p=2 108×51×8: |pred/actual − 1| of nnz(L),0.3318000386088096,0.3,false
+square fill law on rectangle p=2 76×35×16: |pred/actual − 1| of nnz(L),0.237999224392073,0.3,true
+square fill law on rectangle p=2 91×38×16: |pred/actual − 1| of nnz(L),0.12243723998377343,0.3,true
