@@ -34,8 +34,9 @@ include("L2_4_asymmetric_absorption.jl")    # L2-1 channel: radiation asymmetry 
 include("L2_5_finite_size_dilution.jl")     # L2-3 modal analysis: hybridisation vs plate length
 include("L2_6_graded_arrays.jl")            # L2-1 channel, evaluation-matrix G_B,h: graded arrays (Woodbury)
 include("L3_0_memory_sizing.jl")            # 3D fluid box + plate: DOFs, memory, time (uses L1-1 fit)
+include("L3_1_oblique_plate.jl")             # 3D bare plate, oblique wave, periodic in y (VT3D_A port)
 include("L3_2_point_resonator.jl")          # 3D channel, point resonator on the plate (VT3D_B port, set P3)
 
-export References, Solvers, L1_1, L1_2, L1_3, L1_4, L1_5, L1_6, L1_8, L2_1, L2_2, L2_3, L2_4, L2_5, L2_6, L3_0, L3_2
+export References, Solvers, L1_1, L1_2, L1_3, L1_4, L1_5, L1_6, L1_8, L2_1, L2_2, L2_3, L2_4, L2_5, L2_6, L3_0, L3_1, L3_2
 
 end

@@ -429,3 +429,74 @@ Infinite plate on the fluid (`green_2d_integral`): \|G\| = 0.0274, 0.1135 and 0.
     julia --project -O0 scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl --list
     bash Loop_Framework/tools/run_limited.sh -- julia --project=<repo> -O0 --heap-size-hint=2500M scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl --case <1..32>
     julia --project scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl     # tables, checks, figure
+
+---
+
+## L3-1: bare plate under oblique incidence (port of VT3D-A, matrix row L3.1(a))
+
+**Sources.** Code: `src/L3_1_oblique_plate.jl` (module `L3_1`),
+[scripts/L3-3D-flat-bottom/L3-1_oblique_plate.jl](../scripts/L3-3D-flat-bottom/L3-1_oblique_plate.jl).
+Legacy: `code/scripts/VT3D_A_{dispersion,analyse,yago}.jl` (LRH folder, prereg VT-3D-CONV-A v2 + A1).
+The legacy A-D driver covers normal incidence only (an m = 0 wave in a walled channel), and A-Y is the
+Yago VLFS benchmark (set P4, outside the paper scope, not ported). The oblique case of row L3.1(a) is new.
+Matrix row L3.1 of `verification_test_matrix_2026-10-22.md`, frozen before the binding run. Outputs:
+`data/exp_pro/L3-1/` (`results.csv`, `ladder.csv`, `checks.csv`), `plots/L3-1/oblique_plate.{pdf,png}`,
+paper text `paper/snippets/L3-1.tex`.
+
+### Test description
+
+Set P1 (C_ρ = 0.49, m_ρ = 0.01, T_ρ = 0, H = 10, ν = 0). The plate covers the whole box, which is
+**periodic in y** (`TankDomain(…; is_periodic=(false, true, false))`) with W = λ_p/sin θ. A line load
+F e^{ik_y y}/b acts on two cells at x_s, with k_y = k₀ sin θ. At both ends there are `StructuralDampingZone`
+sponges (Kelvin–Voigt ωτ = 3 plus a viscous dashpot, ramp ξ²). φ and η are Q2, γ = 6. The mesh has
+h = λ_p/8 and nz = 8, graded with a top cell of 0.2/k₀. The full layout is the L3-0 target: sponges 4λ_p,
+gaps 5/κ₁ and 3λ_p on each side of the source (333×16×8 cells at ω = 10, θ = 30°). The reference is the
+oblique Green function, from the residues in k_x:
+
+    η = F e^{ik_y y} i Σ (k_m/k_{x,m}) e^{ik_{x,m}|x|}/𝒟₀′(k_m),   k_{x,m} = √(k_m² − k_y²).
+
+It gives k_h = √(k_x,h² + k_y²) → k₀, γ_θ = γ_r/cos θ, and an x-flux of ¼ω𝒟₀′ cos θ |A|² per wave.
+Each process does one METIS factorisation with 3 RHS: the oblique load and two point loads (`DiracDelta`)
+for the reciprocity check. The observables come from the y-projection onto e^{ik_y y} (Gauss-5 per
+y cell) and a wave fit at the **cell vertices**, where a discrete Bloch wave is exactly exponential. A
+uniform sampling gave a 2 % left/right bias in a smoke run. P_in = ½ω Im(b̄·x)/W is the exact discrete
+input power.
+
+Mesh study (deviation from the §0.3 ladder, as L3-0 recommends): the 333×16×8 channel cannot be refined
+on this machine. A short channel (sponges 2λ_p, gaps 5/√(κ₁² + k_y²), half-window 2λ_p) is used instead at
+ω = 10, θ ∈ {0°, 30°}, h = λ_p/{6, 8, 12}, plus θ = 0 at λ_p/16. With k_y ≠ 0 the fluid evanescent modes
+decay at ≥ k_y, so the shorter gaps are §0.3-equivalent. The vertical convergence is that of the vertical
+section (L1-1).
+
+### Results (144/144 checks)
+
+| layout | θ | ω | h | N | \|k_h/k₀ − 1\| | γ_h cos θ/γ_r − 1 | flux/P_in − 1 | reciprocity | wall s |
+|---|---|---|---|---|---|---|---|---|---|
+| full | 30° | 10 | λp/8 | 384 192 | 4.19e-3 | −2.2 % | −2.3 % | 1.3e-12 | 96 |
+| full | 0° | 10 | λp/8 | 72 036 | 9.25e-3 | −3.5 % | −3.8 % | 2.8e-14 | 6 |
+| full | 60° | 10 | λp/8 | 216 108 | 4.54e-3 | +2.0 % | +1.9 % | 1.6e-11 | 23 |
+| full | 30° / 0° | 5 | λp/8 | 288 576 / 54 108 | 3.24e-3 / 7.13e-3 | −1.9 / −3.3 % | −2.1 / −3.6 % | ≤ 5.3e-10 | 81 / 4 |
+| full | 30° / 0° | 2 | λp/8 | 159 552 / 29 916 | 1.7e-4 / 3.5e-4 | −0.1 / −0.2 % | −0.2 / −0.3 % | ≤ 5e-14 | 25 / 2 |
+
+- Identities: residual ≤ 4.7e-9, reciprocity ≤ 5.3e-10, METIS ordering in every case, left/right
+  symmetry of k_x,h ≤ 1e-6. The vertex fit residual is ≤ 5.7e-9 for oblique waves and ≤ 1.9e-6 at θ = 0
+  (model mismatch of the slow fluid evanescent modes). The transverse residual (field outside the
+  e^{ik_y y} mode) is ≤ 2e-3, and the sponge reflection is ≤ 1.5e-3 in the full layout.
+- Isotropy: \|k_h(θ)/k_h(0°) − 1\| = 5.1e-3 (30°), 4.8e-3 (60°) at ω = 10; 3.9e-3 and 1.8e-4 at ω = 5 and 2.
+  The oblique error is *smaller* than at normal incidence on the same mesh. This is the anisotropy of the
+  Q2 dispersion.
+- Mesh study: the anisotropy is 8.7e-3, 5.1e-3 and 2.3e-3 at λ_p/{6, 8, 12}, a rate of 1.84 and then 1.92.
+  At θ = 0, \|k_h/k₀ − 1\| converges at rate 1.92 (λ_p/8 → 12) and 1.93 (12 → 16). With nz = 8 the
+  vertical floor is not yet reached. γ and the energy balance converge at the same rate. The short and
+  full channels give the same k_h to 1e-8.
+- Compute (rss_guard, physical footprint): 11.8 GiB for cases 1–3 in one process (process maxrss 7.8 GB;
+  target factorisation 46 s), 9.3 GiB for cases 4–14. The L3-0 METIS projection for the target was 8.5 GB.
+- Exploratory runs before the freeze (disclosed in the row): smoke runs at λ_p/{4, 6, 8} with
+  nz ∈ {2, 4}. They checked the periodic seam (the plate skeleton has the periodic edge count, and 1 and 2
+  periods give identical k) and the sampling choice.
+
+### Reproduce
+
+    julia --project -O1 scripts/L3-3D-flat-bottom/L3-1_oblique_plate.jl --list
+    python3 -I Loop_Framework/tools/rss_guard.py --mem-gb 22 -- bash Loop_Framework/tools/run_limited.sh --mem-gb 20 --cpu-min 120 --wall-min 120 -- julia --project=<repo> -O1 scripts/L3-3D-flat-bottom/L3-1_oblique_plate.jl --case 1 --case 2 --case 3
+    julia --project scripts/L3-3D-flat-bottom/L3-1_oblique_plate.jl          # tables, checks, figure
