@@ -576,3 +576,96 @@ CSV: `data/exp_pro/L1-{1,2,3}/`.
    `eq:lat_RT`).
 5. HydroElasticFEM: a tension sponge Tᵨ(x) or a PML/DtN end condition would
    absorb long waves and the evanescent field, and is needed in 3D.
+
+---
+
+## 11. L1-7 homogenised resonator field ([src/L1_7_homogenised_resonators.jl](../src/L1_7_homogenised_resonators.jl), [script](../scripts/L1-configA-vertical/L1-7_homogenised_resonators.jl))
+
+State of 2026-10-28. Frozen in `verification_test_matrix_2026-10-22.md` §L1.7 before the binding run.
+
+### 11.1 Theory being tested
+
+- (i) The homogenised dispersion law, `eq:omega_k_x_closed_form` (`dispersion_theory.tex`): the FE wavenumber of a
+  plate carrying a uniform resonator field lies on ω±(k).
+- (i-b) Fluid dilution (`subsubsec:fluid_dilution`): M_f → ∞ as k → 0, so ω₊ → ω_r⁺ at k → 0 and ω₋ → ω_r⁻ at
+  k → ∞. Every ω ≠ ω_r has one real k, and the homogenised plate has no complete stop band.
+- (ii) `eq:lat_gamma` with `eq:PiL` (`discrete_lattices.tex`): ω_Γ ≃ ω_r/√(1 + Π_L), with Π_L evaluated at ω_r.
+  The error is O(Π_L²).
+
+### 11.2 Environment
+
+The homogenised field is the upstream `ResonatorField` on the HydroElasticFEM.jl branch `feat/resonator-field`
+(commit `8314700`, not merged). L1-7 runs in `envs/resonator_field`, which develops that worktree and this
+repository by path (`[sources]` in its Project.toml). The root environment, used by other agents, is untouched.
+The module is therefore not included in `src/HydroElasticFEM_xxx2026.jl`; the script `include`s it, and its
+imports name `HydroElasticFEM_xxx2026.` explicitly. After the merge, include the module in the package, switch
+the imports to `..`, and run in the root environment (both headers say so).
+
+### 11.3 Functions
+
+- [`closed_form_branches`](../src/L1_7_homogenised_resonators.jl): ω±(k) of `eq:omega_k_x_closed_form`, with s₋
+  written as 2ω_r²K/(Σ + d). This is the same root without the cancellation of Σ − d at large k, where
+  `References.local_branches` loses accuracy (k ≈ 5.7 at ω = 9.99).
+- `homogenised_k(h, r, n0, ω)`: the real root on ω₋ (ω < ω_r) or ω₊ (ω > ω_r), by bisection on k ∈ [1e-6, 1e3].
+  Both branches are monotone, so the root is unique.
+- `solve_field(p, ω, k; vm)`: a periodic cell of length 2π/k (`is_periodic`, plate over the whole top, no
+  sponges) with `ResonatorField(M, K, n = n₀)` on `:Γs` and the load F e^{ikx}. It returns the Bloch projections
+  g = ⟨e^{−ikx}η⟩/F and ⟨e^{−ikx}q⟩/F. In the lossless periodic cell this load excites only the Bloch-k mode.
+- `field_wavenumber(p, ω)`: the root of Re(1/g(k)) by secant iteration from k_ref(1 ± 1e-4). The vertical mesh is
+  fixed at k_ref, because an integer ny that changed with k would make 1/g discontinuous. The root is accepted on
+  the step criterion or on the residual ≤ 1e-9, as in L1-5. The secant slope gives the residual and the leakage
+  |Im(1/g)|. It also returns q/η against K/(K − ω²M).
+- `gamma_reference(h, r, a)`: the lattice-sum ω_Γ, taken as the root of the exact Γ equation closest to
+  ω_r/√(1 + Π_L) on [0.6, 1.4]ω_r. `omega_gamma_1d` brackets [0.5ω_r, ω_r). For a = 3 m (2π/a < k_c) that bracket
+  holds the pole at ω₀(2π/a) = 6.28, and it picked the lower root 6.08 in a first attempt (recomputed).
+- `run_case(::L1_7_Gamma_Params)`: `L1_5.band_frequency` (one cell, uniform load) with
+  `L1_5_Params(a, m_ρr = 0.01a, n_c = a·elements_per_metre, p = 3)`.
+
+### 11.4 Results (44/48 checks; `data/exp_pro/L1-7/checks.csv`)
+
+| Quantity | T_ρ = 0 | T_ρ = 9.8 | Tolerance |
+|---|---|---|---|
+| (i) sweep, 400 ω, p = 3, 16/λ: max \|k_h/k − 1\| | 9.1e-8 (at ω = 9.99) | 7.0e-8 | 1e-4 |
+| (i) max \|ω±(k_h)/ω − 1\| | 1.4e-7 | 5.9e-8 | 1e-4 |
+| (i) leakage / q-η ratio | 6.6e-12 / 3.6e-14 | 8.7e-13 / 2.7e-14 | 1e-6 / 1e-8 |
+| (i-b) ω without real root on its branch | 0 / 400 | 0 / 400 | 0 |
+| (i) ladder, p = 3, 4/8/16 per λ | 3.9e-4 / 5.9e-6 / 9.1e-8 | 3.1e-4 / 4.5e-6 / 7.0e-8 | 1e-4 (finest) |
+| (i) ladder, p = 2, 8/16/32 per λ (rate) | NaN* / 3.2e-3 / **7.9e-4** (1.99) | 8.7e-3 / 2.2e-3 / **5.6e-4** (1.99) | 1e-4 (finest), rate ≥ 1.7 |
+| (ii) ω_Γ vs lattice sums, 32/m | ≤ 2.2e-10 | ≤ 8.2e-11 | 1e-4 |
+| (ii) \|δ\|/(ω_r Π_L²), a = 0.5/1/2/3 | 3.4e-4 / 0.0103 / 0.44 / **1.11** | 3.1e-4 / 0.0066 / 0.11 / 0.67 | 1 |
+| (ii) slope d ln\|δ\|/d ln Π_L (2π/a > k_c) | 3.16 (a ≤ 2) | 3.13 (a ≤ 3) | ≥ 1.7 |
+| (ii) Π_L lattice sums (estimate a⁴/352.8) | 1.8e-4, 2.86e-3, 0.084, −0.049 (1.8e-4 … 0.23) | 1.6e-4, 1.94e-3, 0.019, 0.158 | — |
+
+\* The p = 2, 8/λ case misses the secant root at one ladder frequency (pre-asymptotic). It is not used in the rate.
+
+Failures, reported as findings:
+
+1. **p = 2 finest-mesh error** 7.9e-4 / 5.6e-4 > 1e-4. The frozen tolerance (1e-4, copied from L1-5) is stricter
+   than the §0.3 rule (≤ 1e-3), which these values meet. The rate is 1.99, and the level matches L1-1 (P2 1e-4 at
+   80/λ). This is not a defect.
+2. **a = 3 m, T_ρ = 0: \|δ\|/(ω_r Π_L²) = 1.11.** Here 2π/a = 2.09 < k_c = 2.74, so the folded bare branch
+   ω₀(2π/a) = 6.28 lies below ω_r. Π_L = −0.049, and ω_Γ lies above ω_r. Eq. lat_gamma is a near-field estimate,
+   valid only for 2π/a > k_c. This feeds back to `discrete_lattices.tex`. With T_ρ = 9.8, k_c is smaller, a = 3 is
+   still in the regime, and the check passes.
+3. **a = 0.5, T_ρ = 9.8: FE resolution of δ is 3.3 %** (tolerance 1 %). Here δ/ω_r = 7.5e-12 lies just above the
+   pole-search floor of about 2e-13. The FE ω_Γ itself agrees with the lattice sums to 2.5e-13.
+
+Finding (ii): δ falls as Π_L^3.1, not Π_L². The O(Π_L²) term comes from evaluating σ′ at ω_r instead of ω_Γ. Its
+coefficient is about ½ω_r²(m_ρ + M_f)/K at k = 2π/a, which itself scales with Π_L ∝ a⁴ in the bending regime.
+At a = 1 this estimate gives 0.011 Π_L², against 0.0103 Π_L² computed.
+
+Cost: one solve takes about 0.2 s (one wavelength, at most 3k DOFs); each ω needs 6–16 solves. The T_ρ = 9.8
+sweep took 85 min of wall time under machine contention (T_ρ = 0: 14 min). Split it further if it is rerun.
+The a = 3, 32/m Γ cells take about 15 min each.
+
+Outputs: `data/sims/L1-7/` (records with the worktree commit), `data/exp_pro/L1-7/{sweep,ladder,rates,gamma,checks}.csv`,
+`plots/L1-7/bands_overlay.{pdf,png}` (paper `fig:num_L1_7`, staged as `paper/figures/L1_7_bands_overlay.png`),
+`plots/L1-7/k_error.{pdf,png}`.
+
+### 11.5 Deviations from the matrix (2026-10-15 proposal → frozen row)
+
+| Item | Implementation | Reason |
+|---|---|---|
+| (iii) point-vs-homogenised dispersion vs ε_s, Π_L | dropped | L1-8 measures that discreteness correction; the upstream unit test covers array → field O((ka)²) |
+| Ladder on all 401 ω | 10-ω subset | cost |
+| (ii) slope over all four a | only over 2π/a > k_c (excludes a = 3, T = 0) | Π_L < 0 there: log undefined, estimate outside its regime (decided after the run, recorded) |

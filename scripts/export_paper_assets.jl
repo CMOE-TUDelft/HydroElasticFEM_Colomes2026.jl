@@ -46,6 +46,7 @@ const ASSETS = [
     ("L1-4", "plots/L1-4/decay.png", "L1_4_decay.png"),
     ("L1-5", "plots/L1-5/bands.png", "L1_5_bands.png"),
     ("L1-6", "plots/L1-6/gap.png", "L1_6_gap.png"),
+    ("L1-7", "plots/L1-7/bands_overlay.png", "L1_7_bands_overlay.png"),
     ("L1-8", "plots/L1-8/dilution.png", "L1_8_dilution.png"),
     ("L2-1", "plots/L2-1/diagonal.png", "L2_1_diagonal.png"),
     ("L2-2", "plots/L2-2/woodbury.png", "L2_2_woodbury.png"),
