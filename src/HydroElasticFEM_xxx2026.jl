@@ -4,8 +4,10 @@ of the paper J2025-LRMM, built on HydroElasticFEM.jl.
 
 Layout (see README.md):
 
-- `src/references.jl` — the only shared code: analytical references of the
+- `src/references.jl` — shared analytical references of the
   paper (Sections 3–4), no FE;
+- `src/solvers.jl` — `Solvers.MetisLUSolver`, a Gridap `LinearSolver`
+  (UMFPACK LU, METIS ordering) passed through `config.solver` for 3D runs;
 - `src/Lx_y_<name>.jl` — one self-contained module per test: its parameter
   struct (fixed and variable parameters), the FE problem written with the
   HydroElasticFEM.jl API, and the observables of one case;
@@ -17,6 +19,7 @@ Tests are specified in `docs/verification_test_matrix.md`.
 module HydroElasticFEM_xxx2026
 
 include("references.jl")
+include("solvers.jl")                     # Gridap LinearSolver: UMFPACK LU with METIS ordering (3D runs)
 include("L1_1_bare_host_dispersion.jl")
 include("L1_2_flux_normalisation.jl")       # uses the L1-1 problem
 include("L1_3_single_line_resonator.jl")    # L1-1 problem with a resonator
@@ -32,6 +35,6 @@ include("L2_5_finite_size_dilution.jl")     # L2-3 modal analysis: hybridisation
 include("L2_6_graded_arrays.jl")            # L2-1 channel, evaluation-matrix G_B,h: graded arrays (Woodbury)
 include("L3_0_memory_sizing.jl")            # 3D fluid box + plate: DOFs, memory, time (uses L1-1 fit)
 
-export References, L1_1, L1_2, L1_3, L1_4, L1_5, L1_6, L1_8, L2_1, L2_2, L2_3, L2_4, L2_5, L2_6, L3_0
+export References, Solvers, L1_1, L1_2, L1_3, L1_4, L1_5, L1_6, L1_8, L2_1, L2_2, L2_3, L2_4, L2_5, L2_6, L3_0
 
 end

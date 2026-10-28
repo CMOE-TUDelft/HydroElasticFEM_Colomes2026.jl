@@ -223,7 +223,7 @@ end
 # ─── FE problem (HydroElasticFEM.jl) ────────────────────────────────────────
 
 """
-    solve(p; ω=p.ω, lay=layout(p), resonators=ResonatorSpec[], x_res=Float64[])
+    solve(p; ω=p.ω, lay=layout(p), resonators=ResonatorSpec[], x_res=Float64[], solver=nothing)
 
 Build and solve the frequency-domain problem with HydroElasticFEM: potential
 flow in the channel (`PotentialFlow`), the plate as a tensioned
@@ -235,9 +235,10 @@ discretisation fields of `L1_1_Params`; `lay` any layout with the fields of
 `layout` (L1-3 passes its own, sized at the resonator frequency, and sweeps
 `ω` on that mesh). Returns the plate deflection `ηh`, the resonator
 displacements `q`, the layout, the vertical mesh and the number of DOFs.
+`solver` is passed to `config.solver` (`nothing`: the library default `LUSolver`).
 """
 function solve(p; ω::Real=p.ω, lay=layout(p), resonators::AbstractVector{ResonatorSpec}=ResonatorSpec[],
-               x_res::AbstractVector{<:Real}=Float64[])
+               x_res::AbstractVector{<:Real}=Float64[], solver=nothing)
     length(resonators) == length(x_res) || throw(DimensionMismatch("one position per resonator"))
     vm = vertical_mesh(p, lay.he)
     H, L = p.H, lay.L
@@ -271,7 +272,7 @@ function solve(p; ω::Real=p.ω, lay=layout(p), resonators::AbstractVector{Reson
     field_order(fmap) = [s for (s, _) in sort!(collect(fmap._map); by=last)]
     rhs_fn = (ctx, fmap) -> [sym == :η ? load : 0.0 for sym in field_order(fmap)]
 
-    problem = S.build_problem(tank, entities, PH.FreqDomainConfig(ω=ω); rhs_fn=rhs_fn)
+    problem = S.build_problem(tank, entities, PH.FreqDomainConfig(ω=ω, solver=solver); rhs_fn=rhs_fn)
     result = S.simulate(problem)
     ηh = result.solution[result.fmap[:η]]
     q = ComplexF64[first(get_free_dof_values(result.solution[result.fmap[Symbol("q$i")]])) for i in 1:N]

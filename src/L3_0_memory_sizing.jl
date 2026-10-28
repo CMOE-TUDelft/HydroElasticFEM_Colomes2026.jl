@@ -248,8 +248,8 @@ end
 
 # ─── Problem ────────────────────────────────────────────────────────────────
 
-"Build the problem of case `p` (returns the HydroElasticFEM problem and the layout)."
-function build(p::L3_0_Params; lay=layout(p))
+"Build the problem of case `p` (returns the HydroElasticFEM problem and the layout); `solver` goes to `config.solver`."
+function build(p::L3_0_Params; lay=layout(p), solver=nothing)
     tank = G.TankDomain(L=lay.Lx, W=lay.Ly, H=p.H, nx=p.nx, ny=p.ny, nz=p.nz,
                         map=let fz = zmap(p.H, p.nz, lay.top); x -> VectorValue(x[1], x[2], fz(x[3])) end,
                         structure_domains=[G.StructureDomain(L=lay.Lx, W=lay.Ly, x₀=[0.0, 0.0, p.H],
@@ -265,7 +265,7 @@ function build(p::L3_0_Params; lay=layout(p))
     load(x) = abs(x[1] - lay.x_s) < lay.b / 2 ? complex(p.F / lay.b) : zero(ComplexF64)
     field_order(fmap) = [s for (s, _) in sort!(collect(fmap._map); by=last)]
     rhs_fn = (ctx, fmap) -> [sym == :η ? load : 0.0 for sym in field_order(fmap)]
-    problem = S.build_problem(tank, P.PhysicsParameters[fluid, plate], PH.FreqDomainConfig(ω=p.ω); rhs_fn=rhs_fn)
+    problem = S.build_problem(tank, P.PhysicsParameters[fluid, plate], PH.FreqDomainConfig(ω=p.ω, solver=solver); rhs_fn=rhs_fn)
     return problem, lay
 end
 

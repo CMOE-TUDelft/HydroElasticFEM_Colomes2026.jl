@@ -3,7 +3,8 @@
 Phase 4 of the numerical programme (3D fluid with a plate): L3-1, L3-2, L3-3,
 L4-4 and L4-8. This report starts with the sizing card L3-0 (state of
 2026-10-28), which sets how each 3D test can be run. Sections for L3-1 … L4-8
-will be added as they land.
+will be added as they land. Section L3-0b documents the METIS-ordered
+direct solver used for the 3D runs.
 
 **Sources**
 
@@ -260,3 +261,73 @@ Other notes:
 
 Cases 26, 29 and 22 (analysis, N = 547 k, 566 k and 670 k) exceed the cap
 during the assembly or analysis, and have no record.
+
+---
+
+## L3-0b: METIS-ordered direct solver
+
+### Implementation
+
+`src/solvers.jl` (module `Solvers`) defines `MetisLUSolver`, a Gridap
+`LinearSolver`. It is UMFPACK sparse LU with `UMFPACK_ORDERING_METIS`. METIS
+ships with Julia's SuiteSparse build (`libsuitesparse_jll`), so no package is
+added. CHOLMOD is not an option: the system is complex symmetric, not
+Hermitian. The solver goes in through the existing hook, with no change to
+HydroElasticFEM.jl:
+
+    S.build_problem(domain, entities, PH.FreqDomainConfig(ω=ω, solver=MetisLUSolver()); rhs_fn)
+
+Factorise once, solve many: `ns = factorize(MetisLUSolver(), A)`, then
+`solve_rhs(ns, b)` or `solve_rhs(ns, B)` (one column per right-hand side).
+`numerical_setup!(ns, A2)` refactorises a matrix with the same pattern and
+reuses the symbolic analysis, and thus the METIS ordering. `factor_stats(ns)`
+returns lunz, the UMFPACK peak and numeric memory, the flops and the ordering
+used. `ordering=:amd`, `:best` or `:default` select other orderings.
+`L1_1.solve` and `L3_0.build` gained a `solver` keyword (default `nothing`,
+the library `LUSolver`).
+
+### Validation (`test/test_solvers.jl`, 13/13 pass)
+
+- 2D: the L1-1 channel with one line resonator (p = 2, 10 el./λ_p), through
+  `simulate`. η and q equal the `LUSolver` values to ≤ 1e-10 relative.
+- 3D: the L3-0 box, p = 2, 8×3×3 cells. The full solution equals the
+  `LUSolver` solution to ≤ 1e-10 relative. UMFPACK reports the METIS
+  ordering (and AMD when asked).
+- Multi-RHS: three right-hand sides from one factorisation equal `lu(A) \ B`
+  to ≤ 1e-10. A refactorisation with the same pattern and new values (the
+  next ω) matches `lu(A2) \ b` to ≤ 1e-10.
+
+### Cost on the L3-0 ladder (`scripts/L3-3D-flat-bottom/L3-0b_metis_solver.jl`)
+
+One case per process, under `run_limited` (4 GB, 1 thread), after a warm-up.
+The peak RSS is `Sys.maxrss` right after `simulate`. "simulate" is the
+factorisation plus one solve through the hook. The projection is the L3-0
+METIS model (κ_L, β = 18.2 B/entry, rate = 3.56 GFlop/s, R₀, r) applied to the
+measured CHOLMOD fill (`fill.csv`), or to the METIS fill law for 24×24×16,
+which has no fill record. Output: `data/exp_pro/L3-0b/metis_solver.csv`.
+
+| p | nx×ny×nz | N | lunz meas. / proj. | UMFPACK peak GB meas. / proj. | peak RSS GB meas. / proj. | fact.+solve s meas. / proj. | re-solve, 1 / 4 RHS (s) | L3-0 default: peak GB, fact.+solve s |
+|---|---|---|---|---|---|---|---|---|
+| 2 | 24×24×8 | 43218 | 2.87e7 / 2.87e7 | 0.48 / 0.49 | 2.46 / 2.47 | 3.7 / 2.9 | 0.03 / 0.08 | 2.96, 10.1 |
+| 2 | 32×32×8 | 76050 | 5.90e7 / 5.90e7 | 0.96 / 1.00 | 2.93 / 3.10 | 8.2 / 7.8 | 0.05 / 0.15 | 3.47, 26.5 |
+| 3 | 16×16×8 | 62426 | 5.24e7 / 5.24e7 | 0.91 / 0.89 | 3.27 / 3.00 | 7.3 / 7.6 | 0.04 / 0.13 | 3.89, 17.9 |
+| 2 | 24×24×16 | 81634 | 7.24e7 / 7.11e7 | 1.21 / 1.21 | **4.09** / 3.32 | 11.5 / 11.9 | 0.09 / 0.18 | killed > 4 GiB |
+
+- The fill and the UMFPACK peak match the projection to 2 % and 4 %. The
+  factorisation time (`factorize`, without the solve) is 0.94–1.04× the
+  projection.
+- The peak RSS is 0.95–1.09× the projection on the three `nz = 8` cases. On
+  24×24×16 the model is 19 % low, so the case does not fit: 4.09 GiB against
+  the 4 GiB cap. Later in that process (a second factorisation for the
+  statistics, with the first one not yet collected), the peak reached
+  5.1 GiB. `run_limited` caps Julia only by a GC hint, so the run was not
+  killed. Treat projections above about 3.3 GB as not fitting.
+- Against the default ordering, the time drops 2.4–3.2× and the peak 0.5–0.6 GB
+  on these meshes. A re-solve with the stored factors costs 1 % of the
+  factorisation.
+
+### Reproduce
+
+    julia --project -O1 -e 'using Test, HydroElasticFEM_xxx2026; include("test/test_solvers.jl")'
+    bash Loop_Framework/tools/run_limited.sh -- julia --project=<repo> -O1 scripts/L3-3D-flat-bottom/L3-0b_metis_solver.jl --case <1..4>
+    julia --project scripts/L3-3D-flat-bottom/L3-0b_metis_solver.jl      # table
