@@ -568,7 +568,7 @@ The graded-array estimates should therefore be stated as follows. Equations~\eqr
 
 \subsection{Three-dimensional fluid with a plate}\label{subsec:num_3D}
 
-\textbf{[PENDING Phase 4.] L3-3: single resonator with quarter symmetry, $\sigma_\mathrm{abs}\le1/k_0$ and the optical theorem~\eqref{eq:lat_optical}; L4-4: anisotropic resonator island with the three-dimensional resonator field (Section~\ref{subsubsec:aniso_rays}); L4-8: forced response of a finite plate against equation~\eqref{eq:mode_dilution}, with the prefactor found in Section~\ref{subsubsec:num_L2_5}. Memory sizing: card L3-0.}
+\textbf{[PENDING Phase 4.] L3-3: single resonator with quarter symmetry, $\sigma_\mathrm{abs}\le1/k_0$ and the optical theorem~\eqref{eq:lat_optical}; L4-4: anisotropic resonator island with the three-dimensional resonator field (Section~\ref{subsubsec:aniso_rays}); L4-8: forced response of a finite plate against equation~\eqref{eq:mode_dilution}, with the prefactor found in Section~\ref{subsubsec:num_L2_5}. Memory sizing: card L3-0. Planned setups: Figure~\ref{fig:num_sketch_3D_planned}.}
 
 \begin{figure}[t]
     \centering
@@ -639,6 +639,60 @@ The graded-array estimates should therefore be stated as follows. Equations~\eqr
     \end{tikzpicture}
     \caption{Three-dimensional setups (not to scale). (a) Plate over the whole surface of a box periodic in $y$, with sponges at both ends and a line load $F\mathrm{e}^{\mathrm{i}k_yy}$, $k_y=k_0\sin\theta$, that radiates two oblique plate waves (Section~\ref{subsubsec:num_L3_1}). (b) Channel of width $W$ with no-flux walls: damping zones of $4\lambda_0$, open water of $\lambda_0/2$, and a plate of length $4\lambda_p$ with free edges and a point resonator at its centre $\boldsymbol{x}_r$. The plate cells are fixed far from $\boldsymbol{x}_r$ and graded towards it (Section~\ref{subsubsec:num_L3_2}).}
     \label{fig:num_sketch_3D}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \begin{tikzpicture}[x=0.8cm,y=0.8cm,font=\footnotesize]
+        % (a) L3-3: quarter domain, resonator at the corner
+        \node[anchor=west] at (-0.6,5.6) {(a)};
+        \fill[gray!12] (0,0) rectangle (5,5);
+        \fill[gray!45] (3.1,0) -- (5,0) -- (5,5) -- (0,5) -- (0,3.1) -- (3.1,3.1) -- cycle;
+        \draw[thick] (0,0) rectangle (5,5);
+        \draw[very thick,dash dot,blue!70!black] (0,0) -- (5,0);
+        \draw[very thick,dash dot,blue!70!black] (0,0) -- (0,5);
+        \node[rotate=90,above,blue!70!black] at (0,1.5) {symmetry};
+        \node[below,blue!70!black] at (1.5,0) {symmetry};
+        \foreach \r in {1.7,2.1,2.5} \draw[orange!80!black] (\r,0) arc (0:90:\r);
+        \node[orange!80!black,align=center] at (0.75,0.8) {fit\\rings};
+        \fill[red!70!black] (0,0) circle (0.12);
+        \node[above right,red!70!black] at (0.05,0.05) {$\boldsymbol{x}_r$};
+        \node[align=center] at (4.05,4.05) {absorbing\\frame};
+        \draw[<->] (0,-0.75) -- (3.1,-0.75) node[midway,below] {$R_s$};
+        \draw[<->] (3.1,-0.75) -- (5,-0.75) node[midway,below] {frame};
+
+        % (b) L4-4: anisotropic island in a plate-covered domain
+        \begin{scope}[shift={(5.9,0)}]
+            \node[anchor=west] at (-0.3,5.6) {(b)};
+            \fill[gray!45] (0,0) rectangle (6,5);
+            \fill[gray!12] (0.6,0.6) rectangle (5.4,4.4);
+            \draw[thick] (0,0) rectangle (6,5);
+            \foreach \s/\c in {1.0/12,0.72/25,0.45/40} \fill[blue!\c] (2.2,2.5) ellipse ({1.2*\s} and {0.8*\s});
+            \draw[<->] (2.2-1.2,1.45) -- (2.2+1.2,1.45) node[midway,below] {$L_x$};
+            \draw[<->] (3.55,2.5-0.8) -- (3.55,2.5+0.8) node[midway,right] {$L_y$};
+            \foreach \x in {4.2,4.7,5.2} \draw[dashed,orange!80!black] (\x,1.3) -- (\x,3.7);
+            \node[above,orange!80!black,align=center] at (4.7,3.7) {lines\\[-2pt]$x=2,3,4\,L_x$};
+            \foreach \y in {1.6,2.5,3.4} \draw[-{Latex},thick,blue!70!black] (0.15,\y) -- (0.85,\y);
+            \node[below,align=center] at (3,0.6) {absorbing frame};
+        \end{scope}
+
+        % (c) L4-8: finite rectangular plate with a uniform population in open water
+        \begin{scope}[shift={(12.8,0)}]
+            \node[anchor=west] at (-0.3,5.6) {(c)};
+            \fill[blue!6] (0,0) rectangle (4,5);
+            \draw[thick,dashed] (0,0) rectangle (4,5);
+            \fill[gray!20] (1.3,1.1) rectangle (2.7,3.9);
+            \draw[line width=1.6pt] (1.3,1.1) rectangle (2.7,3.9);
+            \foreach \x in {1.45,1.65,...,2.6} \foreach \y in {1.25,1.45,...,3.8} \fill (\x,\y) circle (0.025);
+            \draw[<->] (1.3,4.2) -- (2.7,4.2) node[midway,above] {$L_x$};
+            \draw[<->] (3.0,1.1) -- (3.0,3.9) node[midway,right] {$L_y$};
+            \draw[-{Latex},thick,blue!70!black] (0.2,2.5) -- (0.9,2.5);
+            \draw[-{Latex},thick,blue!70!black] (2.0,0.1) -- (2.0,0.55);
+            \node[align=center] at (3.3,0.45) {open\\water};
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Planned three-dimensional setups, plan views (not to scale, depth $H$ in all cases). (a) Single resonator: quarter of a plate-covered domain with the resonator at the corner $\boldsymbol{x}_r$, symmetry planes $x=0$ and $y=0$, an absorbing frame beyond $R_s$, and rings on which the outgoing amplitude is fitted. (b) Anisotropic island of homogenised resonators with elliptic footprint $L_x\times L_y$ in a plate-covered domain with an absorbing frame, a plane wave incident along $x$, and the lines behind the island on which the transmitted phase and amplitude are measured; the island is rotated for incidence along $y$. (c) Free rectangular plate of size $L_x\times L_y$ with a uniform resonator population in open water, under plane incidence along $x$ and along $y$.}
+    \label{fig:num_sketch_3D_planned}
 \end{figure}
 
 \subsubsection{Bare plate under oblique incidence}\label{subsubsec:num_L3_1}
