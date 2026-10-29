@@ -178,15 +178,88 @@ The results of Section~\ref{sec:discrete_lattice} that distinguish a floating la
 
 \subsubsection{Numerical setup for periodic lattices}\label{subsubsec:num_setup_lattice}
 
-Band frequencies are computed without Bloch-periodic boundary conditions and without an eigenvalue solver. The computational domain is a periodic channel of depth $H$ and length $Ma$, i.e.\ a supercell of $M$ cells, whose free surface is entirely covered by the plate and which carries $M$ resonators at $x_n=(n-\tfrac12)a$; the domain is closed, so that no sponge layers are needed. A supercell admits the Bloch wavenumbers $q=2\pi j/(Ma)$, $j=0,\ldots,M-1$, and a load selects one of them: each resonator position carries a patch load of amplitude $F\mathrm{e}^{\mathrm{i}qx_n}$, which excites only the Bloch modes with wavenumber $q$. The band frequencies at $q$ are the poles of the projected response
+Band frequencies are computed without Bloch-periodic boundary conditions and without an eigenvalue solver. The computational domain is a periodic channel of depth $H$ and length $Ma$ (Figure~\ref{fig:num_sketch_lattice}b), i.e.\ a supercell of $M$ cells, whose free surface is entirely covered by the plate and which carries $M$ resonators at $x_n=(n-\tfrac12)a$; the domain is closed, so that no sponge layers are needed. A supercell admits the Bloch wavenumbers $q=2\pi j/(Ma)$, $j=0,\ldots,M-1$, and a load selects one of them: each resonator position carries a patch load of amplitude $F\mathrm{e}^{\mathrm{i}qx_n}$, which excites only the Bloch modes with wavenumber $q$. The band frequencies at $q$ are the poles of the projected response
 \begin{equation}\label{eq:num_bloch_response}
     g(\omega)=\frac{1}{MF}\sum_{n=1}^{M}\mathrm{e}^{-\mathrm{i}qx_n}\,q_n(\omega),
 \end{equation}
 with $q_n$ the resonator amplitudes of the finite element solution, and are found as the roots of $\operatorname{Re}(1/g)$, a smooth function of $\omega$ near each pole, by secant iteration started at the lattice-sum value. The zone centre $\Gamma$ is $M=1$, $j=0$, the zone boundary $X$ is $M=2$, $j=1$, and interior wavenumbers follow from larger supercells. In the lossless problem $\operatorname{Im}(1/g)$ vanishes at the poles; its value, below $2\times10^{-11}$ relative in all cases, checks that the load excites a single Bloch wavenumber. The bare host is checked in the same way: without resonators, the pole at $q=\pi/a$ is the frequency $\omega_0(\pi/a)$ of the bare branch. The mesh is uniform in $x$ with $n_c$ elements per cell, so that every resonator lies on a node, and graded vertically as in Section~\ref{subsubsec:num_setup_A}.
 
+\begin{figure}[t]
+    \centering
+    \begin{tikzpicture}[x=0.8cm,y=0.8cm,font=\footnotesize,
+        spr/.style={decorate,decoration={zigzag,amplitude=1.2pt,segment length=2.5pt}}]
+        % (a) finite array in the configuration-A channel
+        \node[anchor=west] at (-0.3,1.3) {(a)};
+        \fill[blue!6] (0,0) rectangle (16,-1.4);
+        \draw[thick] (0,0.2) -- (0,-1.4) -- (16,-1.4) -- (16,0.2);
+        \fill[gray!35] (0,0) rectangle (2.5,0.18);
+        \fill[gray!35] (13.5,0) rectangle (16,0.18);
+        \node[above] at (1.25,0.2) {sponge};
+        \node[above] at (14.75,0.2) {sponge};
+        \draw[very thick] (0,0) -- (16,0);
+        \fill[red!70] (3.9,0) rectangle (4.2,0.15);
+        \node[above,red!70!black] at (4.05,0.2) {$F/b$};
+        \draw[|-|, blue!70!black] (4.7,0.35) -- (6.3,0.35) node[midway,above] {probe};
+        \draw[|-|, blue!70!black] (9.5,0.35) -- (11.1,0.35) node[midway,above] {probe};
+        \foreach \x in {6.9,7.4,7.9,8.4,8.9} {
+            \draw (\x,0) -- (\x,0.25);
+            \draw[spr] (\x,0.25) -- (\x,0.6);
+            \fill (\x-0.12,0.6) rectangle (\x+0.12,0.76);
+        }
+        \node[above] at (7.9,0.8) {$N$ resonators};
+        \draw[<->] (6.9,-0.3) -- (7.4,-0.3) node[midway,below] {$a$};
+        \draw[dashed] (7.9,0) -- (7.9,-0.75) node[below] {$x_c$};
+        \draw[<->] (2.5,-0.5) -- (3.9,-0.5) node[midway,below] {$\ge 5/\operatorname{Im}k_1$};
+        \draw[<->] (11.1,-0.5) -- (13.5,-0.5) node[midway,below] {$\ge 5/\operatorname{Im}k_1$};
+        \draw[<->] (0.6,0) -- (0.6,-1.4) node[midway,right] {$H$};
+
+        \begin{scope}[shift={(0,-3.7)}]
+            % (b) supercell of M cells with Bloch-phased loads
+            \node[anchor=west] at (-0.3,1.3) {(b)};
+            \fill[blue!6] (0.5,0) rectangle (8.5,-1.4);
+            \draw[thick] (0.5,-1.4) -- (8.5,-1.4);
+            \draw[thick,dashed] (0.5,0.2) -- (0.5,-1.4);
+            \draw[thick,dashed] (8.5,0.2) -- (8.5,-1.4);
+            \node[rotate=90,above] at (0.5,-0.7) {periodic};
+            \node[rotate=90,below] at (8.5,-0.7) {periodic};
+            \draw[very thick] (0.5,0) -- (8.5,0);
+            \foreach \i in {1,2,3} \draw[gray] (0.5+2*\i,0.1) -- (0.5+2*\i,-0.1);
+            \foreach \x in {1.5,3.5,5.5,7.5} {
+                \draw (\x,0) -- (\x,0.25);
+                \draw[spr] (\x,0.25) -- (\x,0.6);
+                \fill (\x-0.12,0.6) rectangle (\x+0.12,0.76);
+                \draw[-{Latex[length=1.5mm]},red!70!black] (\x+0.35,0.65) -- (\x+0.35,0.04);
+            }
+            \node[above,red!70!black] at (7.85,0.65) {$F\mathrm{e}^{\mathrm{i}qx_n}$};
+            \node[above] at (1.5,0.8) {$x_1$};
+            \node[above] at (3.5,0.8) {$x_2$};
+            \draw[<->] (0.5,-0.35) -- (2.5,-0.35) node[midway,below] {$a$};
+            \draw[<->] (0.5,-1.7) -- (8.5,-1.7) node[midway,below] {$Ma$};
+
+            % (c) one-wavelength cell with the homogenised resonator field
+            \node[anchor=west] at (9.5,1.3) {(c)};
+            \fill[blue!6] (10,0) rectangle (15.6,-1.4);
+            \draw[thick] (10,-1.4) -- (15.6,-1.4);
+            \draw[thick,dashed] (10,0.2) -- (10,-1.4);
+            \draw[thick,dashed] (15.6,0.2) -- (15.6,-1.4);
+            \draw[very thick] (10,0) -- (15.6,0);
+            \foreach \x in {10.2,10.45,...,15.45} {
+                \draw[spr,gray!70!black] (\x,0) -- (\x,0.4);
+                \fill (\x-0.06,0.4) rectangle (\x+0.06,0.5);
+            }
+            \draw[red!70!black,domain=10:15.6,samples=80] plot (\x,{0.85+0.12*sin(deg(2*pi*(\x-10)/5.6))});
+            \node[above,red!70!black] at (12.8,0.95) {load $\mathrm{e}^{\mathrm{i}kx}$};
+            \node[below] at (12.8,-0.25) {field $q(x)$, density $n_0$};
+            \draw[<->] (10,-1.7) -- (15.6,-1.7) node[midway,below] {$L=2\pi/k$};
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Setups for the line lattices (not to scale). (a) Finite array of $N$ resonators, spacing $a$ and centre $x_c$, in the channel of Figure~\ref{fig:num_channel_A} (Section~\ref{subsubsec:num_L1_4}). (b) Closed periodic supercell of $M$ cells with one resonator per cell at $x_n=(n-\tfrac12)a$, each loaded by $F\mathrm{e}^{\mathrm{i}qx_n}$ (Sections~\ref{subsubsec:num_L1_5}--\ref{subsubsec:num_L1_8}); $M=1$ gives the zone centre, $M=2$ with alternating load the zone boundary. (c) Periodic cell of one wavelength, $L=2\pi/k$, carrying the homogenised resonator field $q(x)$ and the load $\mathrm{e}^{\mathrm{i}kx}$ (Section~\ref{subsubsec:num_L1_7}).}
+    \label{fig:num_sketch_lattice}
+\end{figure}
+
 \subsubsection{Finite arrays}\label{subsubsec:num_L1_4}
 
-\paragraph{Test description.} Arrays of $N\in\{1,2,5,10,20,40\}$ identical resonators with spacing $a=1~\si{\meter}$, $\omega_r=10~\si{\radian\per\second}$ and damping ratios $\zeta\in\{0,0.01,0.05\}$ are placed in the channel of Section~\ref{subsubsec:num_setup_A}, with a mesh of $n_c$ elements per spacing so that every resonator lies on a node and the mesh is symmetric about the centre of the array, $x_c$. Probe samples on either side of the array, minus the exact near fields of the source and of every resonator (forces $\omega^2m_{\rho,r}q_n$ from the finite element solution), are fitted by the incoming and outgoing propagating waves, with amplitudes $a_L$, $a_R$ and $b_L$, $b_R$ referred to $x_c$. The array is symmetric, so that
+\paragraph{Test description.} Arrays of $N\in\{1,2,5,10,20,40\}$ identical resonators with spacing $a=1~\si{\meter}$, $\omega_r=10~\si{\radian\per\second}$ and damping ratios $\zeta\in\{0,0.01,0.05\}$ are placed in the channel of Section~\ref{subsubsec:num_setup_A} (Figure~\ref{fig:num_sketch_lattice}a), with a mesh of $n_c$ elements per spacing so that every resonator lies on a node and the mesh is symmetric about the centre of the array, $x_c$. Probe samples on either side of the array, minus the exact near fields of the source and of every resonator (forces $\omega^2m_{\rho,r}q_n$ from the finite element solution), are fitted by the incoming and outgoing propagating waves, with amplitudes $a_L$, $a_R$ and $b_L$, $b_R$ referred to $x_c$. The array is symmetric, so that
 \begin{equation}\label{eq:num_two_port}
     b_L=\mathcal{R}a_L+\mathcal{T}a_R,\qquad b_R=\mathcal{T}a_L+\mathcal{R}a_R ,
 \end{equation}
@@ -268,7 +341,7 @@ The rate of this decrease is not set by a single Bloch wavenumber (Figure~\ref{f
 
 \subsubsection{Homogenised resonator field}\label{subsubsec:num_L1_7}
 
-\paragraph{Test description.} The homogenised model of Section~\ref{sec:dispersion_relation} is discretised directly: a resonator field $q(x)$ with uniform density $n_0=1~\si{\per\meter}$, $m_{\rho,r}=0.01~\si{\meter\squared}$ ($n_0m_{\rho,r}=0.01~\si{\meter}$), $\omega_r=10~\si{\radian\per\second}$ and no damping is added to the plate of Section~\ref{subsubsec:num_setup_lattice}, with the same space as $\eta$. At each sampled frequency the periodic cell is one wavelength long, $L=2\pi/k$, and the plate carries the load $e^{\mathrm{i}kx}$. The finite element wavenumber $k_h(\omega)$ is the root in $k$ of the inverse projected response, found by secant iteration from the root of equation~\eqref{eq:omega_k_x_closed_form}. The frequencies are $400$ points of $\omega\in[8,12]~\si{\radian\per\second}$ ($\omega_r$ excluded), for both pre-tensions, with $p=3$ and $16$ elements per wavelength; a convergence study on ten of these frequencies uses $p=2$ with $\{8,16,32\}$ and $p=3$ with $\{4,8,16\}$ elements per wavelength. The test checks (i) $k_h(\omega)$ against equation~\eqref{eq:omega_k_x_closed_form}, and (i-b) that a real root exists on one branch at every sampled $\omega\neq\omega_r$, i.e.\ that the homogenised model has no complete stop band (Section~\ref{subsubsec:fluid_dilution}). It then checks (ii) that the zone-centre edge of the discrete lattice satisfies $\omega_\Gamma-\omega_r/\sqrt{1+\Pi_L}=O(\Pi_L^2)$, equation~\eqref{eq:lat_gamma}. For (ii) the one-cell problem of Section~\ref{subsubsec:num_L1_5} is solved for $a\in\{0.5,1,2,3\}~\si{\meter}$ at fixed loading ($m_{\rho,r}=0.01a$, $k_{\rho,r}=a$), with $p=3$ and $32$ elements per metre, and $\Pi_L$ is evaluated from the lattice sums, equation~\eqref{eq:PiL}.
+\paragraph{Test description.} The homogenised model of Section~\ref{sec:dispersion_relation} is discretised directly: a resonator field $q(x)$ with uniform density $n_0=1~\si{\per\meter}$, $m_{\rho,r}=0.01~\si{\meter\squared}$ ($n_0m_{\rho,r}=0.01~\si{\meter}$), $\omega_r=10~\si{\radian\per\second}$ and no damping is added to the plate of Section~\ref{subsubsec:num_setup_lattice}, with the same space as $\eta$. At each sampled frequency the periodic cell is one wavelength long, $L=2\pi/k$ (Figure~\ref{fig:num_sketch_lattice}c), and the plate carries the load $e^{\mathrm{i}kx}$. The finite element wavenumber $k_h(\omega)$ is the root in $k$ of the inverse projected response, found by secant iteration from the root of equation~\eqref{eq:omega_k_x_closed_form}. The frequencies are $400$ points of $\omega\in[8,12]~\si{\radian\per\second}$ ($\omega_r$ excluded), for both pre-tensions, with $p=3$ and $16$ elements per wavelength; a convergence study on ten of these frequencies uses $p=2$ with $\{8,16,32\}$ and $p=3$ with $\{4,8,16\}$ elements per wavelength. The test checks (i) $k_h(\omega)$ against equation~\eqref{eq:omega_k_x_closed_form}, and (i-b) that a real root exists on one branch at every sampled $\omega\neq\omega_r$, i.e.\ that the homogenised model has no complete stop band (Section~\ref{subsubsec:fluid_dilution}). It then checks (ii) that the zone-centre edge of the discrete lattice satisfies $\omega_\Gamma-\omega_r/\sqrt{1+\Pi_L}=O(\Pi_L^2)$, equation~\eqref{eq:lat_gamma}. For (ii) the one-cell problem of Section~\ref{subsubsec:num_L1_5} is solved for $a\in\{0.5,1,2,3\}~\si{\meter}$ at fixed loading ($m_{\rho,r}=0.01a$, $k_{\rho,r}=a$), with $p=3$ and $32$ elements per metre, and $\Pi_L$ is evaluated from the lattice sums, equation~\eqref{eq:PiL}.
 
 \paragraph{Results.} The finite element wavenumber of the homogenised plate agrees with equation~\eqref{eq:omega_k_x_closed_form} to $9.1\times10^{-8}$ ($T_\rho=0$) and $7.0\times10^{-8}$ ($T_\rho=9.8~\si{\meter\cubed\per\second\squared}$) at all $400$ frequencies (tolerance $10^{-4}$). The wavenumber ranges from $0.20~\si{\per\meter}$ at $\omega=10.01~\si{\radian\per\second}$ to $5.67~\si{\per\meter}$ at $\omega=9.99~\si{\radian\per\second}$. The largest error occurs at $\omega=9.99~\si{\radian\per\second}$, where the lower branch has its shortest wavelength. With $p=2$ the error converges at order $1.99$ and is $7.9\times10^{-4}$ ($T_\rho=0$) and $5.6\times10^{-4}$ ($T_\rho=9.8~\si{\meter\cubed\per\second\squared}$) with $32$ elements per wavelength. A real root is found on the lower branch at every sampled $\omega<\omega_r$ and on the upper branch at every sampled $\omega>\omega_r$, down to $|\omega-\omega_r|=0.01~\si{\radian\per\second}$ (Figure~\ref{fig:num_L1_7}). The homogenised floating plate therefore transmits at every frequency except $\omega_r$, whereas the discrete lattice with the same loading has the stop band of Section~\ref{subsubsec:num_L1_5}. At the zone centre of the discrete lattice, the finite element $\omega_\Gamma$ agrees with the lattice sums to $2\times10^{-10}$ or better. For $2\pi/a>k_c$, where the folded host branches lie above $\omega_r$ and $\Pi_L>0$, $|\omega_\Gamma-\omega_r/\sqrt{1+\Pi_L}|/\omega_r$ is below $0.44\,\Pi_L^2$ (tolerance $\Pi_L^2$). It decreases with the slope $3.16$ ($T_\rho=0$) and $3.13$ ($T_\rho=9.8~\si{\meter\cubed\per\second\squared}$) against $\Pi_L$, from $0.084$ to $1.8\times10^{-4}$. The slope exceeds $2$ because the coefficient of $\Pi_L^2$, which comes from evaluating the near-field sum at $\omega_r$ instead of $\omega_\Gamma$, is itself proportional to $\omega_r^2(m_\rho+M_{f,\rho})/K$ at $k=2\pi/a$ and hence to $\Pi_L$ when bending dominates: at $a=1~\si{\meter}$ this estimate gives $0.011\,\Pi_L^2$, against $0.0103\,\Pi_L^2$ computed. At $a=3~\si{\meter}$ and $T_\rho=0$, $2\pi/a<k_c$, the folded branch $\omega_0(2\pi/a)=6.28~\si{\radian\per\second}$ lies below $\omega_r$ and $\Pi_L=-0.049$. Equation~\eqref{eq:lat_gamma} then misses $\omega_\Gamma$ by $1.1\,\Pi_L^2$, so the estimate is limited to $2\pi/a>k_c$. At $a=0.5~\si{\meter}$ and $T_\rho=9.8~\si{\meter\cubed\per\second\squared}$ the difference, $7.5\times10^{-12}\,\omega_r$, is resolved by the finite element model only to $3\%$, at its round-off floor of about $2\times10^{-13}$.
 
@@ -294,13 +367,81 @@ For a finite structure in open water, configuration~B, the Green function of the
 
 \subsubsection{Numerical setup}\label{subsubsec:num_setup_B}
 
-The structure is the plate of Section~\ref{subsubsec:num_setup_A} ($T_\rho=0$) of length $L_p$ with free edges, equations~\eqref{eq:structure_bcs}. It floats in a channel of depth $H=10~\si{\meter}$ with open water on both sides. The vertical ends of the channel carry the Sommerfeld condition with the open-water wavenumber $k_\mathrm{out}$, which is exact for the propagating wave only. The open water on each side has length $\max\{\lambda_\mathrm{out},6/\kappa_1\}$, with $\kappa_1$ the decay rate of the slowest evanescent mode in open water, so that the evanescent field reaching the ends is reduced by $\mathrm{e}^{-12}$. The element size is $h=\min\{\lambda_\mathrm{out},\lambda_p,4\ell_f\}/n$, with $\lambda_p$ the plate wavelength, $\ell_f$ the decay length of the flexural roots and $n$ the number of elements per wavelength. The plate edges and all attachment points lie on mesh nodes, and $p=3$.
+The structure is the plate of Section~\ref{subsubsec:num_setup_A} ($T_\rho=0$) of length $L_p$ with free edges, equations~\eqref{eq:structure_bcs}. It floats in a channel of depth $H=10~\si{\meter}$ with open water on both sides (Figure~\ref{fig:num_sketch_B}a). The vertical ends of the channel carry the Sommerfeld condition with the open-water wavenumber $k_\mathrm{out}$, which is exact for the propagating wave only. The open water on each side has length $\max\{\lambda_\mathrm{out},6/\kappa_1\}$, with $\kappa_1$ the decay rate of the slowest evanescent mode in open water, so that the evanescent field reaching the ends is reduced by $\mathrm{e}^{-12}$. The element size is $h=\min\{\lambda_\mathrm{out},\lambda_p,4\ell_f\}/n$, with $\lambda_p$ the plate wavelength, $\ell_f$ the decay length of the flexural roots and $n$ the number of elements per wavelength. The plate edges and all attachment points lie on mesh nodes, and $p=3$.
 
 The columns of $\mathbf{G}_{B,h}$ are computed from one factorisation per frequency. A unit point force is applied at each attachment point through a massless spring, i.e.\ a resonator with $m_{\rho,r}=0$, whose equation $k_\rho(q-\eta(x_j))=F$ transmits exactly the force $F$ to the plate and which is inert when unloaded. Near the wet resonances of the free plate, which are sharp because plate waves are almost totally reflected at free edges when $\lambda_\mathrm{out}\ll\lambda_p$, a small shift of a resonance changes $G_B$ by a large fraction. Mesh and truncation changes of $\mathbf{G}_{B,h}$ are therefore expressed as an equivalent frequency shift,
 \begin{equation}\label{eq:num_freq_equivalent}
     \delta\omega=\frac{\|\Delta\mathbf{G}_{B,h}\|}{\|\partial_\omega\mathbf{G}_{B,h}\|},
 \end{equation}
 with the derivative from central differences at $\omega(1\pm10^{-6})$.
+
+\begin{figure}[t]
+    \centering
+    \begin{tikzpicture}[x=0.75cm,y=0.8cm,font=\footnotesize,
+        spr/.style={decorate,decoration={zigzag,amplitude=1.2pt,segment length=2.5pt}}]
+        % (a) free plate in open water
+        \node[anchor=west] at (-0.3,1.4) {(a)};
+        \fill[blue!6] (0,0) rectangle (16,-1.6);
+        \draw[thick] (0,-1.6) -- (16,-1.6);
+        \draw[thick,dashed] (0,0.15) -- (0,-1.6);
+        \draw[thick,dashed] (16,0.15) -- (16,-1.6);
+        \node[rotate=90,above] at (0,-0.8) {Sommerfeld};
+        \node[rotate=90,below] at (16,-0.8) {Sommerfeld};
+        \draw (0,0) -- (4.5,0);
+        \draw (11.5,0) -- (16,0);
+        \draw[line width=2.2pt] (4.5,0) -- (11.5,0);
+        \draw[-{Latex},thick,blue!70!black] (0.6,0.45) -- (2.6,0.45) node[midway,above] {incident wave};
+        \foreach \x/\j in {5.8/1,7.3/2} {
+            \draw (\x,0) -- (\x,0.2);
+            \draw[spr] (\x,0.2) -- (\x,0.55);
+            \draw[-{Latex[length=1.5mm]},red!70!black] (\x,1.05) -- (\x,0.6);
+            \node[below] at (\x,-0.05) {$x_\j$};
+        }
+        \node[above,red!70!black] at (6.55,1.05) {unit force, massless spring};
+        \draw (9.8,0) -- (9.8,0.25);
+        \draw[spr] (9.8,0.25) -- (9.8,0.6);
+        \fill (9.68,0.6) rectangle (9.92,0.76);
+        \node[right] at (9.95,0.7) {$m_r,k_r,c_r$};
+        \draw[<->] (0,-0.45) -- (4.5,-0.45) node[midway,below] {$\max\{\lambda_\mathrm{out},6/\kappa_1\}$};
+        \draw[<->] (11.5,-0.45) -- (16,-0.45) node[midway,below] {$\max\{\lambda_\mathrm{out},6/\kappa_1\}$};
+        \draw[<->] (4.5,-1.95) -- (11.5,-1.95) node[midway,below] {$L_p$, free edges};
+        \draw[<->] (17.3,0) -- (17.3,-1.6) node[midway,right] {$H$};
+
+        \begin{scope}[shift={(0,-4.6)}]
+            % (b) graded array on a long plate with a plate source
+            \node[anchor=west] at (-0.3,1.4) {(b)};
+            \fill[blue!6] (0,0) rectangle (16,-1.6);
+            \draw[thick] (0,-1.6) -- (16,-1.6);
+            \draw[thick,dashed] (0,0.15) -- (0,-1.6);
+            \draw[thick,dashed] (16,0.15) -- (16,-1.6);
+            \draw (0,0) -- (0.6,0);
+            \draw (15.4,0) -- (16,0);
+            \draw[line width=2.2pt] (0.6,0) -- (15.4,0);
+            \fill[gray!35] (0.6,0.08) rectangle (2.8,0.26);
+            \fill[gray!35] (13.2,0.08) rectangle (15.4,0.26);
+            \node[above] at (1.7,0.26) {sponge};
+            \node[above] at (14.3,0.26) {sponge};
+            \draw[-{Latex[length=1.5mm]},red!70!black] (3.7,0.9) -- (3.7,0.08);
+            \node[above,red!70!black] at (3.7,0.9) {$x_s$};
+            \draw[|-|, blue!70!black] (4.3,0.4) -- (5.7,0.4) node[midway,above] {$W_1$};
+            \draw[|-|, blue!70!black] (11.2,0.4) -- (12.6,0.4) node[midway,above] {$W_2$};
+            \foreach \i in {0,...,14} {
+                \pgfmathsetmacro{\x}{6.3+0.3*\i}
+                \pgfmathsetmacro{\c}{15+4*\i}
+                \draw (\x,0) -- (\x,0.18);
+                \draw[spr] (\x,0.18) -- (\x,0.5);
+                \fill[black!\c!blue!60] (\x-0.08,0.5) rectangle (\x+0.08,0.62);
+            }
+            \node[above] at (8.4,0.65) {graded $\omega_r(x)$ or $n(x)$};
+            \draw[dashed,orange!80!black] (8.7,0) -- (8.7,-1.0) node[below] {$x^*(\omega)$};
+            \draw[|-|,orange!80!black] (8.1,-0.35) -- (9.3,-0.35);
+            \node[right,orange!80!black] at (9.3,-0.35) {$\Delta x$};
+            \draw[<->] (6.3,-1.95) -- (10.5,-1.95) node[midway,below] {array, $x\in[0,L_g]$};
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Setups for finite structures in open water, configuration~B (not to scale). (a) Free plate of length $L_p$ between open-water regions closed by the Sommerfeld condition. The transfer compliance $G_B$ is obtained from unit forces applied through massless springs at the attachment points $x_j$ (Section~\ref{subsubsec:num_L2_1}). The same domain carries one resonator (Sections~\ref{subsubsec:num_L2_3} and~\ref{subsubsec:num_L2_4}, the latter with an incident wave from the left) or a tuned population with spacing $a\simeq1~\si{\meter}$ (Section~\ref{subsubsec:num_L2_5}). (b) Graded array on a long plate (Section~\ref{subsec:num_graded}): point source $x_s$ on a bare lead-in, fit windows $W_1$ and $W_2$, viscous sponges of $6\lambda_p$ at both plate ends, and all separations at least $5/\kappa_1$. A frequency $\omega$ is absorbed near its turning point $x^*(\omega)$ over a footprint $\Delta x$.}
+    \label{fig:num_sketch_B}
+\end{figure}
 
 \subsubsection{Transfer compliance and Woodbury equivalence}\label{subsubsec:num_L2_1}\label{subsubsec:num_L2_2}
 
@@ -389,7 +530,7 @@ These results also bear on the three-dimensional estimate~\eqref{eq:mode_dilutio
 
 \subsection{Graded arrays}\label{subsec:num_graded}\label{subsubsec:num_L2_6}
 
-\paragraph{Test description.} Section~\ref{sec:dispersion_relation} maps each frequency to the turning point $x^*(\omega)$ of the grading law, equations~\eqref{eq:x_star_linear} and~\eqref{eq:x_star_exp}, with the footprint~\eqref{eq:footprint_general}, and proposes the density taper~\eqref{eq:density_grade} to reduce the reflection at the entrance of an array. These are local estimates. The test checks them on a long floating plate ($T_\rho=0$, $H=10~\si{\meter}$) that carries the full discrete array. Incidence from open water is not suitable here: at the free edge of the plate $|R|>0.99$ at these frequencies, and almost no power enters the plate. The incident plate wave is instead generated by a point source on a bare lead-in, and viscous sponges of length $6\lambda_p$ absorb the waves at both ends of the plate. Their reflection is at most $1.4\times10^{-3}$. The amplitudes $A^\pm$ are fitted in two bare windows, $W_1$ upstream and $W_2$ downstream of the array. Since the left sponge re-reflects part of $R$ towards the array, the energy check uses the net plate-wave flux into the array, $(|A^+_1|^2-|A^-_1|^2-|A^+_2|^2+|A^-_2|^2)/|A^+_{1,0}|^2$, against the sum of the dashpot powers; this balance is exact. All arrays are evaluated with equation~\eqref{eq:lat_woodbury} from one factorisation per frequency, with the bare compliance at the attachment points assembled from an evaluation matrix. Two sets of arrays are computed:
+\paragraph{Test description.} Section~\ref{sec:dispersion_relation} maps each frequency to the turning point $x^*(\omega)$ of the grading law, equations~\eqref{eq:x_star_linear} and~\eqref{eq:x_star_exp}, with the footprint~\eqref{eq:footprint_general}, and proposes the density taper~\eqref{eq:density_grade} to reduce the reflection at the entrance of an array. These are local estimates. The test checks them on a long floating plate ($T_\rho=0$, $H=10~\si{\meter}$) that carries the full discrete array. Incidence from open water is not suitable here: at the free edge of the plate $|R|>0.99$ at these frequencies, and almost no power enters the plate. The incident plate wave is instead generated by a point source on a bare lead-in, and viscous sponges of length $6\lambda_p$ absorb the waves at both ends of the plate (Figure~\ref{fig:num_sketch_B}b). Their reflection is at most $1.4\times10^{-3}$. The amplitudes $A^\pm$ are fitted in two bare windows, $W_1$ upstream and $W_2$ downstream of the array. Since the left sponge re-reflects part of $R$ towards the array, the energy check uses the net plate-wave flux into the array, $(|A^+_1|^2-|A^-_1|^2-|A^+_2|^2+|A^-_2|^2)/|A^+_{1,0}|^2$, against the sum of the dashpot powers; this balance is exact. All arrays are evaluated with equation~\eqref{eq:lat_woodbury} from one factorisation per frequency, with the bare compliance at the attachment points assembled from an evaluation matrix. Two sets of arrays are computed:
 \begin{itemize}
     \item frequency set, $\omega\in\{2,3,5,7\}~\si{\radian\per\second}$: linear and exponential grading of $\omega_r$ from $\omega_{r,0}=10~\si{\radian\per\second}$ with $L_g=500~\si{\meter}$, down to $\omega_r=1~\si{\radian\per\second}$; spacing $a\in\{0.25,1\}~\si{\meter}$; $\zeta\in\{0.01,0.02,0.05\}$ with uniform loading $n_0m_{\rho,r}=0.01~\si{\meter}$; and the mass-graded loading of equation~\eqref{eq:mass_grading_rule} with $\sqrt{\mu^*}=0.163$ at $\zeta=0.02$. The dissipated power per unit length gives the peak position and the full width at half maximum (FWHM), which are compared with $x^*$ and $\Delta x$;
     \item density set, 41 frequencies in $[9.5,10.5]~\si{\radian\per\second}$: $\omega_r=10~\si{\radian\per\second}$, $a=1~\si{\meter}$, $n=n_0e^{-x/L_g}$ on $[0,L_g]$ with $L_g\in\{1,5,20,100\}\lambda$ ($\lambda=2.32~\si{\meter}$), $\zeta\in\{0,0.02\}$, against abrupt arrays with the same number of resonators.
@@ -429,9 +570,80 @@ The graded-array estimates should therefore be stated as follows. Equations~\eqr
 
 \textbf{[PENDING Phase 4.] L3-3: single resonator with quarter symmetry, $\sigma_\mathrm{abs}\le1/k_0$ and the optical theorem~\eqref{eq:lat_optical}; L4-4: anisotropic resonator island with the three-dimensional resonator field (Section~\ref{subsubsec:aniso_rays}); L4-8: forced response of a finite plate against equation~\eqref{eq:mode_dilution}, with the prefactor found in Section~\ref{subsubsec:num_L2_5}. Memory sizing: card L3-0.}
 
+\begin{figure}[t]
+    \centering
+    \begin{tikzpicture}[x={(0.8cm,0cm)},y={(0.33cm,0.33cm)},z={(0cm,0.8cm)},font=\footnotesize,
+        spr/.style={decorate,decoration={zigzag,amplitude=1.2pt,segment length=2.5pt}}]
+        % (a) L3-1: box periodic in y, line load
+        \node[anchor=west] at (-1.2,0,1.2) {(a)};
+        \draw[gray!60,dashed] (0,3,0) -- (0,3,-2) -- (14,3,-2);
+        \draw[gray!60,dashed] (0,3,-2) -- (0,0,-2);
+        \fill[blue!6] (0,0,0) -- (14,0,0) -- (14,0,-2) -- (0,0,-2) -- cycle;
+        \fill[blue!12] (14,0,0) -- (14,3,0) -- (14,3,-2) -- (14,0,-2) -- cycle;
+        \fill[gray!12] (0,0,0) -- (14,0,0) -- (14,3,0) -- (0,3,0) -- cycle;
+        \fill[gray!45] (0,0,0) -- (3,0,0) -- (3,3,0) -- (0,3,0) -- cycle;
+        \fill[gray!45] (11,0,0) -- (14,0,0) -- (14,3,0) -- (11,3,0) -- cycle;
+        \fill[red!60] (5.4,0,0) -- (5.7,0,0) -- (5.7,3,0) -- (5.4,3,0) -- cycle;
+        \draw[thick] (0,0,-2) -- (14,0,-2) -- (14,3,-2);
+        \draw[thick] (0,0,0) -- (14,0,0) -- (14,3,0) -- (0,3,0) -- cycle;
+        \draw[thick] (0,0,0) -- (0,0,-2);
+        \draw[thick] (14,0,0) -- (14,0,-2);
+        \draw[thick] (14,3,0) -- (14,3,-2);
+        \node[above] at (1.5,3,0) {sponge};
+        \node[above] at (12.5,3,0) {sponge};
+        \node[above,red!70!black] at (5.55,3,0) {$F\mathrm{e}^{\mathrm{i}k_yy}$};
+        \draw[-{Latex},thick] (5.7,1.5,0) -- (8.3,2.7,0) node[right] {$\boldsymbol{k}$};
+        \draw[-{Latex},thick] (5.4,1.5,0) -- (3.4,2.7,0);
+        \node at (7,0,-1) {periodic in $y$ (faces $y=0$ and $y=W$)};
+        \draw[<->] (14.4,0,0) -- (14.4,3,0) node[pos=1,right] {$W=\lambda_p/\sin\theta$};
+        \draw[<->] (-0.4,0,0) -- (-0.4,0,-2) node[midway,left] {$H$};
+        \draw[-{Latex}] (15.6,0,-2.3) -- (16.6,0,-2.3) node[right] {$x$};
+        \draw[-{Latex}] (15.6,0,-2.3) -- (15.6,1.2,-2.3) node[right] {$y$};
+        \draw[-{Latex}] (15.6,0,-2.3) -- (15.6,0,-1.5) node[above] {$z$};
+
+        \begin{scope}[shift={(0,0,-5.6)}]
+            % (b) L3-2: channel with walls, plate and point resonator
+            \node[anchor=west] at (-1.2,0,1.6) {(b)};
+            \draw[gray!60,dashed] (0,2.4,0) -- (0,2.4,-2) -- (16,2.4,-2);
+            \draw[gray!60,dashed] (0,2.4,-2) -- (0,0,-2);
+            \fill[blue!6] (0,0,0) -- (16,0,0) -- (16,0,-2) -- (0,0,-2) -- cycle;
+            \fill[blue!12] (16,0,0) -- (16,2.4,0) -- (16,2.4,-2) -- (16,0,-2) -- cycle;
+            \fill[gray!45] (0,0,0) -- (2.5,0,0) -- (2.5,2.4,0) -- (0,2.4,0) -- cycle;
+            \fill[blue!15] (2.5,0,0) -- (4,0,0) -- (4,2.4,0) -- (2.5,2.4,0) -- cycle;
+            \fill[gray!15] (4,0,0) -- (12,0,0) -- (12,2.4,0) -- (4,2.4,0) -- cycle;
+            \fill[blue!15] (12,0,0) -- (13.5,0,0) -- (13.5,2.4,0) -- (12,2.4,0) -- cycle;
+            \fill[gray!45] (13.5,0,0) -- (16,0,0) -- (16,2.4,0) -- (13.5,2.4,0) -- cycle;
+            % plate mesh: fixed far field, graded next to the resonator
+            \foreach \x in {4.5,5,...,7.5,8.5,9,...,11.5} \draw[gray!85,very thin] (\x,0,0) -- (\x,2.4,0);
+            \foreach \x in {7.6,7.75,7.88,8.12,8.25,8.4} \draw[gray!85,very thin] (\x,0,0) -- (\x,2.4,0);
+            \foreach \y in {0.4,0.8,1.6,2.0,0.9,1.0,1.1,1.3,1.4,1.5} \draw[gray!85,very thin] (4,\y,0) -- (12,\y,0);
+            \draw[thick] (4,0,0) -- (12,0,0) -- (12,2.4,0) -- (4,2.4,0) -- cycle;
+            \draw[thick] (0,0,-2) -- (16,0,-2) -- (16,2.4,-2);
+            \draw[thick] (0,0,0) -- (16,0,0) -- (16,2.4,0) -- (0,2.4,0) -- cycle;
+            \draw[thick] (0,0,0) -- (0,0,-2);
+            \draw[thick] (16,0,0) -- (16,0,-2);
+            \draw[thick] (16,2.4,0) -- (16,2.4,-2);
+            % resonator at the plate centre
+            \draw (8,1.2,0) -- (8,1.2,0.3);
+            \draw[spr] (8,1.2,0.3) -- (8,1.2,0.9);
+            \node[fill,inner sep=2pt] at (8,1.2,0.98) {};
+            \node[right] at (8.15,1.2,1.0) {$M_\rho,\omega_r$ at $\boldsymbol{x}_r$};
+            \draw[-{Latex},thick,blue!70!black] (-2.2,1.2,0) -- (-0.3,1.2,0) node[pos=0,above right] {incident};
+            \node[above] at (1.25,2.4,0) {damping};
+            \node[above] at (14.75,2.4,0) {damping};
+            \node[above] at (6,2.4,0) {plate, $4\lambda_p$};
+            \node at (8,0,-1) {no-flux walls at $y=0$ and $y=W$};
+            \draw[<->] (16.4,0,0) -- (16.4,2.4,0) node[pos=1,right] {$W$};
+            \draw[<->] (-0.4,0,0) -- (-0.4,0,-2) node[midway,left] {$H$};
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Three-dimensional setups (not to scale). (a) Plate over the whole surface of a box periodic in $y$, with sponges at both ends and a line load $F\mathrm{e}^{\mathrm{i}k_yy}$, $k_y=k_0\sin\theta$, that radiates two oblique plate waves (Section~\ref{subsubsec:num_L3_1}). (b) Channel of width $W$ with no-flux walls: damping zones of $4\lambda_0$, open water of $\lambda_0/2$, and a plate of length $4\lambda_p$ with free edges and a point resonator at its centre $\boldsymbol{x}_r$. The plate cells are fixed far from $\boldsymbol{x}_r$ and graded towards it (Section~\ref{subsubsec:num_L3_2}).}
+    \label{fig:num_sketch_3D}
+\end{figure}
+
 \subsubsection{Bare plate under oblique incidence}\label{subsubsec:num_L3_1}
 
-\paragraph{Test description.} The plate covers the whole surface of a box of depth $H=10~\si{\meter}$, with the parameters of Table~\ref{tab:dispersion_test_parameters} and $\nu=0$. The box is periodic in $y$ with width $W=\lambda_p/\sin\theta$. A line load $F\mathrm{e}^{\mathrm{i}k_yy}$ with $k_y=k_0\sin\theta$ acts on a strip of two cells across the plate, and viscoelastic sponges absorb the waves at both ends of the box. Since $\mathcal{D}_0$ depends on $|\boldsymbol{k}|$ only, the load radiates two oblique plate waves with $k_x=(k_0^2-k_y^2)^{1/2}$. Closing the $k_x$ integral on its poles gives
+\paragraph{Test description.} The plate covers the whole surface of a box of depth $H=10~\si{\meter}$, with the parameters of Table~\ref{tab:dispersion_test_parameters} and $\nu=0$. The box is periodic in $y$ with width $W=\lambda_p/\sin\theta$ (Figure~\ref{fig:num_sketch_3D}a). A line load $F\mathrm{e}^{\mathrm{i}k_yy}$ with $k_y=k_0\sin\theta$ acts on a strip of two cells across the plate, and viscoelastic sponges absorb the waves at both ends of the box. Since $\mathcal{D}_0$ depends on $|\boldsymbol{k}|$ only, the load radiates two oblique plate waves with $k_x=(k_0^2-k_y^2)^{1/2}$. Closing the $k_x$ integral on its poles gives
 \begin{equation}
     \eta(x,y)=F\mathrm{e}^{\mathrm{i}k_yy}\,\mathrm{i}\sum_m\frac{k_m}{k_{x,m}}\frac{\mathrm{e}^{\mathrm{i}k_{x,m}|x|}}{\mathcal{D}_0'(k_m)},\qquad k_{x,m}=(k_m^2-k_y^2)^{1/2},
 \end{equation}
@@ -448,7 +660,7 @@ so the radiated amplitude is $\gamma_\theta=\gamma_r/\cos\theta$. Each wave carr
 
 \subsubsection{Point resonator on the plate}\label{subsubsec:num_L3_2}
 
-\paragraph{Test description.} A point resonator is attached to the plate in a channel of width $W=2~\si{\meter}$ and depth $H=10~\si{\meter}$, with walls that carry no flux. Along the channel there is a damping zone of $4\lambda_0$, open water of $\lambda_0/2$, the plate, open water and a second zone. The plate is $4\lambda_p$ long, spans the width with free lateral edges, and has $C_\rho=0.05g$, $m_\rho=0.01~\si{\meter}$ and $\nu=0$. The resonator sits at the plate centre $\xvec_r$, with $M_\rho=0.01~\si{\meter\cubed}$ and $\omega_r=10~\si{\radian\per\second}$. An incident wave enters from the inlet. The fields are $Q_2$. On the plate the far-field cells are fixed at $\lambda_p/16$ along and $W/14$ across the channel, the same on every mesh. Only the two far-field cells next to $\xvec_r$, in each direction, are replaced by cells graded from $h_\mathrm{min}=\lambda_p/16$, $\lambda_p/32$, $\lambda_p/64$ or $\lambda_p/128$ (ratio at most $1.5$; $N=1.3\times10^5$ to $2.1\times10^5$). The Kirchhoff Green function is finite at the source, with $\eta-\eta(\xvec_r)\sim c\,r^2\ln r$ and $c=f/(8\pi C_\rho)$, so no footprint is needed. We solve the bare plate under the incident wave and under a unit point load $f$, which gives $G(\xvec_r,\xvec_r)$, and the plate with the resonator. The attachment point is a mesh node, the midpoint of a cell edge or a cell interior point. Two softer plates, $C_\rho=0.005g$ and $5\times10^{-4}g$, are run in a channel scaled with $\lambda_p$. The static Winkler plate, $C_\rho\nabla^4w+gw=f\delta$, gives an independent check of the singularity. The sparse LU factorisation uses a nested-dissection (METIS) ordering. Every run stays below $10$~GB of memory.
+\paragraph{Test description.} A point resonator is attached to the plate in a channel of width $W=2~\si{\meter}$ and depth $H=10~\si{\meter}$, with walls that carry no flux. Along the channel there is a damping zone of $4\lambda_0$, open water of $\lambda_0/2$, the plate, open water and a second zone (Figure~\ref{fig:num_sketch_3D}b). The plate is $4\lambda_p$ long, spans the width with free lateral edges, and has $C_\rho=0.05g$, $m_\rho=0.01~\si{\meter}$ and $\nu=0$. The resonator sits at the plate centre $\xvec_r$, with $M_\rho=0.01~\si{\meter\cubed}$ and $\omega_r=10~\si{\radian\per\second}$. An incident wave enters from the inlet. The fields are $Q_2$. On the plate the far-field cells are fixed at $\lambda_p/16$ along and $W/14$ across the channel, the same on every mesh. Only the two far-field cells next to $\xvec_r$, in each direction, are replaced by cells graded from $h_\mathrm{min}=\lambda_p/16$, $\lambda_p/32$, $\lambda_p/64$ or $\lambda_p/128$ (ratio at most $1.5$; $N=1.3\times10^5$ to $2.1\times10^5$). The Kirchhoff Green function is finite at the source, with $\eta-\eta(\xvec_r)\sim c\,r^2\ln r$ and $c=f/(8\pi C_\rho)$, so no footprint is needed. We solve the bare plate under the incident wave and under a unit point load $f$, which gives $G(\xvec_r,\xvec_r)$, and the plate with the resonator. The attachment point is a mesh node, the midpoint of a cell edge or a cell interior point. Two softer plates, $C_\rho=0.005g$ and $5\times10^{-4}g$, are run in a channel scaled with $\lambda_p$. The static Winkler plate, $C_\rho\nabla^4w+gw=f\delta$, gives an independent check of the singularity. The sparse LU factorisation uses a nested-dissection (METIS) ordering. Every run stays below $10$~GB of memory.
 
 \paragraph{Results.} The resonance identities hold to round-off at every attachment point and every $C_\rho$. At $\omega_r$ with $\zeta=0$, $\eta_h(\xvec_r)$ vanishes to $1.4\times10^{-15}$ of the bare value. The Sherman--Morrison relation between $q_h$, the bare field and $G_h$ holds to $1.2\times10^{-9}$ at $\omega_r$ and to $3.6\times10^{-9}$ at $0.9\omega_r$ with $\zeta=0.02$. With the far field fixed, the driving point converges (Figure~\ref{fig:num_L3_2}b). Over the first three meshes, $G_h(\xvec_r,\xvec_r)$ converges at rates of $1.6$ to $1.9$ and $|q_h|$ at $1.8$ to $2.1$, for all three plates. The changes between the second and third meshes are $0.15$--$0.24\%$ for $G_h$ and $0.03$--$0.12\%$ for $|q_h|$ (tolerance $2\%$). The near field around $\xvec_r$ converges at rates of $1.5$ in $L^2$ and $1.7$ in $H^1$. On the finest mesh the changes level off: $G_h$ moves by about $0.3\%$ for every plate, and this does not decrease. The same increment appears with a top cell half as thick or with 12 vertical cells, so it does not come from the vertical mesh. Most likely it comes from the elongated cells that the tensor-product grading creates along the two lines through $\xvec_r$ (aspect ratio $8$ on the finest mesh). The driving-point compliance is therefore resolved to about $0.3\%$, against about $5\%$ in a first ladder whose far-field cells changed with the refinement. The local field has the predicted singularity (Figure~\ref{fig:num_L3_2}a). On the third mesh the fitted coefficient gives $c_h\,8\pi C_\rho/f_h=1$ within $2.3\%$ for the resonator force and within $3.7\%$ for the point load, and within $3.9\%$ for the softer plates (tolerance $10\%$). The static plate gives $w_h(0)$ within $0.67\%$ of $f/(8\sqrt{gC_\rho})$, with a rate of $1.03$. The attachment location does not matter: $G_h$ at the edge and interior points differs from $G_h$ at the node by $0.06\%$ and $0.11\%$ on the third mesh, and the difference falls fourfold per refinement. The penalty control changes $G_h$ by $0.15\%$. The driving-point compliance stays bounded as $C_\rho$ decreases. It grows as $C_\rho^{-0.49}$, against $C_\rho^{-0.62}$ for the infinite plate on the fluid (Figure~\ref{fig:num_L3_2}c). We conclude that a point resonator on the plate needs no footprint, and that its driving-point response converges under local refinement.
 
