@@ -43,16 +43,25 @@ using HydroElasticFEM_xxx2026.L3_2
 
 const TEST_ID = "L3-2"
 const REPO = normpath(joinpath(@__DIR__, "..", ".."))
-const CAP_GB = 4.0
-const LEVELS = ("L1", "L2", "L3")
+# Far field: `--graded` = the first run (P3 legacy grading, far cells change with the level; 4 GB cap);
+# default = the refinement L3-2r of 2026-10-28 (nested fixed far field Δx = λ_p/16, Δy = W/14, levels
+# h_min = h_far/{1, 2, 4, 8}; 3D batch rules, 20 GB cap).
+const FAR = "--graded" in ARGS ? :graded : :nested
+const CAP_GB = FAR == :graded ? 4.0 : 20.0
+const LEVELS = FAR == :graded ? ("L1", "L2", "L3") : ("L1", "L2", "L3", "L4")
+const LADDER = ("L1", "L2", "L3")                  # the frozen ladder of every rate check
 const CS = (0.05, 0.005, 5e-4)
 const W_LEVELS = (8.0, 16.0, 32.0)
+const OUT_SUB = FAR == :graded ? "graded_far_field" : ""
+
+params(l, c) = FAR == :graded ? L3_2_Params(level=l, C_over_g=c) :
+               L3_2_Params(level=l, C_over_g=c, far_mesh=:nested, dx_plate_over_λp=16.0, ny_base=14)
 
 parts(c, l) = c == 0.05 ? (l == "L2" ? (:bare, :res_node, :res_edge, :res_interior, :bare09, :S4, :PG) :
                                          (:bare, :res_node, :res_edge, :res_interior, :bare09, :S4)) : (:bare, :res_node)
 
 "Cases (params, mode): one process per (C_ρ, level, part) and one for D-W."
-cases() = [[(L3_2_Params(level=l, C_over_g=c), m) for c in CS for l in LEVELS for m in parts(c, l)];
+cases() = [[(params(l, c), m) for c in CS for l in LEVELS for m in parts(c, l)];
            [(L3_2_Params(), :winkler)]]
 
 record_name(p, mode) = mode == :winkler ? "winkler_fixed=" * fixed_hash(p) :
@@ -107,7 +116,7 @@ function records()
         d = merge(ds...)
         d["maxrss_final_gb"] = maximum(x["maxrss_final_gb"] for x in ds)
         d["wall_s"] = sum(x["wall_s"] for x in ds)
-        push!(out, (L3_2_Params(level=l, C_over_g=c), :fe, d))
+        push!(out, (params(l, c), :fe, d))
     end
     return out
 end
@@ -183,7 +192,7 @@ function checks(recs)
              d["bare_A_etaeta_one_rel"] <= 1e-8 && d["bare_A_etaeta_one_re"] > 0)
         add!("METIS ordering used by UMFPACK, $tag", "I", Float64(d["bare_ordering"] == "metis"), 1.0,
              d["bare_ordering"] == "metis")
-        add!("peak RSS < 4 GiB, max over the processes of the case (GiB), $tag", "R", d["maxrss_final_gb"], CAP_GB, d["maxrss_final_gb"] < CAP_GB)
+        add!("peak RSS < $(Int(CAP_GB)) GiB, max over the processes of the case (GiB), $tag", "R", d["maxrss_final_gb"], CAP_GB, d["maxrss_final_gb"] < CAP_GB)
         for s in pts
             b1 = abs(d["S3_$(s)_eta"]) / abs(d["bare_S1_eta_δ_$(s)"])
             add!("B-P1 |η_S3(x)|/|η_S1(x)| at $(s), $tag", "I", b1, 1e-8, b1 <= 1e-8)
@@ -217,18 +226,25 @@ function checks(recs)
             end
             continue
         end
-        all(haskey(L, l) for l in LEVELS) || continue
+        all(haskey(L, l) for l in LADDER) || continue
         full = c == 0.05
-        for (lbl, f) in [("G_h(x_r, x_r)", d -> G(d)), ("|q_h|", d -> abs(q(d)))]
-            cc = cauchy(f(L["L1"]), f(L["L2"]), f(L["L3"]))
-            add!("B-P3 $lbl rate p_obs, $tag", "D", cc.p, 1.0, cc.p >= 1.0)
-            add!("B-P3 $lbl d₂₃/|L3|, $tag", "D", cc.rel23, 0.02, cc.rel23 <= 0.02)
+        trips = haskey(L, "L4") ? [("L1", "L2", "L3"), ("L2", "L3", "L4")] : [("L1", "L2", "L3")]
+        for (a, b, f3) in trips
+            tl = f3 == "L3" ? "" : " [$(a)–$(f3)]"
+            for (lbl, f) in [("G_h(x_r, x_r)", d -> G(d)), ("|q_h|", d -> abs(q(d)))]
+                cc = cauchy(f(L[a]), f(L[b]), f(L[f3]))
+                add!("B-P3 $lbl rate p_obs$tl, $tag", "D", cc.p, 1.0, cc.p >= 1.0)
+                add!("B-P3 $lbl d₂₃/|finest|$tl, $tag", "D", cc.rel23, 0.02, cc.rel23 <= 0.02)
+            end
+            full || continue
+            for s in (:edge, :interior)
+                cc = cauchy(G(L[a], s), G(L[b], s), G(L[f3], s))
+                add!("attachment: G_h at $(s), rate p_obs$tl, $tag", "D", cc.p, 1.0, cc.p >= 1.0)
+                add!("attachment: G_h at $(s), d₂₃/|finest|$tl, $tag", "D", cc.rel23, 0.02, cc.rel23 <= 0.02)
+            end
         end
         if full
             for s in (:edge, :interior)
-                cc = cauchy(G(L["L1"], s), G(L["L2"], s), G(L["L3"], s))
-                add!("attachment: G_h at $(s), rate p_obs, $tag", "D", cc.p, 1.0, cc.p >= 1.0)
-                add!("attachment: G_h at $(s), d₂₃/|L3|, $tag", "D", cc.rel23, 0.02, cc.rel23 <= 0.02)
                 for l in LEVELS
                     r = abs(G(L[l], s) / G(L[l]) - 1)
                     l == "L3" ? add!("attachment: |G_h($(s))/G_h(node) − 1| at L3, $tag", "D", r, 0.02, r <= 0.02) :
@@ -244,11 +260,14 @@ function checks(recs)
         nL2 = l2w(w, nf("L3", "eta")); nH1 = sqrt(l2w(w, nf("L3", "gx"))^2 + l2w(w, nf("L3", "gy"))^2)
         dl2(a, b) = l2w(w, nf(a, "eta") .- nf(b, "eta")) / nL2
         dh1(a, b) = sqrt(l2w(w, nf(a, "gx") .- nf(b, "gx"))^2 + l2w(w, nf(a, "gy") .- nf(b, "gy"))^2) / nH1
-        pL2 = log2(dl2("L1", "L2") / dl2("L2", "L3")); pH1 = log2(dh1("L1", "L2") / dh1("L2", "L3"))
-        add!("B-P4 S3 near field L²(B_R) rate p_obs, $tag", "D", pL2, 1.0, pL2 >= 1.0)
-        add!("B-P4 S3 near field L²(B_R) d₂₃, $tag", "D", dl2("L2", "L3"), 0.02, dl2("L2", "L3") <= 0.02)
-        add!("B-P4 S3 near field H¹(B_R) rate p_obs, $tag", "D", pH1, 0.5, pH1 >= 0.5)
-        add!("B-P4 S3 near field H¹(B_R) d₂₃, $tag", "D", dh1("L2", "L3"), 0.05, dh1("L2", "L3") <= 0.05)
+        for (a, b, f3) in trips
+            tl = f3 == "L3" ? "" : " [$(a)–$(f3)]"
+            pL2 = log2(dl2(a, b) / dl2(b, f3)); pH1 = log2(dh1(a, b) / dh1(b, f3))
+            add!("B-P4 S3 near field L²(B_R) rate p_obs$tl, $tag", "D", pL2, 1.0, pL2 >= 1.0)
+            add!("B-P4 S3 near field L²(B_R) d₂₃$tl, $tag", "D", dl2(b, f3), 0.02, dl2(b, f3) <= 0.02)
+            add!("B-P4 S3 near field H¹(B_R) rate p_obs$tl, $tag", "D", pH1, 0.5, pH1 >= 0.5)
+            add!("B-P4 S3 near field H¹(B_R) d₂₃$tl, $tag", "D", dh1(b, f3), 0.05, dh1(b, f3) <= 0.05)
+        end
         # B-P5: r² ln r coefficient at L3 (S3 with f_h from the resonator, S2 with f)
         Cρ = L["L3"]["C_rho"]
         for (lbl, rk, mk, fh) in [("S3", "S3_polar_r", "S3_polar_m", L["L3"]["S3_node_f"]),
@@ -305,20 +324,22 @@ end
 function convergence_table(byC)
     rows = NamedTuple[]
     for c in CS
-        haskey(byC, c) && all(haskey(byC[c], l) for l in LEVELS) || continue
+        haskey(byC, c) && all(haskey(byC[c], l) for l in LADDER) || continue
         L = byC[c]
         qs = [("G_node", d -> G(d)), ("abs_q", d -> abs(q(d)))]
         c == 0.05 && append!(qs, [("G_edge", d -> G(d, :edge)), ("G_interior", d -> G(d, :interior))])
-        for (lbl, f) in qs
-            cc = cauchy(f(L["L1"]), f(L["L2"]), f(L["L3"]))
-            push!(rows, (C_over_g=c, quantity=lbl, d12=cc.d12, d23=cc.d23, p_obs=cc.p, rel23=cc.rel23))
+        trips = haskey(L, "L4") ? [("L1", "L2", "L3"), ("L2", "L3", "L4")] : [("L1", "L2", "L3")]
+        for (a, b, f3) in trips, (lbl, f) in qs
+            cc = cauchy(f(L[a]), f(L[b]), f(L[f3]))
+            push!(rows, (C_over_g=c, triplet="$(a)-$(f3)", quantity=lbl, d12=cc.d12, d23=cc.d23, p_obs=cc.p,
+                         rel23=cc.rel23))
         end
     end
     return DataFrame(rows)
 end
 
 function figure(byC, fits, wk)
-    dir = joinpath(REPO, "plots", TEST_ID); mkpath(dir)
+    dir = joinpath(REPO, "plots", TEST_ID, OUT_SUB); mkpath(dir)
     with_theme(Theme(fontsize=12, Axis=(xgridvisible=false, ygridvisible=false))) do
         fig = Figure(size=(1180, 430))
         # (a) azimuthal mean of η about x_r, S3 at L3 (P3), with the free-a₀ fit and c_pred
@@ -334,19 +355,21 @@ function figure(byC, fits, wk)
         end
         # (b) Cauchy differences of G_h and q_h against h_min
         ax2 = Axis(fig[1, 2], xscale=log10, yscale=log10, xlabel="h_min / λ_p (finer level of the pair)",
-                   ylabel="Cauchy difference / |L3 value|", title="(b) driving point under refinement")
+                   ylabel="Cauchy difference / |finest value|", title="(b) driving point under refinement")
         mk = Dict(0.05 => :circle, 0.005 => :rect, 5e-4 => :utriangle)
         ax2.xreversed = true
         for c in CS
-            haskey(byC, c) && all(haskey(byC[c], l) for l in LEVELS) || continue
-            L = byC[c]; h = [1 / 24, 1 / 48]
+            haskey(byC, c) && all(haskey(byC[c], l) for l in LADDER) || continue
+            L = byC[c]; lv = [l for l in LEVELS if haskey(L, l)]
+            h = [L[l]["hmin"] / L[l]["lambda_p"] for l in lv[2:end]]
             for (f, col, lbl) in [(d -> G(d), :black, "G_h"), (d -> abs(q(d)), :steelblue, "|q_h|")]
-                v = f.(getindex.(Ref(L), collect(LEVELS)))
-                dd = [abs(v[1] - v[2]), abs(v[2] - v[3])] ./ abs(v[3])
+                v = f.(getindex.(Ref(L), lv))
+                dd = [abs(v[i] - v[i + 1]) for i in 1:(length(v) - 1)] ./ abs(v[end])
                 scatterlines!(ax2, h, dd; color=col, marker=mk[c], label=@sprintf("%s, C_ρ = %gg", lbl, c))
             end
         end
-        lines!(ax2, [1 / 24, 1 / 48], 0.02 .* [1.0, 0.5]; color=:gray, linestyle=:dash, label="slope 1")
+        h0 = FAR == :graded ? [1 / 24, 1 / 48] : [1 / 32, 1 / 128]
+        lines!(ax2, h0, 0.02 .* (h0 ./ h0[1]); color=:gray, linestyle=:dash, label="slope 1")
         Legend(fig[2, 2], ax2; framevisible=false, labelsize=9, nbanks=3, orientation=:horizontal)
         # (c) |G_h| against C_ρ
         ax3 = Axis(fig[1, 3], xscale=log10, yscale=log10, xlabel="C_ρ / g", ylabel="|G(x_r, x_r)|  (m/(m⁴s⁻²))",
@@ -371,7 +394,7 @@ function post()
     pt = points_table(recs)
     ck, fits, wk, byC = checks(recs)
     cv = convergence_table(byC)
-    out = joinpath(REPO, "data", "exp_pro", TEST_ID); mkpath(out)
+    out = joinpath(REPO, "data", "exp_pro", TEST_ID, OUT_SUB); mkpath(out)
     CSV.write(joinpath(out, "points.csv"), pt)
     CSV.write(joinpath(out, "convergence.csv"), cv)
     CSV.write(joinpath(out, "fits.csv"), fits)
@@ -395,8 +418,10 @@ if abspath(PROGRAM_FILE) == @__FILE__
             s = mode == :winkler ? nothing : setup_counts(p)
             println(i, "  ", mode, "  ", mode == :winkler ? "D-W, h_min = l_c/{8,16,32}" : (p.C_over_g, p.level, s))
         end
-    elseif (i = findfirst(==("--case"), ARGS)) !== nothing
-        simulate(parse(Int, ARGS[i + 1]))
+    elseif "--case" in ARGS
+        for (j, a) in enumerate(ARGS)
+            a == "--case" && simulate(parse(Int, ARGS[j + 1]))
+        end
     else
         post()
     end

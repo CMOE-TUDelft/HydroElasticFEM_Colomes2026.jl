@@ -500,3 +500,85 @@ section (L1-1).
     julia --project -O1 scripts/L3-3D-flat-bottom/L3-1_oblique_plate.jl --list
     python3 -I Loop_Framework/tools/rss_guard.py --mem-gb 22 -- bash Loop_Framework/tools/run_limited.sh --mem-gb 20 --cpu-min 120 --wall-min 120 -- julia --project=<repo> -O1 scripts/L3-3D-flat-bottom/L3-1_oblique_plate.jl --case 1 --case 2 --case 3
     julia --project scripts/L3-3D-flat-bottom/L3-1_oblique_plate.jl          # tables, checks, figure
+
+---
+
+## L3-2r: far-field refinement of the point-resonator ladder (2026-10-28)
+
+**Why.** The first L3-2 run (commit 89ab3ca, 113/136) failed 23 convergence-rate checks (16 B-P3/attachment
+rows, 7 B-P4 rows). Its graded far field changed with the level (ny = 8, 10, 14), so the "fixed far field"
+assumption of the ladder did not hold. Those results are kept in `data/exp_pro/L3-2/graded_far_field/` and
+`plots/L3-2/graded_far_field/` (regenerate them with `--graded`; the records are unchanged, and the legacy
+hash 1bc7c3a0 is preserved through `LATE_FIELDS`).
+
+**What changed (frozen in the L3.2 row before the run).** `L3_2_Params.far_mesh = :nested`:
+- the plate far field is uniform and identical at every level, Δx = λ_p/16 and Δy = W/14;
+- only the 2 far cells next to x_r (and next to y = 0) are replaced by a geometric grading from
+  h_min = h_far/2^m (`zone_sizes`, `nested_sizes`, ratio ≤ 1.5): h_min = λ_p/{16, 32, 64, 128} for L1–L4;
+- N = 130 k, 150 k, 171 k, 215 k;
+- open water, zones, nz = 8, the top cell, all solves and all C_ρ variants are unchanged;
+- the script default is the nested ladder, and `--graded` gives the first run.
+
+Every check is re-evaluated on the frozen ladder L1–L2–L3. The same rate and d₂₃ checks on L2–L3–L4 are
+added. The memory row is < 20 GiB. D-W reuses its record.
+
+**Compute** (3D batch rules: rss_guard 22 GiB, run_limited 20 GB, lock, `-O1`, several parts per process):
+
+| batch | cases | guard peak footprint | wall |
+|---|---|---|---|
+| P3 L1+L2 | 1–13 | 6.30 GiB | 5 min |
+| P3 L3+L4 | 14–25 | 9.31 GiB | 7 min |
+| C_ρ variants L1–L4 | 26–41 | 8.85 GiB | 7 min |
+| diagnostic (bare plate, L2–L4, top_k = 0.1 and nz = 12) | — | 12.92 GiB | 5 min |
+
+Process maxrss ≤ 9.13 GB. The largest factorisation is 25 s (L4, N = 215 k, METIS).
+
+### Results: frozen ladder 136/136 (first run 113/136); with the added L2–L4 rows 178/192
+
+| C_ρ | \|G_h\| L1 / L2 / L3 / L4 | p_obs G (L1–L3) | d₂₃/\|L3\| G | p_obs \|q\| | d₂₃ \|q\| | B-P4 p_obs L² / H¹ | L3→L4 change of G |
+|---|---|---|---|---|---|---|---|
+| 0.05g | 0.08858 / 0.08905 / 0.08917 / 0.08944 | 1.90 | 0.15 % | 2.09 | 0.10 % | 1.50 / 1.74 | 0.31 % |
+| 0.005g | 0.2305 / 0.2317 / 0.2321 / 0.2327 | 1.69 | 0.21 % | 1.83 | 0.12 % | 1.48 / 1.66 | 0.30 % |
+| 5e-4g | 0.8613 / 0.8612 / 0.8612 / 0.8611 | 1.62 | 0.24 % | 1.83 | 0.03 % | 1.53 / 1.66 | 0.31 % |
+
+- **All 23 former failures pass.** G_h at the edge and interior points converges at rates 2.09 and 1.97
+  (d₂₃ 0.21 % and 0.47 %). B-P4 d₂₃ is 0.15–0.35 % (L²) and 0.18–0.35 % (H¹).
+- Identities: residual ≤ 7.7e-9, B-P1 ≤ 1.4e-15, B-P2 ≤ 1.2e-9 (ω_r) and 3.6e-9 (0.9ω_r), incidence in the
+  RHS only (0), load sign ≤ 1.8e-15, METIS everywhere.
+- B-P5 (L3): 2.3 % (S3) and 3.7 % (S2) for P3, ≤ 3.9 % for the softer plates. Attachment at L3: 0.06 % (edge)
+  and 0.11 % (interior), falling 4× per level. P-γ: 0.15 %. C_ρ slope: −0.492 (infinite plate −0.623).
+  B-W1/B-W2 are unchanged (0.67 %, p_obs 1.03; 2.7 %).
+- The first run's finest |G_h| (0.0880 for P3) lies 1.3 % below the new L3 value. Its 5 % uncertainty came
+  from the far field.
+
+### The 14 failing checks (all added L2–L4 rate rows): finding, not a bug
+
+The 14 failures are the p_obs rows on L2–L3–L4:
+- P3: G_h, |q_h|, G_h at the edge and interior points, and B-P4 L² and H¹;
+- each softer plate: G_h, |q_h|, and B-P4 L² and H¹.
+
+All their d₂₃ rows pass (≤ 0.39 %). The L3→L4 change (≈ 0.3 % of G_h for every C_ρ, 0.15–0.35 % of the
+near field) is larger than the L2→L3 change (0.12–0.24 %), so p_obs < 1. The ladder reaches a plateau at
+about 3e-3:
+
+1. **Not the vertical mesh.** The diagnostic re-ran the P3 bare plate at L2–L4 with a top cell half as
+   thick (top_k = 0.1) and with nz = 12 (`data/exp_pro/L3-2/diag_vertical.csv`). The level increments of
+   |G_h| are identical to 1 % in the three vertical meshes: 1.15e-4 (L2→L3) and 2.73e-4 (L3→L4). The
+   vertical mesh shifts G_h only by a constant (−0.3 % and +0.3 %).
+2. **Not the far field.** The far-field nodes are identical at every level by construction.
+3. **Not the post-processing.** The Cauchy formula and the reference set are those of the frozen ladder,
+   and the identities hold to round-off at L4.
+4. **Most likely cause:** the tensor-product grading creates elongated cells along the lines y = 0 and
+   x = x_r. Their aspect ratio h_far/h_min is 1, 2, 4 and 8 at L1–L4, and the C/DG plate penalty and the Q2
+   fluid cells under them lose accuracy as the aspect ratio grows. This is not confirmed: the confirming
+   run (a refinement local in both directions, or a γ scaled with the cell aspect) was not done, because
+   the compute window had closed.
+
+So the driving-point compliance is resolved to ≈ 0.3 %. The frozen L1–L3 ladder converges at rates 1.6–2.1.
+
+### Reproduce
+
+    julia --project -O1 scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl --list            # nested ladder, 42 cases
+    python3 -I Loop_Framework/tools/rss_guard.py --mem-gb 22 -- bash Loop_Framework/tools/run_limited.sh --mem-gb 20 --cpu-min 120 --wall-min 120 -- julia --project=<repo> -O1 scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl --case 1 … --case 13
+    julia --project scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl                        # tables, checks, figure
+    julia --project scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl --graded               # first run (graded far field)

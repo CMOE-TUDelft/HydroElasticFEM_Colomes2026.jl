@@ -117,13 +117,22 @@ export L3_2_Params, VARIABLE, fixed_hash, run_case, winkler_level, layout, case_
     n_angles::Int = 24
     n_radii::Int = 40
     rmin_over_hmin::Float64 = 3.0
+
+    # ── Added 2026-10-28 (far-field refinement, L3-2r) ─────────────────────────
+    far_mesh::Symbol = :graded            # :graded (P3 legacy) or :nested (fixed far field, see `layout`)
+    zone_far_cells::Int = 2               # :nested: far cells next to x_r (and y = 0) that hold the grading
 end
 
 const VARIABLE = (:level, :C_over_g)
 const HMIN = Dict("L1" => 12.0, "L2" => 24.0, "L3" => 48.0)
+"Nested far field: h_min = h_far/2^m at level L(m+1)."
+const NEST = Dict("L1" => 0, "L2" => 1, "L3" => 2, "L4" => 3)
+"Fields added after the first records; they enter the hash only when they differ from their default."
+const LATE_FIELDS = (:far_mesh => :graded, :zone_far_cells => 2)
 
 function fixed_hash(p::L3_2_Params)
-    fixed = Tuple(getfield(p, f) for f in fieldnames(L3_2_Params) if !(f in VARIABLE))
+    late(f) = any(l -> l.first == f && getfield(p, f) == l.second, LATE_FIELDS)
+    fixed = Tuple(getfield(p, f) for f in fieldnames(L3_2_Params) if !(f in VARIABLE) && !late(f))
     return string(hash(fixed); base=16, pad=16)[1:8]
 end
 
@@ -168,19 +177,69 @@ end
 
 uniform_sizes(len, hmax) = (n = max(1, ceil(Int, len / hmax - 1e-9)); fill(len / n, n))
 
-"Node vectors and layout of case `p` at `level` (legacy `b_layout`)."
+"""
+Geometric cell sizes from `hmin` that fill `len` exactly with the fewest cells
+whose ratio r ≤ `rmax` (r ≥ 1; one uniform cell size when hmin·n = len).
+"""
+function zone_sizes(len, hmin, rmax)
+    n0 = round(Int, len / hmin)
+    abs(n0 * hmin - len) <= 1e-9 * len && n0 <= 2 && return fill(len / n0, n0)
+    for n in 2:10_000
+        n * hmin > len * (1 + 1e-12) && break
+        f(r) = hmin * (r^n - 1) / (r - 1) - len
+        f(rmax) < 0 && continue
+        a, b = 1.0 + 1e-12, rmax
+        for _ in 1:200
+            m = (a + b) / 2
+            f(m) > 0 ? (b = m) : (a = m)
+        end
+        r = (a + b) / 2
+        sz = hmin .* r .^ (0:(n - 1))
+        return sz .* (len / sum(sz))
+    end
+    error("zone_sizes: no grading with ratio ≤ $rmax fills $len from $hmin")
+end
+
+"""
+Half-axis sizes from 0 for the nested far field: `nfar` cells of `hfar`, the
+first `nzone` of them replaced by a geometric grading from `hmin` (ratio ≤
+`rmax`). Every far node beyond the zone is the same at every level.
+"""
+function nested_sizes(len, hfar, hmin, nzone, rmax)
+    nfar = round(Int, len / hfar)
+    abs(nfar * hfar - len) <= 1e-9 * len || error("nested far field: $len is not a multiple of h_far = $hfar")
+    hmin >= hfar - 1e-12 && return fill(hfar, nfar)
+    return vcat(zone_sizes(nzone * hfar, hmin, rmax), fill(hfar, nfar - nzone))
+end
+
+"""
+Node vectors and layout of case `p` at `level` (legacy `b_layout`).
+
+`far_mesh = :graded` (P3): cells grow from h_min = λ_p/{12, 24, 48} by `ratio` up to
+the far size and the rest is divided uniformly, so the far cells change with the
+level. `far_mesh = :nested`: the plate far field is uniform (Δx = λ_p/`dx_plate_over_λp`,
+Δy = W/`ny_base`) and identical at every level; only the `zone_far_cells` far cells
+next to x_r (and y = 0) are replaced by a grading from h_min = h_far/2^m
+(L1–L4: m = 0…3, ratio ≤ `ratio`).
+"""
 function layout(p::L3_2_Params; level::String=p.level)
     c = case_constants(p)
-    hmin = c.λp / HMIN[level]
     Ld, gap, Lpl = p.zone_over_λ0 * c.λ0, p.gap_over_λ0 * c.λ0, p.plate_over_λp * c.λp
     dx0, dxp = c.λ0 / p.dx_open_over_λ0, c.λp / p.dx_plate_over_λp
     W = c.W
     dyf = W / p.ny_base
-    half = graded_sizes(Lpl / 2, hmin, dxp, p.ratio)
+    if p.far_mesh == :nested
+        hmin = dxp / 2^NEST[level]
+        half = nested_sizes(Lpl / 2, dxp, hmin, p.zone_far_cells, p.ratio)
+        hy = nested_sizes(W / 2, dyf, dyf / 2^NEST[level], p.zone_far_cells, p.ratio)
+    else
+        hmin = c.λp / HMIN[level]
+        half = graded_sizes(Lpl / 2, hmin, dxp, p.ratio)
+        hy = graded_sizes(W / 2, hmin, dyf, p.ratio)
+    end
     sx = vcat(uniform_sizes(Ld, dx0), uniform_sizes(gap, dx0), reverse(half), half,
               uniform_sizes(gap, dx0), uniform_sizes(Ld, dx0))
     xs = cumsum([0.0; sx])
-    hy = graded_sizes(W / 2, hmin, dyf, p.ratio)
     ys = cumsum([-W / 2; reverse(hy); hy]); ys[end] = W / 2
     xp0 = Ld + gap; xp1 = xp0 + Lpl; xr = xp0 + Lpl / 2; LΩ = xs[end]
     for e in (Ld, xp0, xr, xp1, LΩ - Ld)
