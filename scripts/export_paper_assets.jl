@@ -59,6 +59,7 @@ const ASSETS = [
     ("L2-6", "plots/L2-6/density.png", "L2_6_density.png"),
     ("L3-1", "plots/L3-1/oblique_plate.png", "L3_1_oblique_plate.png"),
     ("L3-2", "plots/L3-2/point_resonator.png", "L3_2_point_resonator.png"),
+    ("L3-3", "plots/L3-3/single_resonator.png", "L3_3_single_resonator.png"),
     # Tables: the paper tables are typeset inline in numerical_results.tex, so
     # no file of plots/<id>/*.tex or data/exp_pro/<id>/ is included at present.
     # Add ("<id>", "data/exp_pro/<id>/<file>", "<paper name>") here when one is.
