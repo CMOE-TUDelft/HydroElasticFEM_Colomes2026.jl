@@ -582,3 +582,24 @@ So the driving-point compliance is resolved to ≈ 0.3 %. The frozen L1–L3 lad
     python3 -I Loop_Framework/tools/rss_guard.py --mem-gb 22 -- bash Loop_Framework/tools/run_limited.sh --mem-gb 20 --cpu-min 120 --wall-min 120 -- julia --project=<repo> -O1 scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl --case 1 … --case 13
     julia --project scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl                        # tables, checks, figure
     julia --project scripts/L3-3D-flat-bottom/L3-2_point_resonator.jl --graded               # first run (graded far field)
+
+---
+
+## L4-4: anisotropic resonator island (incomplete, usage stop 2026-10-29)
+
+No binding run was made and the matrix row is not frozen (draft in `verification_test_matrix_2026-10-22.md`).
+Code: `src/L4_4_aniso_island.jl` (module `L4_4`, run in `envs/resonator_field`). It contains the half-domain 3D
+model with the upstream `ResonatorField` (n(x) Gaussian with a taper, floor 1e-6), a Nitsche symmetry on y = 0,
+the scattered-field load, line, axis and map outputs, and the references: exact local complex root, eikonal
+phase, thin-lens J, the port of `aniso_island_rays.py`, a split-step PE, back-propagation and curvature fit.
+
+- Upstream: `ResonatorField` assembles and solves in 3D (KirchhoffLovePlate host). No blocker.
+- Smoke (N = 12 k): residual 2.7e-13, METIS used, half vs full domain 9.1e-13. The load identity gives 8.6e-3
+  because the reference used the interpolated η_inc and the load used the analytic e^{ik₀x}. Use the interpolant
+  in the load and re-check before the binding run.
+- References (`scripts/L4-beyond-analytical/L4-4_references_check.jl`): the ray port reproduces the Python
+  values to 0.1 m. With untruncated data, the PE back-propagated focal length is within 2.4 % / 0.2 % / 7.9 %
+  of the ray focus (A at ω = 8, B at ω = 8, A at ω = 12).
+- Open issue before freezing: truncating the line data at y = 2.5L_y + 2 m shifts f by 10–60 % and makes it
+  depend on the line. The y-width of the FE domain must grow, or the FE must be compared with PE data truncated
+  the same way. Sizing (CHOLMOD analysis of the chosen layout) has not been run yet.
