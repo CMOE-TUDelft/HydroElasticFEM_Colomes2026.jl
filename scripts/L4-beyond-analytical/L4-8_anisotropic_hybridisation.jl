@@ -47,15 +47,15 @@ const REPO = normpath(joinpath(@__DIR__, "..", ".."))
 const LX = 20.0
 const LOADING = 0.01
 
-"Grid centres ω_ref (rad/s) per (L_y, H, target). m10, L_y = 40, H = 10: smoke pass (ω_mn = 2.073, coarse mesh);
-the others are provisional (2D L2-5 values of the strip length); smoke cases 1 and 6 before the binding run."
+"""Grid centres ω_ref (rad/s) per (L_y, H, target): ω_mn of the coarse smoke pass (4 cells/λ, plate 8, nz = 4,
+±30 % grid, 5 nodes). m10, L_y = 40, H = 10: smoke 2026-10-29 (2.073); the others smoke 2026-10-30 (cases 1, 2, 4–12)."""
 const OMEGA_REF = Dict(
-    (20.0, 10.0, :sym) => 2.20, (20.0, 10.0, :anti) => 2.20,
-    (40.0, 10.0, :m10) => 2.07, (40.0, 10.0, :m01) => 1.50,
-    (80.0, 10.0, :m10) => 2.07, (80.0, 10.0, :m01) => 1.00,
-    (20.0, 50.0, :sym) => 2.20, (20.0, 50.0, :anti) => 2.20,
-    (40.0, 50.0, :m10) => 2.06, (40.0, 50.0, :m01) => 1.50,
-    (80.0, 50.0, :m10) => 2.06, (80.0, 50.0, :m01) => 1.00)
+    (20.0, 10.0, :sym) => 2.119, (20.0, 10.0, :anti) => 2.008,
+    (40.0, 10.0, :m10) => 2.07, (40.0, 10.0, :m01) => 1.501,
+    (80.0, 10.0, :m10) => 2.020, (80.0, 10.0, :m01) => 1.110,
+    (20.0, 50.0, :sym) => 2.117, (20.0, 50.0, :anti) => 2.013,
+    (40.0, 50.0, :m10) => 2.067, (40.0, 50.0, :m01) => 1.504,
+    (80.0, 50.0, :m10) => 2.068, (80.0, 50.0, :m01) => 1.097)
 
 const MAIN = [(Ly, H, t) for H in (10.0, 50.0) for (Ly, t) in ((20.0, :sym), (20.0, :anti), (40.0, :m10), (40.0, :m01),
                                                                   (80.0, :m10), (80.0, :m01))]
@@ -167,6 +167,55 @@ function ratios(df)
             push!(out, (H=H, aspect=Ly / LX, ratio_FE=a.split[1]^2 / b.split[1]^2, ratio_est=a.mu_est[1] / b.mu_est[1],
                         ratio_deep=Ly / LX, ratio_mode=a.mu_mode[1] / b.mu_mode[1]))
         end
+    end
+    return DataFrame(out)
+end
+
+"""
+Near-degenerate (1,0)/(0,3) pair at L_y = 40 (k = 0.237 vs 0.275 1/m): both candidate
+wet modes, tracked from X₁(x) and from X₃(y), with their MACs against both dry shapes
+(Governor/PI request 2026-10-30). Reported, not a frozen check.
+"""
+function pair_L40(cs, recs)
+    out = NamedTuple[]
+    for (p, d) in zip(cs, recs)
+        (p.Ly == 40.0 && p.target == :m10) || continue
+        sh = L4_8.shapes(p)
+        e10 = zeros(length(sh)); e10[findfirst(==((1, 0)), sh)] = 1
+        e03 = zeros(length(sh)); e03[findfirst(==((0, 3)), sh)] = 1
+        for (name, t) in (("from X1(x)", e10), ("from X3(y)", e03))
+            r = L4_8.reduce_case(d["K_B"], d["M_B"], d["N_B"], d["A_re"], d["A_im"], d["omegas"], t; loading=LOADING)
+            push!(out, (H=p.H, variant=variant(p), candidate=name, omega=r.omega, split=r.split, mu_mode=r.mu_mode,
+                        zeta_rad=r.zeta_rad, mac_10=L4_8.macN(r.psi, e10, r.N), mac_03=L4_8.macN(r.psi, e03, r.N),
+                        mac_01=L4_8.macN(r.psi, (s = zeros(length(sh)); s[findfirst(==((0, 1)), sh)] = 1; s), r.N),
+                        inside=r.inside))
+        end
+    end
+    return DataFrame(out)
+end
+
+"""
+Oblique absorption of the frame: buffer variant (gap 1.5λ, frame 2λ) against the main
+layout at L_y = 40, H = 10, same ω grid. Relative change of Re/Im A_B (Frobenius, max
+over ω), of the target diagonal entry, and of ω_mn, Δ, ζ_rad.
+"""
+function buffer_absorption(cs, recs, df)
+    out = NamedTuple[]
+    for t in (:m10, :m01)
+        jb = findfirst(p -> variant(p) == "buffer" && p.target == t, cs)
+        jm = findfirst(p -> variant(p) == "main" && p.target == t && p.Ly == 40.0 && p.H == 10.0, cs)
+        (jb === nothing || jm === nothing) && continue
+        db, dm = recs[jb], recs[jm]
+        maximum(abs.(db["omegas"] .- dm["omegas"])) < 1e-12 || continue
+        tv = L4_8.target_vector(cs[jm]); a = findfirst(!=(0), tv)
+        rre = maximum(norm(x - y) / norm(y) for (x, y) in zip(db["A_re"], dm["A_re"]))
+        rim = maximum(norm(x - y) / norm(y) for (x, y) in zip(db["A_im"], dm["A_im"]))
+        dre = maximum(abs(x[a, a] / y[a, a] - 1) for (x, y) in zip(db["A_re"], dm["A_re"]))
+        dim = maximum(abs(x[a, a] / y[a, a] - 1) for (x, y) in zip(db["A_im"], dm["A_im"]))
+        rb = only(eachrow(filter(r -> r.variant == "buffer" && r.target == String(t), df)))
+        rm = only(eachrow(filter(r -> r.variant == "main" && r.target == String(t) && r.Ly == 40.0 && r.H == 10.0, df)))
+        push!(out, (target=String(t), dRe_AB=rre, dIm_AB=rim, dRe_Att=dre, dIm_Att=dim, d_omega=rb.omega / rm.omega - 1,
+                    d_split=rb.split / rm.split - 1, d_zeta=rb.zeta_rad / rm.zeta_rad - 1))
     end
     return DataFrame(out)
 end
@@ -334,6 +383,10 @@ function main()
     out = joinpath(REPO, "data", "exp_pro", TEST_ID); mkpath(out)
     CSV.write(joinpath(out, "modes.csv"), df); CSV.write(joinpath(out, "ratios.csv"), rt)
     CSV.write(joinpath(out, "validation_2d.csv"), v2); CSV.write(joinpath(out, "checks.csv"), ck)
+    pl = pair_L40(csk, rk); ba = buffer_absorption(csk, rk, df)
+    CSV.write(joinpath(out, "pair_L40.csv"), pl); CSV.write(joinpath(out, "buffer_absorption.csv"), ba)
+    println(); show(stdout, MIME"text/plain"(), pl; allrows=true); println()
+    println(); show(stdout, MIME"text/plain"(), ba; allrows=true); println()
     plot_all(df, rt, csk, rk, joinpath(REPO, "plots", TEST_ID))
     show(stdout, MIME"text/plain"(), select(df, :Ly, :H, :target, :variant, :omega, :split, :sqrt_mu_mode, :mu_est,
                                             :zeta_rad, :mac_target, :proj, :forced_trunc, :N, :wall_time_s); allrows=true)

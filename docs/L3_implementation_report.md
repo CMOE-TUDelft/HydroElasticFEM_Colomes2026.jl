@@ -685,3 +685,55 @@ julia --project -O1 scripts/L3-3D-flat-bottom/L3-3_single_resonator.jl --case <i
 julia --project scripts/L3-3D-flat-bottom/L3-3_single_resonator.jl                 # tables, checks, figure
 julia scripts/export_paper_assets.jl L3-3
 ```
+
+## L4-8: anisotropic hybridisation of finite plates (reduced model), 2026-10-29/30
+
+Matrix row L4.8 (frozen 2026-10-29, smoke amendment). Route: Ritz-reduced wet modes instead of
+forced-response peak splitting (Δ = 0.04–0.07 < 2ζ_rad = 0.16–0.43), **approved by the PI on
+2026-10-30 10:26**. Code: `src/L4_8_anisotropic_hybridisation.jl` (method in the module docstring),
+`scripts/L4-beyond-analytical/L4-8_anisotropic_hybridisation.jl`. Quarter domain, `DampingZoneBC` frame,
+basis X_i(x)X_j(y), i, j ∈ {0,1,3,5,7}; one METIS factorisation of S_ff per ω with 25 RHS → A_B(ω);
+reduced eigWet on 7 Chebyshev ω in ω_ref(1 ± 0.12); homogenised field exact in the basis.
+
+**ω_ref**: coarse smoke pass 2026-10-30 of cases 1, 2, 4–12 (one process, guard peak 6.93 GiB),
+values in `OMEGA_REF`.
+
+**Compute** (rss_guard 20 GiB / run_limited 18 GB, one case per process, heavy-run lock; peak footprint,
+wall): cases 1–12 6.5–9.0 GiB, 162–268 s (case 5: 3808 s wall at 6 s CPU per assembly phase — machine
+load 25 from outside this run between 13:55 and 14:55; result unaffected); buffer 13/14: 10.71 / 9.64 GiB,
+375 / 318 s; mesh 16 (N = 271 k): 11.78 GiB, 563 s; mesh 15 (N = 321 k): **16.06 GiB**, 696 s (projected
+≈ 13.3 GiB from cases 13 and 16; below the 18.5 GiB threshold, no size reduction made); 2D validation
+10.31 GiB, 159 s. Every process exits with a segfault (rc 139) at teardown after the records are saved
+(also seen in the smoke); the outputs are complete.
+
+### Results (204/227 checks)
+
+- Identities: residual ≤ 2.9e-10, S_ss linearity ≤ 4e-15, M_B = m_ρN ≤ 2.6e-12, K_B,00 = g·area
+  ≤ 1.5e-14, square x↔y invariance ≤ 7.4e-13, METIS used, ω± inside the grid, pair projection 1.0.
+  **Re A_B symmetry fails in 11/16 cases (1.4e-8 – 1.2e-7 vs 1e-8)**: the tolerance is at the level of
+  the solve residual times the conditioning of S_ff (residual 1e-11 – 3e-10); A_B is used symmetrised.
+- Reduced vs FE forced response ≤ 0.63 %; mesh variant Δ 2e-4, ω 6e-5; buffer variant (oblique
+  absorption, Governor (c)): Re A_B 0.23 / 0.20 %, Im A_B 0.65 / 0.67 %, Δ 0.65 / 0.44 %, ω 5e-4 /
+  1.7e-4, ζ_rad 0.56 / 0.43 % ((1,0) / (0,1)) — `buffer_absorption.csv`.
+- 2D Ritz vs L2-5 eigWet: ω₁ 3.7e-5 / 3.0e-5, Δ 7.2e-5 / 8.7e-5 (L = 23 / 46 m).
+- Near-degenerate (1,0)/(0,3) at L_y = 40 (Governor (b), `pair_L40.csv`): two distinct wet modes, H = 10:
+  ω = 2.068 (MAC 0.507 vs X₁(x), 6.7e-4 vs X₃(y), 0.004 vs X₁(y)) and 1.915 (0.066, 0.440, 0.128);
+  H = 50: 2.056 (0.525, 1.1e-3) and 1.914 (0.062, 0.451); same in the buffer and mesh variants.
+- **L_y = 80, (1,0)**: MAC 0.136 (H = 10) / 0.280 (H = 50) < 0.3; basis truncation Δ 3.1 %, ω 1.8e-3 /
+  2.8e-3 (fail): dense (0,j) spectrum near k = β₁/L_x.
+- Δ vs √μ_mode: 1.9–9.98 % in 8 cases; fails for the square anti mode (12.8 / 13.1 %) and L_y = 80 (0,1)
+  (15.0 / 18.5 %).
+- μ₁₀/μ₀₁ from Δ²: H = 10: 1.72, 3.01 (eq. 2.37, 7.39); H = 50: 1.69, 2.73 (eq. 2.00, 4.01). Trend passes
+  (step ratios 1.75, 1.62); deep exponent 0.79 (|s − 1| = 0.21, pass); vs eq:mode_dilution: 15.6 % pass
+  (H = 50, aspect 2), fails 27.5 % (H = 10, 2), 59.3 % (H = 10, 4), 31.9 % (H = 50, 4). From μ_mode:
+  1.90, 3.51 / 1.87, 3.53. Prefactor Δ²/μ_mn ≈ 2.0 at k = β₁/L_x (as L2-5).
+
+Data: `data/exp_pro/L4-8/{modes,ratios,validation_2d,pair_L40,buffer_absorption,checks}.csv`; figure
+`plots/L4-8/anisotropic_hybridisation.{pdf,png}`; snippet `paper/snippets/L4-8.tex`.
+
+```
+julia --project -O1 scripts/L4-beyond-analytical/L4-8_anisotropic_hybridisation.jl --case <i>   # i = 1…16, under rss_guard
+julia --project -O1 scripts/L4-beyond-analytical/L4-8_anisotropic_hybridisation.jl --validate2d
+julia --project scripts/L4-beyond-analytical/L4-8_anisotropic_hybridisation.jl                 # tables, checks, figure
+julia scripts/export_paper_assets.jl L4-8
+```
