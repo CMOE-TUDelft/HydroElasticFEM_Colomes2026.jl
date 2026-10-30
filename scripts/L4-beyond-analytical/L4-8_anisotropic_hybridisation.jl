@@ -292,7 +292,7 @@ function plot_all(df, rt, cs, records, dir)
     @eval using CairoMakie
     mkpath(dir)
     Base.invokelatest() do
-        fig = Figure(size=(900, 330), fontsize=11)
+        fig = Figure(size=(900, 400), fontsize=11)
         # (a) μ₁₀/μ₀₁ vs aspect ratio
         ax = Axis(fig[1, 1]; xscale=log2, yscale=log2, xlabel="L_y / L_x", ylabel="μ₁₀ / μ₀₁", title="(a)")
         for (i, H) in enumerate((10.0, 50.0))
@@ -302,7 +302,7 @@ function plot_all(df, rt, cs, records, dir)
             lines!(ax, g.aspect, g.ratio_est; color=c, linestyle=:dash, label="eq. mode_dilution, H = $(Int(H)) m")
         end
         lines!(ax, [1, 4], [1, 4]; color=:black, linestyle=:dot, label="L_y/L_x (deep)")
-        axislegend(ax; position=:lt, framevisible=false, labelsize=8)
+        Legend(fig[2, 1], ax; framevisible=false, labelsize=8, nbanks=2, tellwidth=false)
         # (b) splitting vs √μ estimate
         ax2 = Axis(fig[1, 2]; xlabel="k_mn (1/m)", ylabel="Δ = (ω₊ − ω₋)/ω_mn", title="(b)")
         m = filter(r -> r.variant == "main", df)
@@ -313,10 +313,11 @@ function plot_all(df, rt, cs, records, dir)
             lines!(ax2, g.k_mn, sqrt.(g.mu_est); color=c, linestyle=:dash, label="√μ_mn, eq. mode_dilution")
             scatter!(ax2, g.k_mn, 2 .* g.zeta_rad; color=c, marker=:xcross, label="2ζ_rad")
         end
-        axislegend(ax2; position=:lt, framevisible=false, labelsize=8)
-        # (c) forced response of the reduced model, L_y = 80, H = 10, mode (1,0)
+        Legend(fig[2, 2], ax2; framevisible=false, labelsize=8, nbanks=2, tellwidth=false)
+        # (c) forced response of the reduced model, L_y = 40, H = 10, mode (1,0)
+        # (L_y = 80 is not shown: its (1,0) wet mode fails the MAC identification)
         ax3 = Axis(fig[1, 3]; xlabel="ω / ω_mn", ylabel="|response| (normalised)", title="(c)")
-        j = findfirst(p -> p.Ly == 80.0 && p.H == 10.0 && p.target == :m10 && variant(p) == "main", cs)
+        j = findfirst(p -> p.Ly == 40.0 && p.H == 10.0 && p.target == :m10 && variant(p) == "main", cs)
         if j !== nothing
             p = cs[j]; d = records[j]
             full, _ = analyse(p, d)
@@ -326,8 +327,10 @@ function plot_all(df, rt, cs, records, dir)
             lines!(ax3, ωq ./ full.omega, bare ./ s; color=:black, label="bare")
             lines!(ax3, ωq ./ full.omega, res ./ s; color=Makie.wong_colors()[3], label="with resonators")
             vlines!(ax3, [full.omega_minus, full.omega_plus] ./ full.omega; color=:gray, linestyle=:dash, label="ω±")
-            axislegend(ax3; position=:rt, framevisible=false, labelsize=8)
+            Legend(fig[2, 3], ax3; framevisible=false, labelsize=8, nbanks=2, tellwidth=false)
         end
+        rowsize!(fig.layout, 1, Fixed(250))
+        resize_to_layout!(fig)
         save(joinpath(dir, "anisotropic_hybridisation.pdf"), fig)
         save(joinpath(dir, "anisotropic_hybridisation.png"), fig; px_per_unit=300 / 96)
     end
