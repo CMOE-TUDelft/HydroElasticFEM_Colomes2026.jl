@@ -57,6 +57,9 @@ import HydroElasticFEM.ParameterHandler as PH
 
 using HydroElasticFEM_xxx2026.References
 using HydroElasticFEM_xxx2026.Solvers: MetisLUSolver, factorize, solve_rhs, factor_stats
+import HydroElasticFEM_xxx2026.Solvers as Solvers
+import SparseArrays.LibSuiteSparse as LSS
+using LinearAlgebra: lu
 import HydroElasticFEM_xxx2026.L3_0
 
 export L3_3_Params, VARIABLE, fixed_hash, layout, run_case, fit_ring, host, resonator, size_counts
@@ -66,7 +69,7 @@ export L3_3_Params, VARIABLE, fixed_hash, layout, run_case, fit_ring, host, reso
     # ── Variable ──────────────────────────────────────────────────────────────
     ω::Float64 = 9.95                     # frequency (rad/s)
     order::Int = 3                        # φ and η order
-    epw::Float64 = 5.0                    # horizontal cells per λ_p(ω_ref)
+    epw::Float64 = 4.5                    # horizontal cells per λ_p(ω_ref) (frozen 5.0; 4.5 post-freeze, 20 GiB footprint)
     r_sponge::Float64 = 5.0               # frame starts at max(x, y) = r_sponge λ_p
     frame::Float64 = 3.0                  # frame width (λ_p)
     full::Bool = false                    # full domain (identity check, small meshes only)
@@ -199,6 +202,23 @@ end
 
 eval_on_plate(fh, pts) = ComplexF64.(L3_0.eval_on_plate(fh, pts))
 
+"""
+    factorize_prealloc(solver, A)
+
+`factorize(solver, A)` with UMFPACK's initial numeric allocation set to its full
+symbolic estimate (Control[ALLOC_INIT] = 1 instead of 0.7): same ordering, pivoting
+and factors; avoids the realloc growth of the LU memory, whose copies raised the
+process footprint (the rss_guard measure) well above UMFPACK's own peak.
+"""
+function factorize_prealloc(solver::MetisLUSolver, A::SparseArrays.SparseMatrixCSC{Tv,Ti}) where {Tv,Ti}
+    c = Solvers.umfpack_control(solver, Tv, Ti)
+    c[LSS.UMFPACK_ALLOC_INIT + 1] = 1.0
+    return Solvers.MetisLUNumericalSetup(lu(A; control=c), solver)
+end
+
+"Return freed malloc pages to the OS (macOS: they otherwise stay in the process footprint that rss_guard limits)."
+release_freed() = Sys.isapple() ? ccall(:malloc_zone_pressure_relief, Csize_t, (Ptr{Cvoid}, Csize_t), C_NULL, 0) : 0
+
 "Assemble (+ symmetry terms), factorise, solve one RHS. Returns (η field, point value, stats Dict)."
 function solve_one(p, l, ω; res=nothing, rec, tag)
     tk = tank(p, l)
@@ -219,13 +239,17 @@ function solve_one(p, l, ω; res=nothing, rec, tag)
     X = S.get_trial_fe_space(problem)
     fmap = S.get_field_map(problem)
     rec["$(tag)_N"] = size(A, 1); rec["$(tag)_nnzA"] = SparseArrays.nnz(A)
-    problem = nothing; op = nothing; GC.gc(true)
-    ns = L3_0.phase!(() -> factorize(solver, A), rec, "$(tag)_factorize")
+    problem = nothing; op = nothing; GC.gc(true); release_freed()
+    ns = L3_0.phase!(() -> factorize_prealloc(solver, A), rec, "$(tag)_factorize")
     st = factor_stats(ns)
+    for (k, j) in (("alloc_init_used", LSS.UMFPACK_ALLOC_INIT_USED), ("realloc", LSS.UMFPACK_NUMERIC_REALLOC),
+                   ("costly_realloc", LSS.UMFPACK_NUMERIC_COSTLY_REALLOC), ("defrag", LSS.UMFPACK_NUMERIC_DEFRAG))
+        rec["$(tag)_umf_$(k)"] = ns.factors.info[j + 1]
+    end
     rec["$(tag)_lunz"] = st.lunz; rec["$(tag)_umf_peak_gb"] = st.peak_gb; rec["$(tag)_ordering"] = String(st.ordering)
     x = L3_0.phase!(() -> solve_rhs(ns, b), rec, "$(tag)_solve")
     rec["$(tag)_rel_residual"] = norm(A * x - b) / norm(b)
-    finalize(ns.factors); ns = nothing; A = nothing; GC.gc(true)
+    finalize(ns.factors); ns = nothing; A = nothing; GC.gc(true); release_freed()
     uh = FEFunction(X, x)
     ηh = uh[fmap[:η]]
     η0 = eval_on_plate(ηh, [Point(0.0, 0.0, p.H)])[1]

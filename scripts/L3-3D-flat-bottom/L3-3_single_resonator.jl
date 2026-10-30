@@ -4,7 +4,9 @@ Pre- and post-processing of src/L3_3_single_resonator.jl (problem, mesh and
 solves are documented there).
 
 Binding configuration (frozen in row L3.3 of verification_test_matrix_2026-10-22.md
-before the binding runs): set P1, ω_r = 10, m_r = 0.01 m³; p = 3, h = λ_p/5
+before the binding runs): set P1, ω_r = 10, m_r = 0.01 m³; p = 3, h = λ_p/5 frozen, run at
+h = λ_p/4.5 (post-freeze deviation: guard footprint 18.2–18.6 GiB at λ_p/5; R_s = 22 cells = 4.89λ_p,
+frame 14 cells = 3.11λ_p, L_q = 8λ_p)
 (λ_p at ω = 10), nz = 8; quarter domain L_q = 8λ_p: undamped region
 max(x, y) < 5λ_p, Kelvin–Voigt frame 3λ_p (ωτ = 10, ramp ξ²). One METIS
 factorisation per ω (unit point force); the ζ sweep is Sherman–Morrison on
@@ -189,11 +191,11 @@ function renormalised_h(P)
         f(a) * f(c) <= 0 ? (b = c) : (a = c)
     end
     ωh = (a + b) / 2
-    γ = imag(imG(ωh))
+    γ = imG(ωh)                     # imG interpolates Im G_h(0; ω) (real values)
     # damping with γ_d = Im G_h(ω̃_h) (smaller root, as `critical_damping`)
     disc = 1 - 4γ^2 * R0.k_ρ^2
     c = (1 - sqrt(disc)) / (2γ * ωh)
-    return (ω=ωh, ImG=imag(imG(ωh)) + 0, ReG=reG(ωh), ζopt=c / (2sqrt(R0.k_ρ * R0.m_ρ)), reG=reG, imG=imG)
+    return (ω=ωh, ImG=γ, ReG=reG(ωh), ζopt=c / (2sqrt(R0.k_ρ * R0.m_ρ)), reG=reG, imG=imG)
 end
 
 function checks(recs, ft, sw, P, rh)
@@ -272,7 +274,7 @@ function checks(recs, ft, sw, P, rh)
             s = [(p, d) for (_, p, d) in recs if variant(p) == v]
             isempty(s) && continue
             Gv = s[1][2]["G0"]
-            lbl = v == "B" ? "buffer (frame at 4λ_p vs 5λ_p)" : "mesh (h = λ_p/4 vs λ_p/5)"
+            lbl = v == "B" ? "buffer (frame at 4λ_p vs 4.89λ_p)" : "mesh (h = λ_p/4 vs λ_p/4.5)"
             add!("$lbl: |ΔG_h(0)|/|G_h(0)| at ω̃", "D", abs(Gv - G0) / abs(G0), v == "B" ? 5e-3 : tol)
             add!("$lbl: |ΔIm G_h(0)|/γ_r at ω̃", "D", abs(imag(Gv - G0)) / gamma_r(P1, ΩT; dim=3), v == "B" ? 5e-3 : tol)
         end
@@ -288,6 +290,31 @@ function sensitivity_table(recs)
         push!(rows, (case=i, variant=variant(p), epw=p.epw, r_sponge=p.r_sponge, Lq_over_λp=d["Lq"] / d["λ"], N=d["bare_N"],
                      ReG0_h=real(d["G0"]), ImG0_h=imag(d["G0"]), err_ImG=imag(d["G0"]) / gamma_r(P1, p.ω; dim=3) - 1,
                      reflection=abs(ff.mean.Cminus / ff.mean.Cplus), peak_rss_gb=d["maxrss_final_gb"], wall_s=d["wall_s"]))
+    end
+    return DataFrame(rows)
+end
+
+"""
+Frozen-mesh (h = λ_p/5) records of the P frequencies run before the post-freeze coarsening
+(cases 1–4), compared with the run mesh h = λ_p/4.5 (informational, not a frozen check).
+"""
+function fine_mesh_table(recs)
+    rows = NamedTuple[]
+    path = joinpath(REPO, "data", "sims", TEST_ID)
+    for (i, p, d) in recs
+        variant(p) == "P" || continue
+        q = L3_3_Params(p; epw=5.0)
+        f = joinpath(path, record_name(q) * ".jld2")
+        isfile(f) || continue
+        e = wload(f)
+        γr = gamma_r(P1, p.ω; dim=3)
+        fe, fd = farfield(q, e), farfield(p, d)
+        Ce, Cd = fe.mean.Cplus, fd.mean.Cplus
+        iso(ff) = maximum(abs(f.Cplus / ff.mean.Cplus - 1) for f in ff.perθ)
+        push!(rows, (case=i, ω=p.ω, N_5=e["bare_N"], N_45=d["bare_N"], ImG_5_err=imag(e["G0"]) / γr - 1,
+                     ImG_45_err=imag(d["G0"]) / γr - 1, dG_rel=abs(d["G0"] - e["G0"]) / abs(e["G0"]),
+                     dImG_over_γr=abs(imag(d["G0"] - e["G0"])) / γr, dCplus_rel=abs(Cd / Ce - 1), isotropy_5=iso(fe), isotropy_45=iso(fd),
+                     peak_rss_5=e["maxrss_final_gb"], wall_5=e["wall_s"]))
     end
     return DataFrame(rows)
 end
@@ -354,6 +381,8 @@ function post()
     CSV.write(joinpath(out, "zeta_sweep.csv"), sw)
     CSV.write(joinpath(out, "sensitivity.csv"), st)
     CSV.write(joinpath(out, "checks.csv"), ck)
+    fm = fine_mesh_table(recs)
+    nrow(fm) > 0 && CSV.write(joinpath(out, "fine_mesh_reference.csv"), fm)
     if rh !== nothing
         CSV.write(joinpath(out, "renormalised.csv"),
                   DataFrame(omega_h=[rh.ω], omega_theory=[renormalised_frequency(P1, R0; dim=3)], ImG_h=[rh.ImG],
@@ -365,6 +394,7 @@ function post()
     end
     show(stdout, MIME("text/plain"), ft; allcols=true); println()
     show(stdout, MIME("text/plain"), st; allcols=true); println()
+    nrow(fm) > 0 && (show(stdout, MIME("text/plain"), fm; allcols=true); println())
     rh === nothing || @printf("ω̃_h = %.5f (theory %.5f), ζ_opt,h = %.5f (ζ_crit %.5f), Im G_h = %.6g\n", rh.ω,
                               renormalised_frequency(P1, R0; dim=3), rh.ζopt, ZC, rh.ImG)
     for r in eachrow(ck)

@@ -603,3 +603,85 @@ phase, thin-lens J, the port of `aniso_island_rays.py`, a split-step PE, back-pr
 - Open issue before freezing: truncating the line data at y = 2.5L_y + 2 m shifts f by 10–60 % and makes it
   depend on the line. The y-width of the FE domain must grow, or the FE must be compared with PE data truncated
   the same way. Sizing (CHOLMOD analysis of the chosen layout) has not been run yet.
+
+---
+
+## L3-3: single resonator on a large 3D plate (quarter symmetry), 2026-10-29/30
+
+**Sources.** Code: `src/L3_3_single_resonator.jl` (module `L3_3`, included by the script),
+[scripts/L3-3D-flat-bottom/L3-3_single_resonator.jl](../scripts/L3-3D-flat-bottom/L3-3_single_resonator.jl).
+Matrix row L3.3 of `verification_test_matrix_2026-10-22.md` (frozen 2026-10-29 before the binding run).
+Outputs: `data/exp_pro/L3-3/` (`frequencies.csv`, `zeta_sweep.csv`, `sensitivity.csv`, `renormalised.csv`,
+`checks.csv`, `fine_mesh_reference.csv`), `plots/L3-3/single_resonator.{pdf,png}`, paper snippet
+`paper/snippets/L3-3.tex` (figure staged as `paper/figures/L3_3_single_resonator.png`).
+
+### Test description
+
+Set P1 (C_ρ = 0.49, m_ρ = 0.01, ν = 0, H = 10), plate over the whole free surface, one resonator
+(m_r = 0.01 m³, ω_r = 10) at the centre. Quarter domain [0, L_q]² × [0, H], L_q = 8λ_p, resonator at the
+corner. Symmetry planes: fluid natural, plate ∂η/∂n = 0 by Nitsche (`symmetry_matrix`, the restriction of the
+C/DG facet terms of the mirrored plate, incl. the frame weight). Kelvin–Voigt frame (ωτ = 10, ramp ξ²).
+φ, η Q3, γ = 12, nz = 8 graded. One METIS factorisation per ω of the bare plate under a unit point load gives
+G_h(0) and G_h(x); every ζ follows by scalar Sherman–Morrison, F₁/A = 1/(1/α − G_h(0)). Far field: radial fit
+of η on r ∈ [1.5λ_p, R_s − 0.5λ_p] × 19 angles (H₀⁽¹⁾, H₀⁽²⁾, 6 evanescent terms, k fitted).
+
+**Run mesh (post-freeze deviation): h = λ_p/4.5** (frozen λ_p/5). At λ_p/5 (N = 380 666) the guard peak
+footprint was 17.4 / 18.39 / 18.63 / 18.20 GiB (cases 1, 3, 2, 4) against the 20 GiB guard; case 2 exceeded
+the ~18.5 GiB threshold, so all cases were re-run at λ_p/4.5 as authorised (PI 2026-10-29: "20GB max, if not
+possible, reduce size"). Layout at λ_p/4.5: 36 × 36 × 8 cells, N = 308 906; R_s = 22 cells = 4.89λ_p, frame
+14 cells = 3.11λ_p, L_q = 8λ_p; B: R_s = 4λ_p, L_q = 7.11λ_p; M: h = λ_p/4, R_s = 5λ_p. Memory mitigations
+tried first (no change to the factors): freeing the operator + GC + `malloc_zone_pressure_relief` before the
+factorisation, and UMFPACK Control[ALLOC_INIT] = 1 (`factorize_prealloc`, bitwise-identical solutions). Neither
+changed the peak materially (18.2 GiB vs 18.4–18.6); the footprint grows steadily during the numeric
+factorisation (≈ 3 GiB before it, ≈ 15 GiB during), roughly twice UMFPACK's own peak estimate (8.6 GB).
+The four λ_p/5 records are kept and compared in `fine_mesh_reference.csv` (informational).
+
+### Results (203/203 checks)
+
+| Group | n | worst value | tolerance |
+|---|---|---|---|
+| residual (every solve) | 15 | 4.3e-10 | 1e-8 |
+| quarter vs full G_h(0) / η at 3 points / mirror symmetry | 3 | 4.5e-13 / 8.4e-13 / 6.7e-13 | 1e-8 |
+| Sherman–Morrison vs monolithic (quarter, full); monolithic quarter vs full | 3 | 7.0e-14; 2.1e-13 | 1e-8 |
+| Im G_h(0)/γ_r − 1 | 11 | 3.8e-3 | 2 % |
+| Re G_h(0)/Re G(0) − 1 | 11 | −3.9 % (ω = 10.51; −2.8 to −3.9 %, growing with ω) | 5 % |
+| \|C⁺/(iγ_r) − 1\| | 11 | 1.0e-3 | 2 % |
+| power balance P_flux/P_work − 1 | 11 | −2.9e-3 | 2 % |
+| frame reflection \|C⁻/C⁺\| | 11 | 9.3e-4 | 2 % |
+| isotropy max_θ \|C⁺(θ)/⟨C⁺⟩ − 1\| | 11 | 1.67 % (ω = 9.69) | 2 % |
+| k_h/k₀ − 1 | 11 | −3.9e-4 | 1e-2 |
+| max σ_abs k₀ over (ω, ζ) | 1 | 0.9961 | ≤ 1.02 |
+| optical theorem \|σ_ext − σ_sc − σ_abs\|/σ_ext (ζ = 0, ζ_crit, 3ζ_crit) | 33 | 3.2e-3 | 2 % |
+| k₀σ_abs FE − theory (ζ_crit, 3ζ_crit) | 22 | −5.6e-3 | 0.02 |
+| σ_sc/σ_sc,theory − 1 (ζ = 0) | 11 | −1.37 % | 2 % |
+| ω̃_h/ω̃ − 1 (ω̃_h = 9.95218, theory 9.95063) | 1 | 1.6e-4 | 1e-3 |
+| ζ_opt,h/ζ_crit − 1 (0.012934 vs 0.012894) | 1 | 3.2e-3 | 2 % |
+| bound attained at (ω̃_h, ζ_opt,h): k₀σ_abs − 1 | 1 | −3.4e-3 | 2 % |
+| P_abs/P_sc − 1 at critical coupling | 1 | 2.6e-3 | 2 % |
+| B: \|ΔG_h\|/\|G_h\|, \|ΔIm G_h\|/γ_r | 2 | 2.0e-3, 2.1e-4 | 5e-3 |
+| M: \|ΔG_h\|/\|G_h\|, \|ΔIm G_h\|/γ_r | 2 | 4.6e-3, 1.8e-3 | 2 % |
+| peak RSS (Julia) < 20 GiB | 13 | 10.5 GB | 20 |
+
+Notes. (i) The isotropy error rises below ω̃ (0.55 % at 10.08, 1.67 % at 9.69, 0.95 % at 9.39) at both meshes
+(λ_p/5: 1.38 % at 9.69), so it is not the coarsening; it is the closest margin (×1.2). (ii) Re G_h(0) is the
+near-field quantity and is the least converged (−2.7 % at λ_p/5, −3.1 % at λ_p/4.5 at ω̃). (iii) λ_p/5 vs
+λ_p/4.5 at ω ∈ {9.69, 9.82, 9.95, 10.08}: |ΔG_h(0)|/|G_h(0)| ≤ 2.3e-3, |ΔIm G_h|/γ_r ≤ 8.3e-4,
+|ΔC⁺|/|C⁺| ≤ 5.2e-4.
+
+Compute (rss_guard 20 GiB, run_limited 18 GB, heavy-run lock, `-O1`, one case per process): at λ_p/4.5
+every P case took 164–172 s wall (factorisation 97–104 s, lunz 4.07–4.20e8), B and M 130 / 126 s; guard peak
+footprints 14.08 (1), 15.61 (2), 15.84 (3), 15.24 (4), 14.19 (5), 12.68 (B), 12.29 (M), 15.34 (8), 15.63 (9),
+15.27 (10), 15.30 (11), 14.73 (12), 15.52 (13) GiB. Every guarded run ended with a shell segfault (exit 139)
+of the guard process after it logged exit 0; all records were saved.
+
+Post-run fix in the post-processing (no effect on the solves): `renormalised_h` took `imag` of the
+interpolant of Im G_h (a real function), which gave ζ_opt,h = NaN; fixed before the final checks.
+
+### Reproduce
+
+```
+julia --project -O1 scripts/L3-3D-flat-bottom/L3-3_single_resonator.jl --list
+julia --project -O1 scripts/L3-3D-flat-bottom/L3-3_single_resonator.jl --case <i>   # i = 1…15, under rss_guard
+julia --project scripts/L3-3D-flat-bottom/L3-3_single_resonator.jl                 # tables, checks, figure
+julia scripts/export_paper_assets.jl L3-3
+```
