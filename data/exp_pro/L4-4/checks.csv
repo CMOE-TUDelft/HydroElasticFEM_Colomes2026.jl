@@ -1,0 +1,21 @@
+name,kind,value,tolerance,passed
+"load identity b = −(A(2n) − A(n))U_inc (small mesh, ζ = 0.05)",I,5.745686008825372e-13,1.0e-10,true
+half vs full domain η at 3 points (small mesh),I,8.33952004193729e-13,1.0e-8,true
+full-domain mirror symmetry (small mesh),I,6.504825895220844e-13,1.0e-8,true
+"residual, small mesh half/full",I,3.8461694104412165e-13,1.0e-8,true
+"residual ‖Ax − b‖/‖b‖, A8",I,8.87796379079607e-11,1.0e-8,true
+"METIS ordering used (0 = yes), A8",I,0.0,0.0,true
+"peak RSS (Julia) < 20 GiB, A8",I,7.76220703125,20.0,true
+"residual ‖Ax − b‖/‖b‖, M3",I,4.4978365779265764e-11,1.0e-8,true
+"METIS ordering used (0 = yes), M3",I,0.0,0.0,true
+"peak RSS (Julia) < 20 GiB, M3",I,8.26837158203125,20.0,true
+"residual ‖Ax − b‖/‖b‖, M4",I,1.2791028648169301e-10,1.0e-8,true
+"METIS ordering used (0 = yes), M4",I,0.0,0.0,true
+"peak RSS (Julia) < 20 GiB, M4",I,8.247726440429688,20.0,true
+"reference insensitive to the y-extent: max_{y' ∈ [y_end, 30]} |f_PE(y')/f_PE(∞) − 1|, A8",D,0.014189482236773077,0.02,true
+"FE vs PE focal length |f_FE/f_PE − 1|, A8",D,0.1183395713364086,0.05,false
+"line consistency (max − min)/|mean| of f_FE over 3 lines, A8",D,0.26513487521694373,0.05,false
+mesh variant λ_p/3 vs λ_p/4 (narrow layout): |Δf|/|f|,D,0.08070990507526957,0.02,false
+mesh variant λ_p/3 vs λ_p/4 (narrow layout): |Δ𝒜| (absolute),D,-0.0502700249127363,0.005,false
+"FE vs ray focus |f_FE/f_ray − 1| (ω = 8), A8",A,0.18752640416741673,0.1,false
+"converging below ω_r: f_FE > 0 (0 = yes), A8",A,0.0,0.0,true

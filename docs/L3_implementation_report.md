@@ -585,24 +585,40 @@ So the driving-point compliance is resolved to ≈ 0.3 %. The frozen L1–L3 lad
 
 ---
 
-## L4-4: anisotropic resonator island (incomplete, usage stop 2026-10-29)
+## L4-4: anisotropic resonator island (incomplete; 2026-10-29 usage stop, 2026-10-30/31 wide-layout attempt)
 
-No binding run was made and the matrix row is not frozen (draft in `verification_test_matrix_2026-10-22.md`).
-Code: `src/L4_4_aniso_island.jl` (module `L4_4`, run in `envs/resonator_field`). It contains the half-domain 3D
-model with the upstream `ResonatorField` (n(x) Gaussian with a taper, floor 1e-6), a Nitsche symmetry on y = 0,
-the scattered-field load, line, axis and map outputs, and the references: exact local complex root, eikonal
-phase, thin-lens J, the port of `aniso_island_rays.py`, a split-step PE, back-propagation and curvature fit.
+Matrix row L4.4 (frozen 2026-10-30 18:47, wide layout in y per the PI decision of 2026-10-30; as-run block
+added 2026-10-31). Code: `src/L4_4_aniso_island.jl` (module `L4_4`, run in `envs/resonator_field`, upstream
+`ResonatorField` 8314700), driver `scripts/L4-beyond-analytical/L4-4_aniso_island.jl` (`--list`, `--smoke`,
+`--size`, `--refs`, `--case i`, post-processing), frame test `scripts/L4-beyond-analytical/L4-4_frame_test.jl`.
+Data: `data/exp_pro/L4-4/{smoke_identities,sizing,references,y_sensitivity,lenses,frame_tests,checks}.csv`;
+figure `plots/L4-4/aniso_island.{pdf,png}` (preliminary, case 1 at the frozen frame).
 
-- Upstream: `ResonatorField` assembles and solves in 3D (KirchhoffLovePlate host). No blocker.
-- Smoke (N = 12 k): residual 2.7e-13, METIS used, half vs full domain 9.1e-13. The load identity gives 8.6e-3
-  because the reference used the interpolated η_inc and the load used the analytic e^{ik₀x}. Use the interpolant
-  in the load and re-check before the binding run.
-- References (`scripts/L4-beyond-analytical/L4-4_references_check.jl`): the ray port reproduces the Python
-  values to 0.1 m. With untruncated data, the PE back-propagated focal length is within 2.4 % / 0.2 % / 7.9 %
-  of the ray focus (A at ω = 8, B at ω = 8, A at ω = 12).
-- Open issue before freezing: truncating the line data at y = 2.5L_y + 2 m shifts f by 10–60 % and makes it
-  depend on the line. The y-width of the FE domain must grow, or the FE must be compared with PE data truncated
-  the same way. Sizing (CHOLMOD analysis of the chosen layout) has not been run yet.
+**Done 2026-10-30.** (1) Load identity fixed: the scattered-field load is now built from the interpolant of
+e^{ik₀x} in the η space with the library measure dΓη; b = −(A(2n) − A(n))U_inc to 5.7e-13 (ζ = 0.05; was
+8.6e-3). Half vs full 8.3e-13. (2) y-extent: the PE focal length from line data truncated at y_end oscillates
+with y_end (±2–3 % at 20–25 m without a window); a cosine window of T − 1 over the last 8 m and the mean of
+three lines bring max_{y' ∈ [y_end, 30 m]} |f(y')/f(∞) − 1| to 1.0–1.8 % for y_end ≈ 20–25 m. (3) Sizing
+without assembly: `pattern_fill` builds the exact pattern (CHOLMOD METIS lnz within 0.4 % of the assembled
+matrix) and the projection is calibrated on the measured L3-3 guard peaks (lnz 2.14e8 → 15.84 GiB,
+2.86e8 → 18.63 GiB). Case 1 (lnz 2.07e8) was projected at 15.6 GiB and peaked at 14.04 GiB.
+
+**Binding runs and finding.** Cases 1 (A8, N = 297 k, 168 s, 14.04 GiB), 7 (M3, 150 k, 90 s, 7.76 GiB) and 8
+(M4, 268 k, 147 s, 12.89 GiB); 15/20 checks. Case 1: f_FE = 20.71 m against f_PE = 18.52 m (+11.8 %) and ray
+17.44 m, with a 26.5 % spread over the three lines. Two causes, both established by additional runs:
+
+- the frozen frame (1.5λ_p, ωτ = 10, σ²) reflects ≈ 8 % of the forward scattered field (λ/2 ripple on the
+  axis and across the lines). Frame tests on the narrow layout (`frame_tests.csv`): reflection 0.077
+  (1.5λ, s = 10), 0.034 (s = 30), 0.13–0.15 (s = 3, 5), 0.009 (2λ, s = 10), 0.022 (2.5λ), 0.0037 (3λ);
+- h = λ_p/3 gives a Q3 phase error of the scattered field that enters T fully (|T − 1| ≈ 1.4): on-axis phase
+  1.172 rad (λ/3), 1.232 (λ/4), 1.249 (PE). With the 3λ frame at λ/3 the spread falls to 4 % but f stays
+  12 % above the PE.
+
+A re-run needs h ≤ λ_p/4 and a 2λ_p frame downstream and at the sides; to stay ≤ 14 GB projected this means
+smaller islands ((3, 2)/(2, 3) m at ω = 8, (2.25, 1.5) m at ω = 12; PE y-insensitivity ≤ 2 % from y_end ≈
+15–16 m and 13 m) and a thin upstream frame. Not done: the 07:30 start deadline of 2026-10-31 passed (no
+agent progress between ≈ 21:45 and 14:20). Case 2 was killed at start-up when the batch was stopped after
+case 1 (not a memory stall: its pattern is smaller than case 1's).
 
 ---
 

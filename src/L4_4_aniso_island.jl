@@ -72,7 +72,7 @@ using HydroElasticFEM_xxx2026.References: HostSpec, k0, dD0
 using HydroElasticFEM_xxx2026.Solvers: MetisLUSolver, factorize, solve_rhs, factor_stats
 import HydroElasticFEM_xxx2026.L3_0
 
-export L4_4_Params, VARIABLE, fixed_hash, layout, size_counts, run_case, rhs_identity,
+export L4_4_Params, VARIABLE, fixed_hash, layout, size_counts, pattern_fill, run_case, rhs_identity,
        host, chi, profile, local_k_table, eikonal_phase, ray_focus, thin_lens_gaussian, thin_lens_J,
        pe_march, backprop, curvature_fit, fft!, ifft!
 
@@ -87,6 +87,7 @@ export L4_4_Params, VARIABLE, fixed_hash, layout, size_counts, run_case, rhs_ide
     epw::Float64 = 4.0                    # horizontal cells per λ_p(ω)
     frame::Float64 = 1.5                  # frame width (λ_p)
     gap::Float64 = 0.5                    # island support / last line → frame (λ_p)
+    y_end::Float64 = 0.0                  # > 0: undamped region extends to y = y_end (m) (wide layout)
     full::Bool = false                    # full domain in y (identity check, small meshes only)
     scale_n::Float64 = 1.0                # multiplies n (identity check of the load)
 
@@ -113,13 +114,13 @@ export L4_4_Params, VARIABLE, fixed_hash, layout, size_counts, run_case, rhs_ide
     sponge_power::Int = 2
 
     # ── Fixed: post-processing ────────────────────────────────────────────────
-    line_dx::Tuple{Float64,Float64,Float64} = (0.5, 1.5, 2.5)   # lines at x = ξ_c L_x + d (m)
+    line_dx::Tuple{Float64,Float64,Float64} = (0.5, 1.0, 1.5)   # lines at x = ξ_c L_x + d (m)
     dy_line::Float64 = 0.05
     n_axis::Int = 401
     n_map::Tuple{Int,Int} = (161, 61)
 end
 
-const VARIABLE = (:ω, :Lx, :Ly, :load, :ζ, :epw, :frame, :gap, :full, :scale_n)
+const VARIABLE = (:ω, :Lx, :Ly, :load, :ζ, :epw, :frame, :gap, :y_end, :full, :scale_n)
 
 function fixed_hash(p::L4_4_Params)
     fixed = Tuple(getfield(p, f) for f in fieldnames(L4_4_Params) if !(f in VARIABLE))
@@ -149,7 +150,7 @@ function layout(p::L4_4_Params)
     xs, ys = p.ξ_c * p.Lx, p.ξ_c * p.Ly
     x0 = -(xs + (p.gap + p.frame) * λ)
     nx = ceil(Int, (xs + maximum(p.line_dx) + (p.gap + p.frame) * λ - x0) / he - 1e-9)
-    ny = ceil(Int, (ys + (p.gap + p.frame) * λ) / he - 1e-9)
+    ny = ceil(Int, (max(ys + p.gap * λ, p.y_end) + p.frame * λ) / he - 1e-9)
     x1 = x0 + nx * he
     Y = ny * he
     lines = [xs + d for d in p.line_dx]
@@ -164,6 +165,56 @@ function size_counts(p::L4_4_Params)
     Ns = (o * l.nx + 1) * (o * l.nyt + 1)
     N = Ns * (o * p.nz + 1) + 2Ns
     return (; N, nx=l.nx, ny=l.nyt, nz=p.nz, Lx=l.x1 - l.x0, Ly=l.Y - l.y0)
+end
+
+"""
+    pattern_fill(nx, ny, nz; order=3, q=true) -> NamedTuple
+
+Sizing without assembly: the lower pattern of the coupled matrix on an nx×ny×nz
+box is built from the element connectivity (φ: Q_p cells; top cells: φ face,
+η, q dense; C/DG plate: η of the two cells of every interior top edge), and
+its CHOLMOD METIS fill is returned (`L3_0.cholmod_fill_lower`). `q = false`
+gives the L3-3 pattern (φ, η), used for the calibration against the measured
+L3-3 factorisations.
+"""
+function pattern_fill(nx::Int, ny::Int, nz::Int; order::Int=3, q::Bool=true)
+    o = order
+    mx, my, mz = o * nx + 1, o * ny + 1, o * nz + 1
+    Ns = mx * my
+    Nφ = Ns * mz
+    idφ(i, j, k) = Int32(1 + i + mx * (j + my * k))
+    idη(i, j) = Int32(Nφ + 1 + i + mx * j)
+    idq(i, j) = Int32(Nφ + Ns + 1 + i + mx * j)
+    N = Nφ + (q ? 2 : 1) * Ns
+    I = Int32[]; J = Int32[]
+    function addblock!(ids)
+        for a in ids, b in ids
+            a >= b && (push!(I, a); push!(J, b))
+        end
+    end
+    buf = Int32[]
+    for cz in 0:(nz - 1), cy in 0:(ny - 1), cx in 0:(nx - 1)
+        empty!(buf)
+        for k in (o * cz):(o * cz + o), j in (o * cy):(o * cy + o), i in (o * cx):(o * cx + o)
+            push!(buf, idφ(i, j, k))
+        end
+        addblock!(buf)
+    end
+    kt = o * nz
+    surf(cx, cy) = [idη(i, j) for j in (o * cy):(o * cy + o) for i in (o * cx):(o * cx + o)]
+    for cy in 0:(ny - 1), cx in 0:(nx - 1)
+        empty!(buf)
+        for j in (o * cy):(o * cy + o), i in (o * cx):(o * cx + o)
+            push!(buf, idφ(i, j, kt)); push!(buf, idη(i, j)); q && push!(buf, idq(i, j))
+        end
+        addblock!(buf)
+        cx + 1 < nx && addblock!(vcat(surf(cx, cy), surf(cx + 1, cy)))
+        cy + 1 < ny && addblock!(vcat(surf(cx, cy), surf(cx, cy + 1)))
+    end
+    L = SparseArrays.sparse(Int.(I), Int.(J), ones(Float64, length(I)), N, N, (a, b) -> 1.0)
+    I = nothing; J = nothing; GC.gc()
+    f = L3_0.cholmod_fill_lower(L)
+    return (; N, nnzL=SparseArrays.nnz(L), f...)
 end
 
 "Frame profile σ ∈ [0, 1]: distance into the frame / F, squared."
@@ -242,16 +293,22 @@ end
 """
     island_load(problem, p, ω)
 
-Scattered-field load b(v, ξ) = ∫ n(K − iωC)/ρ η_inc (ξ − v) dΓ, η_inc = e^{ik₀x}.
+Scattered-field load b(v, ξ) = ∫ n(K − iωC)/ρ η_inc,h (ξ − v) dΓ with η_inc,h the
+interpolant of e^{ik₀x} in the η space and the library's own measure `dΓη`
+(the same quadrature as the `ResonatorField` forms), so that b equals
+−(A(2n) − A(n))U_inc to round-off (`rhs_identity`).
 """
 function island_load(problem, p, ω)
-    dΓ, iη, iq, trian = plate_measure(problem, p)
+    _, iη, iq, trian = plate_measure(problem, p)
+    dΓ = S.get_integration_domains(problem)[:dΓη]
+    X = S.get_trial_fe_space(problem)
     r = resonator_mkc(p)
     kk = k0(host(p), ω)
     nf = density(p)
-    c = CellField(x -> nf(x) * (r.K - im * ω * r.C) * cis(kk * x[1]), trian)
+    ηinc = interpolate_everywhere(x -> cis(kk * x[1]), X.spaces[iη])
+    c = CellField(x -> nf(x) * (r.K - im * ω * r.C), trian)
     V = S.get_test_fe_space(problem)
-    return assemble_vector(y -> ∫(c * (y[iq] - y[iη]))dΓ, V)
+    return assemble_vector(y -> ∫(c * ηinc * (y[iq] - y[iη]))dΓ, V)
 end
 
 eval_on_plate(fh, pts) = ComplexF64.(L3_0.eval_on_plate(fh, pts))
@@ -538,11 +595,13 @@ end
     backprop(yh, Th, xm, kb; Yp=200, Ny=8192)
 
 Back-propagation of a half-line record T(y), y = yh ≥ 0 (mirrored, T − 1
-set to 0 beyond max(yh)), from x = xm to x = 0 with the bare propagator
+set to 0 beyond max(yh); `taper` > 0: cosine window of T − 1 over the last
+`taper` metres), from x = xm to x = 0 with the bare propagator
 e^{−i(√(k² − k_y²) − k)xm} for |k_y| < k (evanescent part dropped).
 Returns (ys, T₀(ys)) on the full grid.
 """
-function backprop(yh::AbstractVector, Th::AbstractVector, xm::Real, kb::Real; Yp=200.0, Ny::Int=8192)
+function backprop(yh::AbstractVector, Th::AbstractVector, xm::Real, kb::Real; Yp=200.0, Ny::Int=8192,
+                  taper::Real=0.0)
     ys, kys = ygrid(Yp, Ny)
     s = zeros(ComplexF64, Ny)
     ymax = maximum(yh)
@@ -551,7 +610,8 @@ function backprop(yh::AbstractVector, Th::AbstractVector, xm::Real, kb::Real; Yp
         a <= ymax || continue
         i = clamp(searchsortedlast(yh, a), 1, length(yh) - 1)
         t = (a - yh[i]) / (yh[i + 1] - yh[i])
-        s[j] = (1 - t) * (Th[i] - 1) + t * (Th[i + 1] - 1)
+        w = (taper > 0 && a > ymax - taper) ? 0.5 * (1 + cos(π * (a - (ymax - taper)) / taper)) : 1.0
+        s[j] = w * ((1 - t) * (Th[i] - 1) + t * (Th[i + 1] - 1))
     end
     fft!(s)
     for j in 1:Ny
