@@ -33,7 +33,7 @@ Half domain y ≥ 0 (incidence along +x, the island is symmetric in y):
 box [x₀, x₁] × [0, Y] × [0, H] covered by the Kirchhoff–Love plate (C/DG,
 γ = 12 for p = 3). Symmetry plane y = 0: fluid wall (natural) and, for the
 plate, ∂η/∂n = 0 by Nitsche (`symmetry_matrix`, as in L3-3). Absorbing frame
-of width `frame` λ_p on the three outer sides: Kelvin–Voigt
+of width `frame` λ_p downstream and at the side (`frame_up` λ_p upstream if > 0): Kelvin–Voigt
 `StructuralDampingZone`, τ = s/ω, ramp σ². The island is the upstream
 `ResonatorField` (branch `feat/resonator-field`): q on the whole plate,
 n(x) = n₀[φ(ξ) + n_floor], m_r = 0.01 m³ per resonator, ω_r = 10,
@@ -85,8 +85,10 @@ export L4_4_Params, VARIABLE, fixed_hash, layout, size_counts, pattern_fill, run
     load::Float64 = 0.03                  # peak loading n₀m_ρ,r (m)
     ζ::Float64 = 0.0
     epw::Float64 = 4.0                    # horizontal cells per λ_p(ω)
-    frame::Float64 = 1.5                  # frame width (λ_p)
+    frame::Float64 = 1.5                  # frame width (λ_p), downstream and at the side
+    frame_up::Float64 = 0.0               # > 0: upstream frame width (λ_p); 0: same as `frame`
     gap::Float64 = 0.5                    # island support / last line → frame (λ_p)
+    gap_up::Float64 = -1.0                # ≥ 0: upstream gap island support → frame (λ_p); < 0: same as `gap`
     y_end::Float64 = 0.0                  # > 0: undamped region extends to y = y_end (m) (wide layout)
     full::Bool = false                    # full domain in y (identity check, small meshes only)
     scale_n::Float64 = 1.0                # multiplies n (identity check of the load)
@@ -120,7 +122,7 @@ export L4_4_Params, VARIABLE, fixed_hash, layout, size_counts, pattern_fill, run
     n_map::Tuple{Int,Int} = (161, 61)
 end
 
-const VARIABLE = (:ω, :Lx, :Ly, :load, :ζ, :epw, :frame, :gap, :y_end, :full, :scale_n)
+const VARIABLE = (:ω, :Lx, :Ly, :load, :ζ, :epw, :frame, :frame_up, :gap, :gap_up, :y_end, :full, :scale_n)
 
 function fixed_hash(p::L4_4_Params)
     fixed = Tuple(getfield(p, f) for f in fieldnames(L4_4_Params) if !(f in VARIABLE))
@@ -147,16 +149,18 @@ function layout(p::L4_4_Params)
     λ = 2π / k0(host(p), p.ω)
     he = λ / p.epw
     F = p.frame * λ
+    Fu = (p.frame_up > 0 ? p.frame_up : p.frame) * λ
     xs, ys = p.ξ_c * p.Lx, p.ξ_c * p.Ly
-    x0 = -(xs + (p.gap + p.frame) * λ)
-    nx = ceil(Int, (xs + maximum(p.line_dx) + (p.gap + p.frame) * λ - x0) / he - 1e-9)
+    gu = (p.gap_up >= 0 ? p.gap_up : p.gap) * λ
+    x0 = -(xs + gu + Fu)
+    nx = ceil(Int, (xs + maximum(p.line_dx) + (p.gap + p.frame) * λ - x0) / he - 1e-9)   # x1 ≥ downstream need
     ny = ceil(Int, (max(ys + p.gap * λ, p.y_end) + p.frame * λ) / he - 1e-9)
     x1 = x0 + nx * he
     Y = ny * he
     lines = [xs + d for d in p.line_dx]
     yend = Y - F                          # undamped region |y| < yend
-    return (; λ, k=2π / λ, he, F, x0, x1, Y, nx, ny, y0=p.full ? -Y : 0.0, nyt=p.full ? 2ny : ny,
-            lines, yend, xin=(x0 + F, x1 - F), top=p.top_k * λ / (2π))
+    return (; λ, k=2π / λ, he, F, Fu, x0, x1, Y, nx, ny, y0=p.full ? -Y : 0.0, nyt=p.full ? 2ny : ny,
+            lines, yend, xin=(x0 + Fu, x1 - F), top=p.top_k * λ / (2π))
 end
 
 "DOF count: φ in the box, η and q on the top surface."
@@ -217,12 +221,13 @@ function pattern_fill(nx::Int, ny::Int, nz::Int; order::Int=3, q::Bool=true)
     return (; N, nnzL=SparseArrays.nnz(L), f...)
 end
 
-"Frame profile σ ∈ [0, 1]: distance into the frame / F, squared."
+"Frame profile σ ∈ [0, 1]: distance into the frame / its width (F_u upstream, F elsewhere), to the power `sponge_power`."
 function sponge_profile(p, l)
     return x -> begin
-        dx = max(l.xin[1] - x[1], x[1] - l.xin[2], 0.0)
-        dy = max(abs(x[2]) - l.yend, 0.0)
-        clamp(max(dx, dy) / l.F, 0.0, 1.0)^p.sponge_power
+        du = max(l.xin[1] - x[1], 0.0) / l.Fu
+        dd = max(x[1] - l.xin[2], 0.0) / l.F
+        dy = max(abs(x[2]) - l.yend, 0.0) / l.F
+        clamp(max(du, dd, dy), 0.0, 1.0)^p.sponge_power
     end
 end
 

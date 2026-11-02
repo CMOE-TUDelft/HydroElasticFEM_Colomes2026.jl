@@ -4,20 +4,27 @@ Pre- and post-processing of src/L4_4_aniso_island.jl (problem, layout and
 references are documented there). Runs in envs/resonator_field (upstream
 `ResonatorField`, branch feat/resonator-field, commit 8314700).
 
-Binding configuration (frozen in row L4.4 of verification_test_matrix_2026-10-22.md
-before the binding run): P1 plate, H = 10, half domain y ≥ 0, p = 3,
-h = λ_p/3, nz = 8, Kelvin–Voigt frame 1.5λ_p, gap 0.5λ_p, WIDE layout in y
-(undamped region to y_end = 20–25 m), Gaussian islands tapered on ξ ∈ [2, 2.5].
+Binding configuration (RE-FREEZE 2026-10-31, PI-approved, row L4.4 of
+verification_test_matrix_2026-10-22.md, frozen 2026-11-02 before the binding runs): P1 plate,
+H = 10, half domain y ≥ 0, p = 3, h = λ_p/4, nz = 7 (8 projected 15.2–15.7 GiB > 14 for
+A8/A12/A10/A8w), Kelvin–Voigt frame 2λ_p
+(s = 10, σ²) downstream and at the side, 0.5λ_p upstream with a 0.25λ_p gap
+(smoke-tested: `L4-4_upstream_frame_test.jl`), downstream gap 0.5λ_p, WIDE layout
+in y (undamped region to y_end = 12.5–16 m), Gaussian islands tapered on ξ ∈ [2, 2.5].
 
 Cases (one Julia process each, rss_guard + run_limited, heavy-run lock):
-   1  A8    (L_x, L_y) = (4.5, 3), ω = 8,  n₀m = 0.03           converging lens
-   2  B8    (3, 4.5),               ω = 8,  0.03                incidence along the long axis
-   3  A12   (3, 2),                 ω = 12, 0.03                diverging lens (above ω_r)
-   4  A10   (4.5, 3),               ω = 10, 0.01, ζ = 0.05      optical depth
-   5  B10   (3, 4.5),               ω = 10, 0.01, ζ = 0.05      optical depth
-   6  A8w   (4.5, 3),               ω = 8,  0.01                weak loading (thin lens)
-   7  M3    case 1, narrow layout (y_end = default), h = λ_p/3  mesh variant pair
-   8  M4    case 1, narrow layout, h = λ_p/4
+   1  A8    (L_x, L_y) = (3, 2),    ω = 8,  n₀m = 0.03           converging lens
+   2  B8    (2, 3),                 ω = 8,  0.03                incidence along the long axis
+   3  A12   (2.25, 1.5),            ω = 12, 0.03                diverging lens (above ω_r)
+   4  A10   (3, 2),                 ω = 10, 0.01, ζ = 0.05      optical depth
+   5  B10   (2, 3),                 ω = 10, 0.01, ζ = 0.05      optical depth
+   6  A8w   (3, 2),                 ω = 8,  0.01                weak loading (thin lens)
+   7  M4    case 1, narrow layout (y_end = default), h = λ_p/4  mesh variant pair
+   8  M5    case 1, narrow layout, h = λ_p/5
+   9  M4z8  case 7 with nz = 8                                 vertical-mesh variant
+The first freeze (2026-10-30, h = λ_p/3, frame 1.5λ_p, larger islands) is kept in
+`cases_freeze1()` for the record (its records and lenses are in data/sims/L4-4/ and
+the first as-run block of the matrix row).
 
 Processing: T = η/e^{ik₀x} on three lines x = ξ_cL_x + {0.5, 1.0, 1.5} m, y ∈ [0, y_end],
 cosine window of T − 1 over the last TAPER m, back-propagation to x = 0 with the bare
@@ -57,9 +64,24 @@ const SPEC = (Ny=8192, Yp=200.0)
 const PE_DX = 0.025
 const Y_SENS_MAX = 30.0        # reference insensitivity: y' ∈ [y_end, 30] m
 
-const NAMES = ["A8", "B8", "A12", "A10", "B10", "A8w", "M3", "M4"]
+const NAMES = ["A8", "B8", "A12", "A10", "B10", "A8w", "M4", "M5", "M4z8"]
 
+"Re-freeze 2026-10-31, frozen 2026-11-02 with nz = 7 and case 9 (binding)."
 function cases()
+    A8 = L4_4_Params(ω=8.0, Lx=3.0, Ly=2.0, load=0.03, epw=4.0, frame=2.0, frame_up=0.5, gap_up=0.25, y_end=15.4, nz=7)
+    return [A8,
+            L4_4_Params(A8; Lx=2.0, Ly=3.0, y_end=16.0),
+            L4_4_Params(A8; ω=12.0, Lx=2.25, Ly=1.5, y_end=13.0),
+            L4_4_Params(A8; ω=10.0, load=0.01, ζ=0.05, y_end=12.5),
+            L4_4_Params(A8; ω=10.0, Lx=2.0, Ly=3.0, load=0.01, ζ=0.05, y_end=12.5),
+            L4_4_Params(A8; load=0.01),
+            L4_4_Params(A8; y_end=0.0),
+            L4_4_Params(A8; y_end=0.0, epw=5.0),
+            L4_4_Params(A8; y_end=0.0, nz=8)]
+end
+
+"First freeze 2026-10-30 18:47 (history; names A8, B8, A12, A10, B10, A8w, M3, M4)."
+function cases_freeze1()
     A8 = L4_4_Params(ω=8.0, Lx=4.5, Ly=3.0, load=0.03, epw=3.0, y_end=21.9)
     return [A8,
             L4_4_Params(A8; Lx=3.0, Ly=4.5, y_end=24.9),
@@ -106,6 +128,13 @@ for that mesh (15.84 GiB, 18.63 GiB). Linear law peak = a + b·lnz."""
 const CAL = (lnz=(2.1412e8, 2.8558e8), peak=(15.84, 18.63))
 projected_peak(lnz) = CAL.peak[1] + (lnz - CAL.lnz[1]) * (CAL.peak[2] - CAL.peak[1]) / (CAL.lnz[2] - CAL.lnz[1])
 
+"""L4-4 calibration (re-freeze 2026-10-31): least-squares line through the largest guard peaks
+measured for six L4-4 patterns of the first freeze (lnz 0.79–2.07e8 → 7.92–14.04 GiB: M3, the
+frame tests 2/2.5/3λ, M4, A8), shifted up by the largest positive residual (0.48 GiB), i.e. an
+upper envelope of the measured L4-4 peaks. Used for the re-freeze (the L3-3 law above reads
+1.1–2.8 GiB high on the L4-4 runs)."""
+projected_peak_l44(lnz) = 4.99 + 4.70 * lnz / 1e8
+
 function sizing(cs)
     rows = NamedTuple[]
     for (i, p) in enumerate(cs)
@@ -113,9 +142,11 @@ function sizing(cs)
         f = pattern_fill(l.nx, l.ny, p.nz; order=p.order)
         push!(rows, (case=i, name=NAMES[i], ω=p.ω, Lx=p.Lx, Ly=p.Ly, epw=p.epw, nx=l.nx, ny=l.ny, nz=p.nz,
                      box_x=l.x1 - l.x0, box_y=l.Y, yend=l.yend, N=s.N, lnz_metis=f.chol_lnz_metis,
-                     flops_metis=f.chol_fl_metis, projected_peak_gib=projected_peak(f.chol_lnz_metis)))
-        @printf("%d %-4s %3d×%3d×%d  box %.1f×%.1f m  y_end %.2f  N=%7d  lnz %.3e  projected peak %.1f GiB\n", i, NAMES[i],
-                l.nx, l.ny, p.nz, l.x1 - l.x0, l.Y, l.yend, s.N, f.chol_lnz_metis, projected_peak(f.chol_lnz_metis))
+                     flops_metis=f.chol_fl_metis, projected_peak_gib=projected_peak_l44(f.chol_lnz_metis),
+                     projected_peak_l33cal_gib=projected_peak(f.chol_lnz_metis)))
+        @printf("%d %-4s %3d×%3d×%d  box %.1f×%.1f m  y_end %.2f  N=%7d  lnz %.3e  projected peak %.1f GiB (L3-3 law %.1f)\n", i, NAMES[i],
+                l.nx, l.ny, p.nz, l.x1 - l.x0, l.Y, l.yend, s.N, f.chol_lnz_metis, projected_peak_l44(f.chol_lnz_metis),
+                projected_peak(f.chol_lnz_metis))
         flush(stdout)
     end
     return DataFrame(rows)
@@ -208,11 +239,15 @@ function checks(df, sens, smoke)
         le!("peak RSS (Julia) < 20 GiB, $(r.name)", "I", r.maxrss_gb, 20.0)
     end
     for r in eachrow(df)
-        r.name in ("M3", "M4") && continue
+        le!("frame reflection on the axis behind the island |b|/mean|T − 1|, $(r.name)", "D", r.frame_reflection, 0.02)
+    end
+    for r in eachrow(df)
+        r.name in ("M4", "M5", "M4z8") && continue
         s = filter(x -> x.name == r.name, sens)
         if r.ζ == 0
+            # B8 (f ≈ 35 m): the truncation error of Φ''(0) is the same in rad/m² as for A8, so 3 % in f (re-freeze)
             le!("reference insensitive to the y-extent: max_{y' ∈ [y_end, 30]} |f_PE(y')/f_PE(∞) − 1|, $(r.name)", "D",
-                maximum(abs.(s.f_rel)), 0.02)
+                maximum(abs.(s.f_rel)), r.name == "B8" ? 0.03 : 0.02)
             le!("FE vs PE focal length |f_FE/f_PE − 1|, $(r.name)", "D", r.f_fe / r.f_pe - 1, 0.05)
             le!("line consistency (max − min)/|mean| of f_FE over 3 lines, $(r.name)", "D", r.f_fe_spread, 0.05)
         else
@@ -221,23 +256,29 @@ function checks(df, sens, smoke)
             le!("FE vs PE optical depth |𝒜_FE/𝒜_PE − 1|, $(r.name)", "D", r.A_fe / r.A_pe - 1, 0.05)
         end
     end
-    m3, m4 = get("M3"), get("M4")
-    if m3 !== nothing && m4 !== nothing
-        le!("mesh variant λ_p/3 vs λ_p/4 (narrow layout): |Δf|/|f|", "D", (m3.f_fe - m4.f_fe) / m4.f_fe, 0.02)
-        le!("mesh variant λ_p/3 vs λ_p/4 (narrow layout): |Δ𝒜| (absolute)", "D", m3.A_fe - m4.A_fe, 0.005)
+    m4, m5 = get("M4"), get("M5")
+    if m4 !== nothing && m5 !== nothing
+        le!("mesh variant λ_p/4 vs λ_p/5 (narrow layout): |Δf|/|f|", "D", (m4.f_fe - m5.f_fe) / m5.f_fe, 0.02)
+        le!("mesh variant λ_p/4 vs λ_p/5 (narrow layout): |Δ𝒜| (absolute)", "D", m4.A_fe - m5.A_fe, 0.005)
     end
+    m8 = get("M4z8")
+    if m4 !== nothing && m8 !== nothing
+        le!("vertical mesh nz = 7 vs 8 (narrow layout, λ_p/4): |Δf|/|f|", "D", (m4.f_fe - m8.f_fe) / m8.f_fe, 0.02)
+        le!("vertical mesh nz = 7 vs 8 (narrow layout, λ_p/4): |Δ𝒜| (absolute)", "D", m4.A_fe - m8.A_fe, 0.005)
+    end
+    # re-freeze: ray / thin-lens tolerances widened for the smaller islands (PE vs ray 1.1 / 11.8 / 14.1 %, PE / thin 1.21)
     for n in ("A8", "B8", "A8w")
         r = get(n); r === nothing && continue
-        le!("FE vs ray focus |f_FE/f_ray − 1| (ω = 8), $(n)", "A", r.f_fe / r.f_ray - 1, 0.10)
+        le!("FE vs ray focus |f_FE/f_ray − 1| (ω = 8), $(n)", "A", r.f_fe / r.f_ray - 1, 0.20)
         le!("converging below ω_r: f_FE > 0 (0 = yes), $(n)", "A", r.f_fe > 0 ? 0.0 : 1.0, 0.0)
     end
     r = get("A12")
     r !== nothing && le!("diverging above ω_r: f_FE < 0 (0 = yes), A12", "A", r.f_fe < 0 ? 0.0 : 1.0, 0.0)
     r = get("A8w")
-    r !== nothing && le!("weak loading: FE vs thin lens eq:focal_general |f_FE/f_thin − 1|, A8w", "A", r.f_fe / r.f_thin - 1, 0.15)
+    r !== nothing && le!("weak loading: FE vs thin lens eq:focal_general |f_FE/f_thin − 1|, A8w", "A", r.f_fe / r.f_thin - 1, 0.25)
     a, b = get("A8"), get("B8")
     if a !== nothing && b !== nothing
-        le!("focal ratio f_x/f_y: FE vs ray (A8/B8)", "A", (a.f_fe / b.f_fe) / (a.f_ray / b.f_ray) - 1, 0.10)
+        le!("focal ratio f_x/f_y: FE vs ray (A8/B8)", "A", (a.f_fe / b.f_fe) / (a.f_ray / b.f_ray) - 1, 0.15)
     end
     a, b = get("A10"), get("B10")
     if a !== nothing && b !== nothing
@@ -267,12 +308,12 @@ function plot_all(df, cs, recs, refs, dir)
     @eval using CairoMakie
     mkpath(dir)
     Base.invokelatest() do
-        fig = Figure(size=(720, 560), fontsize=10)
+        fig = Figure(size=(720, 620), fontsize=10)
         # (a) map of |T| for A8 with the lines
         i1 = findfirst(==("A8"), df.name)
         if i1 !== nothing
             k = df.case[i1]; d = recs[k]; p = cs[k]
-            ax = Axis(fig[1, 1:2]; xlabel="x (m)", ylabel="y (m)", title="(a) |η/η_inc|, A8 (ω = 8, L_x = 4.5, L_y = 3 m)",
+            ax = Axis(fig[1, 1:2]; xlabel="x (m)", ylabel="y (m)", title="(a) |η/η_inc|, A8 (ω = 8, L_x = 3, L_y = 2 m)",
                       aspect=DataAspect())
             hm = heatmap!(ax, d["map_x"], d["map_y"], permutedims(abs.(d["map_T"])); colormap=:viridis)
             Colorbar(fig[1, 3], hm; width=8)
@@ -297,7 +338,7 @@ function plot_all(df, cs, recs, refs, dir)
             lp = lens_of_line(r.pe_y, r.pe_lines[1], d["lines"][1], r.kb, p.Ly; yend=d["yend"])
             lines!(ax2, lp.yb[sel] ./ p.Ly, angle.(lp.Tb[sel] ./ lp.Tb[i0]); color=cols[j])
         end
-        axislegend(ax2; position=:lb, framevisible=false, labelsize=8)
+        Legend(fig[3, 1], ax2; orientation=:horizontal, nbanks=2, framevisible=false, labelsize=8, tellheight=true)
         # (c) focal lengths
         ax3 = Axis(fig[2, 2:3]; ylabel="f (m)", title="(c) focal length from the island centre",
                    xticks=(1:4, ["A8", "B8", "A12", "A8w"]))
@@ -310,7 +351,7 @@ function plot_all(df, cs, recs, refs, dir)
             scatter!(ax3, [j + 0.15], [r.f_thin]; color=cols[4], marker=:utriangle, label=j == 1 ? "thin lens" : nothing)
         end
         hlines!(ax3, [0.0]; color=:gray, linewidth=0.5)
-        axislegend(ax3; position=:lt, framevisible=false, labelsize=8)
+        Legend(fig[3, 2:3], ax3; orientation=:horizontal, nbanks=2, framevisible=false, labelsize=8, tellheight=true)
         rowsize!(fig.layout, 1, Relative(0.45))
         save(joinpath(dir, "aniso_island.pdf"), fig)
         save(joinpath(dir, "aniso_island.png"), fig; px_per_unit=300 / 96)
