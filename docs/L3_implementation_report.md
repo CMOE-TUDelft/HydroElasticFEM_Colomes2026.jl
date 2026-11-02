@@ -753,3 +753,50 @@ julia --project -O1 scripts/L4-beyond-analytical/L4-8_anisotropic_hybridisation.
 julia --project scripts/L4-beyond-analytical/L4-8_anisotropic_hybridisation.jl                 # tables, checks, figure
 julia scripts/export_paper_assets.jl L4-8
 ```
+
+## L4-4: anisotropic resonator island, 3D (re-freeze), 2026-11-02
+
+First freeze 2026-10-30 (h = λ_p/3, frame 1.5λ_p, islands (4.5, 3)/(3, 4.5)/(3, 2) m): incomplete, 3 of 8 cases,
+15/20 checks; the frame reflected ≈ 8 % and λ_p/3 left a 0.08 rad phase error (matrix row L4.4, first as-run block).
+Re-frozen 2026-11-02 08:50 (commit 62a342a) before the binding re-run: h = λ_p/4, **nz = 7** (size reduction: nz = 8
+projects 15.2–15.7 GiB for A8/A12/A10/A8w), Kelvin–Voigt frame 2λ_p downstream and at the side, 0.5λ_p upstream
+(gap 0.25λ_p), islands (3, 2)/(2, 3) m at ω = 8, 10 and (2.25, 1.5) m at ω = 12, wide layout y_end = 12.6–16.1 m;
+cases A8, B8, A12, A10, B10, A8w, M4, M5 (λ_p/5) and the new vertical variant M4z8 (nz = 8). Sizing uses an L4-4
+calibration (upper envelope of the six measured first-freeze peaks: 4.99 + 4.70·lnz/1e8 GiB), projected 9.0–13.9 GiB.
+
+### Results (59/70 checks)
+
+| case | N | guard peak (GiB) | wall (s) | f_FE (m) | f_PE (m) | FE/PE − 1 | line spread | frame refl. |
+|---|---|---|---|---|---|---|---|---|
+| A8 | 274 704 | 11.79 | 154 | 12.74 | 13.12 | −2.8 % | 5.2 % | 0.020 |
+| B8 | 225 600 | 11.65 | 119 | 34.23 | 35.90 | −4.7 % | 6.3 % | 0.027 |
+| A12 | 276 000 | 14.23 | 169 | −8.04 | −8.88 | −9.4 % | 2.5 % | 0.018 |
+| A10 | 277 368 | 12.89 | 153 | 𝒜 1.326 | 𝒜 1.350 | −1.8 % | — | 0.023 |
+| B10 | 224 952 | 11.82 | 125 | 𝒜 0.892 | 𝒜 0.897 | −0.6 % | — | 0.027 |
+| A8w | 274 704 | 13.03 | 160 | 34.19 | 35.45 | −3.5 % | 3.3 % | 0.021 |
+| M4 / M5 / M4z8 | 156 / 249 / 175 k | 7.85 / 11.54 / 9.19 | 83 / 130 / 93 | 17.04 / 15.19 / 17.04 | 17.37 / 15.50 / 17.37 | −1.9 / −2.0 / −1.9 % | — | 0.020 / 0.019 / 0.020 |
+
+- Identities: residuals ≤ 6.4e-10, METIS, Julia maxrss ≤ 9.7 GB; smoke (N = 12 k) load identity 5.7e-13, half vs full
+  8.3e-13, mirror 6.5e-13. Every process exits rc 139 at teardown after saving (guard exit 0).
+- A-type: FE/ray 1.096, 0.975, 1.119 (A8, B8, A8w); A8w FE/thin 1.18; focal ratio vs ray 12.4 %; signs of f correct;
+  𝒜_A10/𝒜_B10 = 1.487 vs 1.5. All pass.
+- Vertical mesh: M4 vs M4z8 |Δf|/f = 2e-5, |Δ𝒜| = 4e-5 — nz = 7 is converged.
+- **Failures (11)**: frame reflection 0.020–0.027 vs ≤ 0.02 (7 rows, marginal); line spread A8 5.2 %, B8 6.3 %;
+  A12 FE vs PE 9.4 %; M4 vs M5 |Δf|/f = 12.2 %.
+- **M4/M5 is ill-posed**: on the narrow layout y_end follows h (6.46 vs 6.72 m) and f_PE moves by the same 12 %;
+  FE/PE = 0.981 vs 0.980.
+- **Post-freeze mesh diagnostic** (`scripts/L4-beyond-analytical/L4-4_mesh_diag.jl`, `data/exp_pro/L4-4/mesh_diag.csv`,
+  not binding; narrow layout, fixed y_end, guard peaks 8.6–13.9 GiB): FE/PE A8 0.979 (λ_p/4) → 0.988 (λ_p/5);
+  A12 0.934 → 0.948 (f_FE −20.29 → −20.57 m, same y_end). The A8 mesh error at λ_p/4 is 1–2 %; the A12 gap is mostly
+  not discretisation (PE reference above ω_r is suspect: PE/ray = 1.36) — open.
+
+### Reproduce
+
+```
+julia --project=envs/resonator_field -O1 scripts/L4-beyond-analytical/L4-4_aniso_island.jl --size | --smoke | --refs
+julia --project=envs/resonator_field -O1 scripts/L4-beyond-analytical/L4-4_aniso_island.jl --case <i>   # i = 1…9, under rss_guard
+julia --project=envs/resonator_field -O1 scripts/L4-beyond-analytical/L4-4_mesh_diag.jl --case <j>      # j = 1…4, under rss_guard
+julia --project=envs/resonator_field scripts/L4-beyond-analytical/L4-4_aniso_island.jl                 # lenses, checks, figure
+julia --project=envs/resonator_field scripts/L4-beyond-analytical/L4-4_mesh_diag.jl
+julia scripts/export_paper_assets.jl L4-4
+```

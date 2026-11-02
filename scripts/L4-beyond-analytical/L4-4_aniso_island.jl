@@ -313,10 +313,11 @@ function plot_all(df, cs, recs, refs, dir)
         i1 = findfirst(==("A8"), df.name)
         if i1 !== nothing
             k = df.case[i1]; d = recs[k]; p = cs[k]
-            ax = Axis(fig[1, 1:2]; xlabel="x (m)", ylabel="y (m)", title="(a) |η/η_inc|, A8 (ω = 8, L_x = 3, L_y = 2 m)",
-                      aspect=DataAspect())
+            gl = fig[1, 1:3] = GridLayout()
+            ax = Axis(gl[1, 1]; xlabel="x (m)", ylabel="y (m)", title="(a) |η/η_inc|, A8 (ω = 8, L_x = 3, L_y = 2 m)")
+            colsize!(gl, 1, Aspect(1, -(-(extrema(d["map_x"])...)) / -(-(extrema(d["map_y"])...))))
             hm = heatmap!(ax, d["map_x"], d["map_y"], permutedims(abs.(d["map_T"])); colormap=:viridis)
-            Colorbar(fig[1, 3], hm; width=8)
+            Colorbar(gl[1, 2], hm; width=8)
             θ = range(0, π / 2; length=100)
             lines!(ax, p.ξ_c * p.Lx .* cos.(θ) .* [1], p.ξ_c * p.Ly .* sin.(θ); color=:white, linestyle=:dash)
             lines!(ax, -p.ξ_c * p.Lx .* cos.(θ), p.ξ_c * p.Ly .* sin.(θ); color=:white, linestyle=:dash)

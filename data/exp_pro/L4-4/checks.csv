@@ -3,19 +3,69 @@ name,kind,value,tolerance,passed
 half vs full domain η at 3 points (small mesh),I,8.33952004193729e-13,1.0e-8,true
 full-domain mirror symmetry (small mesh),I,6.504825895220844e-13,1.0e-8,true
 "residual, small mesh half/full",I,3.8461694104412165e-13,1.0e-8,true
-"residual ‖Ax − b‖/‖b‖, A8",I,8.87796379079607e-11,1.0e-8,true
+"residual ‖Ax − b‖/‖b‖, A8",I,3.486934354252351e-11,1.0e-8,true
 "METIS ordering used (0 = yes), A8",I,0.0,0.0,true
-"peak RSS (Julia) < 20 GiB, A8",I,7.76220703125,20.0,true
-"residual ‖Ax − b‖/‖b‖, M3",I,4.4978365779265764e-11,1.0e-8,true
-"METIS ordering used (0 = yes), M3",I,0.0,0.0,true
-"peak RSS (Julia) < 20 GiB, M3",I,8.26837158203125,20.0,true
-"residual ‖Ax − b‖/‖b‖, M4",I,1.2791028648169301e-10,1.0e-8,true
+"peak RSS (Julia) < 20 GiB, A8",I,8.206130981445312,20.0,true
+"residual ‖Ax − b‖/‖b‖, B8",I,5.081534177279663e-11,1.0e-8,true
+"METIS ordering used (0 = yes), B8",I,0.0,0.0,true
+"peak RSS (Julia) < 20 GiB, B8",I,8.470733642578125,20.0,true
+"residual ‖Ax − b‖/‖b‖, A12",I,3.0100004577424337e-10,1.0e-8,true
+"METIS ordering used (0 = yes), A12",I,0.0,0.0,true
+"peak RSS (Julia) < 20 GiB, A12",I,8.045989990234375,20.0,true
+"residual ‖Ax − b‖/‖b‖, A10",I,1.0328139302377904e-10,1.0e-8,true
+"METIS ordering used (0 = yes), A10",I,0.0,0.0,true
+"peak RSS (Julia) < 20 GiB, A10",I,9.659683227539062,20.0,true
+"residual ‖Ax − b‖/‖b‖, B10",I,4.0997683888206354e-11,1.0e-8,true
+"METIS ordering used (0 = yes), B10",I,0.0,0.0,true
+"peak RSS (Julia) < 20 GiB, B10",I,9.3399658203125,20.0,true
+"residual ‖Ax − b‖/‖b‖, A8w",I,6.73165531332873e-11,1.0e-8,true
+"METIS ordering used (0 = yes), A8w",I,0.0,0.0,true
+"peak RSS (Julia) < 20 GiB, A8w",I,9.270217895507812,20.0,true
+"residual ‖Ax − b‖/‖b‖, M4",I,5.78095362727171e-11,1.0e-8,true
 "METIS ordering used (0 = yes), M4",I,0.0,0.0,true
-"peak RSS (Julia) < 20 GiB, M4",I,8.247726440429688,20.0,true
-"reference insensitive to the y-extent: max_{y' ∈ [y_end, 30]} |f_PE(y')/f_PE(∞) − 1|, A8",D,0.014189482236773077,0.02,true
-"FE vs PE focal length |f_FE/f_PE − 1|, A8",D,0.1183395713364086,0.05,false
-"line consistency (max − min)/|mean| of f_FE over 3 lines, A8",D,0.26513487521694373,0.05,false
-mesh variant λ_p/3 vs λ_p/4 (narrow layout): |Δf|/|f|,D,0.08070990507526957,0.02,false
-mesh variant λ_p/3 vs λ_p/4 (narrow layout): |Δ𝒜| (absolute),D,-0.0502700249127363,0.005,false
-"FE vs ray focus |f_FE/f_ray − 1| (ω = 8), A8",A,0.18752640416741673,0.1,false
+"peak RSS (Julia) < 20 GiB, M4",I,8.351409912109375,20.0,true
+"residual ‖Ax − b‖/‖b‖, M5",I,4.034066984653182e-11,1.0e-8,true
+"METIS ordering used (0 = yes), M5",I,0.0,0.0,true
+"peak RSS (Julia) < 20 GiB, M5",I,8.553359985351562,20.0,true
+"residual ‖Ax − b‖/‖b‖, M4z8",I,6.357780480031685e-10,1.0e-8,true
+"METIS ordering used (0 = yes), M4z8",I,0.0,0.0,true
+"peak RSS (Julia) < 20 GiB, M4z8",I,9.223739624023438,20.0,true
+"frame reflection on the axis behind the island |b|/mean|T − 1|, A8",D,0.020334498082114558,0.02,false
+"frame reflection on the axis behind the island |b|/mean|T − 1|, B8",D,0.02650841219269648,0.02,false
+"frame reflection on the axis behind the island |b|/mean|T − 1|, A12",D,0.018306602987776078,0.02,true
+"frame reflection on the axis behind the island |b|/mean|T − 1|, A10",D,0.022556946764406543,0.02,false
+"frame reflection on the axis behind the island |b|/mean|T − 1|, B10",D,0.027318233299777128,0.02,false
+"frame reflection on the axis behind the island |b|/mean|T − 1|, A8w",D,0.020771189804144233,0.02,false
+"frame reflection on the axis behind the island |b|/mean|T − 1|, M4",D,0.020323429779483773,0.02,false
+"frame reflection on the axis behind the island |b|/mean|T − 1|, M5",D,0.01891763700596709,0.02,true
+"frame reflection on the axis behind the island |b|/mean|T − 1|, M4z8",D,0.02032299130034991,0.02,false
+"reference insensitive to the y-extent: max_{y' ∈ [y_end, 30]} |f_PE(y')/f_PE(∞) − 1|, A8",D,0.013128289287242856,0.02,true
+"FE vs PE focal length |f_FE/f_PE − 1|, A8",D,-0.02834234048011075,0.05,true
+"line consistency (max − min)/|mean| of f_FE over 3 lines, A8",D,0.051837129934679343,0.05,false
+"reference insensitive to the y-extent: max_{y' ∈ [y_end, 30]} |f_PE(y')/f_PE(∞) − 1|, B8",D,0.028566008371632257,0.03,true
+"FE vs PE focal length |f_FE/f_PE − 1|, B8",D,-0.04664338003816115,0.05,true
+"line consistency (max − min)/|mean| of f_FE over 3 lines, B8",D,0.06324200159428466,0.05,false
+"reference insensitive to the y-extent: max_{y' ∈ [y_end, 30]} |f_PE(y')/f_PE(∞) − 1|, A12",D,0.014126722641955358,0.02,true
+"FE vs PE focal length |f_FE/f_PE − 1|, A12",D,-0.0942978782858408,0.05,false
+"line consistency (max − min)/|mean| of f_FE over 3 lines, A12",D,0.025107811012036588,0.05,true
+"reference insensitive to the y-extent: max_{y' ∈ [y_end, 30]} |𝒜_PE(y')/𝒜_PE(∞) − 1|, A10",D,0.005583085057461634,0.01,true
+"FE vs PE optical depth |𝒜_FE/𝒜_PE − 1|, A10",D,-0.017723090770327965,0.05,true
+"reference insensitive to the y-extent: max_{y' ∈ [y_end, 30]} |𝒜_PE(y')/𝒜_PE(∞) − 1|, B10",D,0.002784481197503408,0.01,true
+"FE vs PE optical depth |𝒜_FE/𝒜_PE − 1|, B10",D,-0.006037803061103464,0.05,true
+"reference insensitive to the y-extent: max_{y' ∈ [y_end, 30]} |f_PE(y')/f_PE(∞) − 1|, A8w",D,0.016739570238241575,0.02,true
+"FE vs PE focal length |f_FE/f_PE − 1|, A8w",D,-0.03550415555142383,0.05,true
+"line consistency (max − min)/|mean| of f_FE over 3 lines, A8w",D,0.033103980656689486,0.05,true
+mesh variant λ_p/4 vs λ_p/5 (narrow layout): |Δf|/|f|,D,0.1217556060909176,0.02,false
+mesh variant λ_p/4 vs λ_p/5 (narrow layout): |Δ𝒜| (absolute),D,0.004848053593926399,0.005,true
+"vertical mesh nz = 7 vs 8 (narrow layout, λ_p/4): |Δf|/|f|",D,-2.1457254447422084e-5,0.02,true
+"vertical mesh nz = 7 vs 8 (narrow layout, λ_p/4): |Δ𝒜| (absolute)",D,-3.791250267556889e-5,0.005,true
+"FE vs ray focus |f_FE/f_ray − 1| (ω = 8), A8",A,0.09602594226635697,0.2,true
 "converging below ω_r: f_FE > 0 (0 = yes), A8",A,0.0,0.0,true
+"FE vs ray focus |f_FE/f_ray − 1| (ω = 8), B8",A,-0.025375973428514387,0.2,true
+"converging below ω_r: f_FE > 0 (0 = yes), B8",A,0.0,0.0,true
+"FE vs ray focus |f_FE/f_ray − 1| (ω = 8), A8w",A,0.11916413362289369,0.2,true
+"converging below ω_r: f_FE > 0 (0 = yes), A8w",A,0.0,0.0,true
+"diverging above ω_r: f_FE < 0 (0 = yes), A12",A,0.0,0.0,true
+"weak loading: FE vs thin lens eq:focal_general |f_FE/f_thin − 1|, A8w",A,0.18334264157863167,0.25,true
+focal ratio f_x/f_y: FE vs ray (A8/B8),A,0.12456281846645689,0.15,true
+"optical depth ratio 𝒜_x/𝒜_y = L_x/L_y (eq:aspect_ratio_law), FE (A10/B10)",A,-0.008746922738499197,0.05,true
