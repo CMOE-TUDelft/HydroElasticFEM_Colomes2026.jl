@@ -1,0 +1,68 @@
+name,kind,value,tolerance,passed
+"hybrid pair identified (projection ≥ 0.2), L=3, H=3",I,0.9992928987104617,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=3, H=3",I,4.141131881851834e-14,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=3, H=3",A,0.0019026788713408793,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=4, H=3",I,0.9999022759694178,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=4, H=3",I,4.218847493575595e-15,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=4, H=3",A,0.0007670143673510488,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=6, H=3",I,0.9998753269463525,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=6, H=3",I,2.55351295663786e-15,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=6, H=3",A,0.0005862092083878112,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=8, H=3",I,0.9999127084415592,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=8, H=3",I,2.220446049250313e-16,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=8, H=3",A,0.0003003280385440732,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=14, H=3",I,0.9999966483411559,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=14, H=3",I,4.440892098500626e-16,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=14, H=3",A,8.592101896465199e-5,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=18, H=3",I,0.9999993183521448,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=18, H=3",I,1.1102230246251565e-16,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=18, H=3",A,6.31100370407367e-5,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=28, H=3",I,0.999999933768514,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=28, H=3",I,2.220446049250313e-16,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=28, H=3",A,3.519187975487004e-5,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=36, H=3",I,0.9999999777806151,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=36, H=3",I,1.709743457922741e-14,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=36, H=3",A,2.351239857112386e-5,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=3, H=10",I,0.9992887523947059,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=3, H=10",I,1.0658141036401503e-14,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=3, H=10",A,0.001895388333464476,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=4, H=10",I,0.9998989661789145,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=4, H=10",I,2.5091040356528538e-14,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=4, H=10",A,0.0007787444625172446,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=6, H=10",I,0.9999060878877214,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=6, H=10",I,3.6193270602780103e-14,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=6, H=10",A,0.0006176234623338495,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=8, H=10",I,0.9999359114233299,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=8, H=10",I,9.769962616701378e-15,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=8, H=10",A,0.0003449677856193212,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=14, H=10",I,0.9999971375766915,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=14, H=10",I,9.769962616701378e-15,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=14, H=10",A,0.00011816574406808833,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=18, H=10",I,0.9999992480186091,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=18, H=10",I,2.220446049250313e-16,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=18, H=10",A,8.430598007569401e-5,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=28, H=10",I,0.9999998837501605,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=28, H=10",I,0.0,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=28, H=10",A,4.6019950397546694e-5,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=36, H=10",I,0.9999999487687585,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=36, H=10",I,0.0,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=36, H=10",A,3.1144651895131936e-5,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=3, H=30",I,0.9992884210716739,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=3, H=30",I,7.66053886991358e-14,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=3, H=30",A,0.0018947544461728194,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=4, H=30",I,0.999898678921558,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=4, H=30",I,8.215650382226158e-15,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=4, H=30",A,0.0007793511191687141,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=6, H=30",I,0.9999088624777441,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=6, H=30",I,2.220446049250313e-16,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=6, H=30",A,0.0006224308406210799,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=8, H=30",I,0.9999383411667874,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=8, H=30",I,6.661338147750939e-16,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=8, H=30",A,0.0003538686937215596,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=14, H=30",I,0.9999973420553976,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=14, H=30",I,1.1102230246251565e-16,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=14, H=30",A,0.0001258277971084576,0.01,true
+"hybrid pair identified (projection ≥ 0.2), L=18, H=30",I,0.9999993031640647,0.2,true
+"one-solve modal mass vs full added-mass matrix, L=18, H=30",I,2.220446049250313e-16,1.0e-6,true
+"splitting vs single-mode Galerkin (dispersive added mass), L=18, H=30",A,9.064278665016356e-5,0.01,true
+"deep-water exponent (H=30, N ≥ 5, L ≤ 23), |s + ½|",A,0.03515129150606566,0.1,true
