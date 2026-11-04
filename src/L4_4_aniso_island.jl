@@ -68,9 +68,9 @@ import HydroElasticFEM.Physics as P
 import HydroElasticFEM.Simulation as S
 import HydroElasticFEM.ParameterHandler as PH
 
-using HydroElasticFEM_xxx2026.References: HostSpec, k0, dD0
-using HydroElasticFEM_xxx2026.Solvers: MetisLUSolver, factorize, solve_rhs, factor_stats
-import HydroElasticFEM_xxx2026.L3_0
+using HydroElasticFEM_Colomes2026.References: HostSpec, k0, dD0
+using HydroElasticFEM_Colomes2026.Solvers: MetisLUSolver, factorize, solve_rhs, factor_stats
+import HydroElasticFEM_Colomes2026.L3_0
 
 export L4_4_Params, VARIABLE, fixed_hash, layout, size_counts, pattern_fill, run_case, rhs_identity,
        host, chi, profile, local_k_table, eikonal_phase, ray_focus, thin_lens_gaussian, thin_lens_J,

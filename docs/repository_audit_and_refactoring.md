@@ -41,7 +41,7 @@ script is a thin compatibility entry point.
 
 ```text
 src/
-├── HydroElasticFEM_xxx2026.jl       # package composition and public API
+├── HydroElasticFEM_Colomes2026.jl       # package composition and public API
 ├── Cases/
 │   └── RunAll.jl                     # aggregate manuscript workflow
 ├── Models/
@@ -77,7 +77,7 @@ subsection title, without encoding the figure number.
 ## 3. Include hierarchy
 
 ```julia
-module HydroElasticFEM_xxx2026
+module HydroElasticFEM_Colomes2026
 using Plots
 using LaTeXStrings
 
@@ -105,12 +105,12 @@ separately, with a translucent midpoint surface marking the gap between them.
 Open the HTML files in a browser and rotate, zoom, or hover over the surfaces.
 
 ```julia
-using HydroElasticFEM_xxx2026
+using HydroElasticFEM_Colomes2026
 run_frequency_graded_3d()
 ```
 
 ```julia
-using HydroElasticFEM_xxx2026
+using HydroElasticFEM_Colomes2026
 run_frequency_graded_dispersion()
 ```
 
@@ -122,7 +122,7 @@ logic; those calls should be made through the `HydroElasticFEM.jl` API.
 
 ```mermaid
 flowchart TD
-    H[HydroElasticFEM_xxx2026] --> M[Models]
+    H[HydroElasticFEM_Colomes2026] --> M[Models]
     H --> P[Physics reference formulas]
     H --> PP[PostProcessing]
     H --> U[Utilities IO/cache/parameters]
@@ -177,7 +177,7 @@ they do not define shared numerical kernels.
 ## 7. Reviewer workflow
 
 ```julia
-using HydroElasticFEM_xxx2026
+using HydroElasticFEM_Colomes2026
 generate_all_figures()
 ```
 

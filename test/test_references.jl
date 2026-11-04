@@ -9,8 +9,8 @@ same quantity must agree) and pins against published values
 using Test
 using TOML
 using LinearAlgebra
-using HydroElasticFEM_xxx2026
-using HydroElasticFEM_xxx2026.References
+using HydroElasticFEM_Colomes2026
+using HydroElasticFEM_Colomes2026.References
 
 # Baseline sets of the test matrix (§0.1) used by these tests. In the
 # verification tests themselves each test carries its own parameter struct.

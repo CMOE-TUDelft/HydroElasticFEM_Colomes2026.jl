@@ -5,8 +5,8 @@ of the script (one coarse case) into a temporary folder.
 """
 
 using Test
-using HydroElasticFEM_xxx2026.References
-using HydroElasticFEM_xxx2026.L1_1
+using HydroElasticFEM_Colomes2026.References
+using HydroElasticFEM_Colomes2026.L1_1
 
 const L1_1_SCRIPT = joinpath(@__DIR__, "..", "scripts", "L1-configA-vertical", "L1-1_bare_host_dispersion.jl")
 

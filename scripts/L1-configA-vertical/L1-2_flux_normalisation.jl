@@ -37,8 +37,8 @@ using CSV
 using Printf
 using TOML
 import HydroElasticFEM
-using HydroElasticFEM_xxx2026.L1_1: L1_1_Params, VARIABLE, fixed_hash
-using HydroElasticFEM_xxx2026.L1_2
+using HydroElasticFEM_Colomes2026.L1_1: L1_1_Params, VARIABLE, fixed_hash
+using HydroElasticFEM_Colomes2026.L1_2
 
 const TEST_ID = "L1-2"
 const REPO = normpath(joinpath(@__DIR__, "..", ".."))

@@ -5,8 +5,8 @@ a smoke run of the script (one coarse case) into a temporary folder.
 """
 
 using Test
-import HydroElasticFEM_xxx2026.L1_3
-using HydroElasticFEM_xxx2026.References: kappa1
+import HydroElasticFEM_Colomes2026.L1_3
+using HydroElasticFEM_Colomes2026.References: kappa1
 
 const L1_3_SCRIPT = joinpath(@__DIR__, "..", "scripts", "L1-configA-vertical", "L1-3_single_line_resonator.jl")
 

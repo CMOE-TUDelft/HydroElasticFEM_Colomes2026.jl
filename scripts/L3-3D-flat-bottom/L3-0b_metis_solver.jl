@@ -30,8 +30,8 @@ using Printf
 using LinearAlgebra: norm
 using Gridap: get_matrix, get_vector, get_free_dof_values
 import HydroElasticFEM.Simulation as S
-using HydroElasticFEM_xxx2026.Solvers
-using HydroElasticFEM_xxx2026.L3_0
+using HydroElasticFEM_Colomes2026.Solvers
+using HydroElasticFEM_Colomes2026.L3_0
 
 const TEST_ID = "L3-0b"
 const REPO = normpath(joinpath(@__DIR__, "..", ".."))

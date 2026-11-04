@@ -5,7 +5,7 @@ folder.
 """
 
 using Test
-import HydroElasticFEM_xxx2026.L1_2
+import HydroElasticFEM_Colomes2026.L1_2
 using Gridap: Point
 
 const L1_2_SCRIPT = joinpath(@__DIR__, "..", "scripts", "L1-configA-vertical", "L1-2_flux_normalisation.jl")

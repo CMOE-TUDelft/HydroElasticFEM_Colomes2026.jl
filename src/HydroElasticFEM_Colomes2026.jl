@@ -16,7 +16,7 @@ Layout (see README.md):
 
 Tests are specified in `docs/verification_test_matrix.md`.
 """
-module HydroElasticFEM_xxx2026
+module HydroElasticFEM_Colomes2026
 
 include("references.jl")
 include("solvers.jl")                     # Gridap LinearSolver: UMFPACK LU with METIS ordering (3D runs)

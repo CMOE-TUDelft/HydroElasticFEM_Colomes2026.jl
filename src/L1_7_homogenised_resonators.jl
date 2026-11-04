@@ -48,7 +48,7 @@ HydroElasticFEM.jl (not merged yet). This file is therefore not included in
 the package module: the L1-7 script includes it and runs in
 `envs/resonator_field` (`julia --project=envs/resonator_field -O1`). After the
 PR merges, add `include("L1_7_homogenised_resonators.jl")` to
-`src/HydroElasticFEM_xxx2026.jl`, replace `HydroElasticFEM_xxx2026.` by `..`
+`src/HydroElasticFEM_Colomes2026.jl`, replace `HydroElasticFEM_Colomes2026.` by `..`
 in the imports below, and run L1-7 in the root environment.
 
 ## Reproduce
@@ -66,12 +66,12 @@ import HydroElasticFEM.Simulation as S
 import HydroElasticFEM.ParameterHandler as PH
 using HydroElasticFEM: map_vertical_GP_for_const_dep
 
-using HydroElasticFEM_xxx2026.References: HostSpec, ResonatorSpec, resonator_from_frequency, local_branches,
+using HydroElasticFEM_Colomes2026.References: HostSpec, ResonatorSpec, resonator_from_frequency, local_branches,
                                           omega_gamma_1d, lattice_compliance_number_1d, Pi_L_estimate_plate,
                                           D0, k0, lattice_sum_1d, bare_frequency
-import HydroElasticFEM_xxx2026.L1_1
-import HydroElasticFEM_xxx2026.L1_5
-import HydroElasticFEM_xxx2026.L1_3: secant_root
+import HydroElasticFEM_Colomes2026.L1_1
+import HydroElasticFEM_Colomes2026.L1_5
+import HydroElasticFEM_Colomes2026.L1_3: secant_root
 
 export L1_7_Params, L1_7_Gamma_Params, VARIABLE, VARIABLE_GAMMA, fixed_hash, run_case, homogenised_k
 

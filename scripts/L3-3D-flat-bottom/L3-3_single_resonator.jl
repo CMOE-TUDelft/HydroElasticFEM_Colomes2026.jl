@@ -38,8 +38,8 @@ using CSV
 using Printf
 using TOML
 import HydroElasticFEM
-using HydroElasticFEM_xxx2026
-using HydroElasticFEM_xxx2026.References
+using HydroElasticFEM_Colomes2026
+using HydroElasticFEM_Colomes2026.References
 include(joinpath(@__DIR__, "..", "..", "src", "L3_3_single_resonator.jl"))
 using .L3_3
 

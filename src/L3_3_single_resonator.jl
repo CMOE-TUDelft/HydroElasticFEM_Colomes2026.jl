@@ -55,12 +55,12 @@ import HydroElasticFEM.Physics as P
 import HydroElasticFEM.Simulation as S
 import HydroElasticFEM.ParameterHandler as PH
 
-using HydroElasticFEM_xxx2026.References
-using HydroElasticFEM_xxx2026.Solvers: MetisLUSolver, factorize, solve_rhs, factor_stats
-import HydroElasticFEM_xxx2026.Solvers as Solvers
+using HydroElasticFEM_Colomes2026.References
+using HydroElasticFEM_Colomes2026.Solvers: MetisLUSolver, factorize, solve_rhs, factor_stats
+import HydroElasticFEM_Colomes2026.Solvers as Solvers
 import SparseArrays.LibSuiteSparse as LSS
 using LinearAlgebra: lu
-import HydroElasticFEM_xxx2026.L3_0
+import HydroElasticFEM_Colomes2026.L3_0
 
 export L3_3_Params, VARIABLE, fixed_hash, layout, run_case, fit_ring, host, resonator, size_counts
 

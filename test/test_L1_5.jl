@@ -6,10 +6,10 @@ geometry of L1-8, and a smoke run of each script into a temporary folder.
 """
 
 using Test
-import HydroElasticFEM_xxx2026.L1_5
-import HydroElasticFEM_xxx2026.L1_6
-import HydroElasticFEM_xxx2026.L1_8
-using HydroElasticFEM_xxx2026.References
+import HydroElasticFEM_Colomes2026.L1_5
+import HydroElasticFEM_Colomes2026.L1_6
+import HydroElasticFEM_Colomes2026.L1_8
+using HydroElasticFEM_Colomes2026.References
 
 const L1_5_SCRIPT = joinpath(@__DIR__, "..", "scripts", "L1-configA-vertical", "L1-5_discrete_stop_band.jl")
 const L1_6_SCRIPT = joinpath(@__DIR__, "..", "scripts", "L1-configA-vertical", "L1-6_spacing_sweep.jl")

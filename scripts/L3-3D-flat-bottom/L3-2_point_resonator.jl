@@ -39,7 +39,7 @@ using Printf
 using TOML
 using LinearAlgebra: cond
 import HydroElasticFEM
-using HydroElasticFEM_xxx2026.L3_2
+using HydroElasticFEM_Colomes2026.L3_2
 
 const TEST_ID = "L3-2"
 const REPO = normpath(joinpath(@__DIR__, "..", ".."))
