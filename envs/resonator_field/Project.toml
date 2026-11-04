@@ -5,7 +5,7 @@ DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"
 Gridap = "56d4f2e9-7ea1-5844-9cf6-b9c51ca7ce8e"
 HydroElasticFEM = "e85360b2-c40c-44d1-92ad-66f8d48f49a1"
-HydroElasticFEM_xxx2026 = "eda7c932-2be7-4689-a78c-0b286c542e0c"
+HydroElasticFEM_Colomes2026 = "eda7c932-2be7-4689-a78c-0b286c542e0c"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
 Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
@@ -16,4 +16,4 @@ TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 # After the PR merges, L1-7 moves to the root environment and this folder can be removed.
 [sources]
 HydroElasticFEM = {path = "/Users/ocolomesgene/Progs/git_repos/CMOE/HydroElasticFEM.jl.worktrees/feat-resonator-field"}
-HydroElasticFEM_xxx2026 = {path = "../.."}
+HydroElasticFEM_Colomes2026 = {path = "../.."}

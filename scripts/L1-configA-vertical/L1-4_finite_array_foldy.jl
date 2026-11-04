@@ -46,9 +46,9 @@ using CSV
 using Printf
 using TOML
 import HydroElasticFEM
-using HydroElasticFEM_xxx2026.L1_4
-import HydroElasticFEM_xxx2026.L1_1
-using HydroElasticFEM_xxx2026.References: bloch_decay_1d, resonator_from_frequency, omega_X_1d, omega_gamma_1d, kappa1, foldy_1d
+using HydroElasticFEM_Colomes2026.L1_4
+import HydroElasticFEM_Colomes2026.L1_1
+using HydroElasticFEM_Colomes2026.References: bloch_decay_1d, resonator_from_frequency, omega_X_1d, omega_gamma_1d, kappa1, foldy_1d
 
 const TEST_ID = "L1-4"
 const REPO = normpath(joinpath(@__DIR__, "..", ".."))

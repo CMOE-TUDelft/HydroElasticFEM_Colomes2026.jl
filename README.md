@@ -1,4 +1,4 @@
-# HydroElasticFEM_xxx2026.jl
+# HydroElasticFEM_Colomes2026.jl
 
 Numerical verification of the locally resonant hydroelastic (LRH)
 formulation of the paper J2025-LRMM, built on

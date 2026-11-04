@@ -39,9 +39,9 @@ using CSV
 using Printf
 using TOML
 import HydroElasticFEM
-using HydroElasticFEM_xxx2026.L2_3
-import HydroElasticFEM_xxx2026.L2_3: green_resonance
-import HydroElasticFEM_xxx2026.L2_1: mesh_size
+using HydroElasticFEM_Colomes2026.L2_3
+import HydroElasticFEM_Colomes2026.L2_3: green_resonance
+import HydroElasticFEM_Colomes2026.L2_1: mesh_size
 
 const TEST_ID = "L2-3"
 const REPO = normpath(joinpath(@__DIR__, "..", ".."))

@@ -77,11 +77,11 @@ import HydroElasticFEM.Physics as P
 import HydroElasticFEM.Simulation as S
 import HydroElasticFEM.ParameterHandler as PH
 
-using HydroElasticFEM_xxx2026.References: k_open, added_mass, ResonatorSpec
-using HydroElasticFEM_xxx2026.Solvers: MetisLUSolver, factorize, solve_rhs, factor_stats
-import HydroElasticFEM_xxx2026.L3_0
-import HydroElasticFEM_xxx2026.L2_3
-import HydroElasticFEM_xxx2026.L2_5
+using HydroElasticFEM_Colomes2026.References: k_open, added_mass, ResonatorSpec
+using HydroElasticFEM_Colomes2026.Solvers: MetisLUSolver, factorize, solve_rhs, factor_stats
+import HydroElasticFEM_Colomes2026.L3_0
+import HydroElasticFEM_Colomes2026.L2_3
+import HydroElasticFEM_Colomes2026.L2_5
 
 export L4_8_Params, VARIABLE, fixed_hash, layout, run_case, reduce_case, BETA, beam, local_estimate
 

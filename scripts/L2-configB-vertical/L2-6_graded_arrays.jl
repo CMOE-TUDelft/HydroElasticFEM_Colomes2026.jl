@@ -52,7 +52,7 @@ using Printf
 using TOML
 using Statistics: mean
 import HydroElasticFEM
-using HydroElasticFEM_xxx2026.L2_6
+using HydroElasticFEM_Colomes2026.L2_6
 
 const TEST_ID = "L2-6"
 const REPO = normpath(joinpath(@__DIR__, "..", ".."))

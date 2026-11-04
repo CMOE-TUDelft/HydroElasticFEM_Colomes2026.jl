@@ -1,5 +1,5 @@
-using HydroElasticFEM_xxx2026
-using HydroElasticFEM_xxx2026.References
+using HydroElasticFEM_Colomes2026
+using HydroElasticFEM_Colomes2026.References
 include(joinpath(@__DIR__, "..", "..", "src", "L4_4_aniso_island.jl"))
 using .L4_4
 using Printf

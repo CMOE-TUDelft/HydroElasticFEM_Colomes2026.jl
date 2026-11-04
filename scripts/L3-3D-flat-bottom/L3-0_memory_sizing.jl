@@ -50,8 +50,8 @@ using Printf
 using Statistics: median
 using TOML
 import HydroElasticFEM
-using HydroElasticFEM_xxx2026.L3_0
-using HydroElasticFEM_xxx2026.References: HostSpec, k0, kappa1
+using HydroElasticFEM_Colomes2026.L3_0
+using HydroElasticFEM_Colomes2026.References: HostSpec, k0, kappa1
 
 const TEST_ID = "L3-0"
 const REPO = normpath(joinpath(@__DIR__, "..", ".."))

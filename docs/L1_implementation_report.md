@@ -597,8 +597,8 @@ State of 2026-10-28. Frozen in `verification_test_matrix_2026-10-22.md` §L1.7 b
 The homogenised field is the upstream `ResonatorField` on the HydroElasticFEM.jl branch `feat/resonator-field`
 (commit `8314700`, not merged). L1-7 runs in `envs/resonator_field`, which develops that worktree and this
 repository by path (`[sources]` in its Project.toml). The root environment, used by other agents, is untouched.
-The module is therefore not included in `src/HydroElasticFEM_xxx2026.jl`; the script `include`s it, and its
-imports name `HydroElasticFEM_xxx2026.` explicitly. After the merge, include the module in the package, switch
+The module is therefore not included in `src/HydroElasticFEM_Colomes2026.jl`; the script `include`s it, and its
+imports name `HydroElasticFEM_Colomes2026.` explicitly. After the merge, include the module in the package, switch
 the imports to `..`, and run in the root environment (both headers say so).
 
 ### 11.3 Functions

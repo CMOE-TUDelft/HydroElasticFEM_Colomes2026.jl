@@ -9,7 +9,7 @@ therefore runs in its own environment, envs/resonator_field, which develops
 that branch's worktree and this repository; the root environment is not
 touched. After the PR merges, L1-7 moves to the root environment: include
 src/L1_7_homogenised_resonators.jl in the package module (see its header),
-replace the `include` below by `using HydroElasticFEM_xxx2026.L1_7`, and run
+replace the `include` below by `using HydroElasticFEM_Colomes2026.L1_7`, and run
 with `julia --project -O1`.
 
 Study: P1 host (Table 1 of the paper), H = 10 m, ω_r = 10 rad/s, lossless,
@@ -56,9 +56,9 @@ using CSV
 using Printf
 using TOML
 import HydroElasticFEM
-using HydroElasticFEM_xxx2026
-using HydroElasticFEM_xxx2026.References: bloch_qa_1d, resonator_from_frequency, HostSpec
-import HydroElasticFEM_xxx2026.L1_1
+using HydroElasticFEM_Colomes2026
+using HydroElasticFEM_Colomes2026.References: bloch_qa_1d, resonator_from_frequency, HostSpec
+import HydroElasticFEM_Colomes2026.L1_1
 
 const TEST_ID = "L1-7"
 const REPO = normpath(joinpath(@__DIR__, "..", ".."))

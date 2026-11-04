@@ -37,8 +37,8 @@ using Printf
 using TOML
 using LinearAlgebra
 import HydroElasticFEM
-using HydroElasticFEM_xxx2026
-using HydroElasticFEM_xxx2026.References: added_mass
+using HydroElasticFEM_Colomes2026
+using HydroElasticFEM_Colomes2026.References: added_mass
 include(joinpath(@__DIR__, "..", "..", "src", "L4_8_anisotropic_hybridisation.jl"))
 using .L4_8
 

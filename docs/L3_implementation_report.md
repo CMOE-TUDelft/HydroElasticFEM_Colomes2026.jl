@@ -328,7 +328,7 @@ which has no fill record. Output: `data/exp_pro/L3-0b/metis_solver.csv`.
 
 ### Reproduce
 
-    julia --project -O1 -e 'using Test, HydroElasticFEM_xxx2026; include("test/test_solvers.jl")'
+    julia --project -O1 -e 'using Test, HydroElasticFEM_Colomes2026; include("test/test_solvers.jl")'
     bash Loop_Framework/tools/run_limited.sh -- julia --project=<repo> -O1 scripts/L3-3D-flat-bottom/L3-0b_metis_solver.jl --case <1..4>
     julia --project scripts/L3-3D-flat-bottom/L3-0b_metis_solver.jl      # table
 
