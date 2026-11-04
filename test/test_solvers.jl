@@ -14,9 +14,11 @@ using Gridap: get_free_dof_values, get_matrix, get_vector
 import Gridap.Algebra as GA
 import HydroElasticFEM.Simulation as S
 using HydroElasticFEM_Colomes2026.Solvers
+using HydroElasticFEM_Colomes2026.Solvers: factorize
 using HydroElasticFEM_Colomes2026.References: ResonatorSpec
 using HydroElasticFEM_Colomes2026.L1_1
-using HydroElasticFEM_Colomes2026.L3_0
+using HydroElasticFEM_Colomes2026: L3_0
+using .L3_0: L3_0_Params
 
 relerr(x, y) = norm(x - y) / norm(y)
 
