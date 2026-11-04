@@ -1,0 +1,127 @@
+name,kind,value,tolerance,passed
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=2, n=4, gap=6/κ₁",I,1.1042933580734333e-14,1.0e-8,true
+"mirror symmetry, ω=2, n=4, gap=6/κ₁",I,1.353784840147141e-13,1.0e-8,true
+"spring residual, ω=2, n=4, gap=6/κ₁",I,2.2215299868541707e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=2, n=8, gap=6/κ₁",I,8.474498309789311e-14,1.0e-8,true
+"mirror symmetry, ω=2, n=8, gap=6/κ₁",I,1.884532984632575e-12,1.0e-8,true
+"spring residual, ω=2, n=8, gap=6/κ₁",I,2.2247786310271853e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=2, n=16, gap=6/κ₁",I,1.173312310012759e-12,1.0e-8,true
+"mirror symmetry, ω=2, n=16, gap=6/κ₁",I,1.9232970131099335e-11,1.0e-8,true
+"spring residual, ω=2, n=16, gap=6/κ₁",I,2.2247786310271853e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=5, n=4, gap=6/κ₁",I,1.730660507461205e-13,1.0e-8,true
+"mirror symmetry, ω=5, n=4, gap=6/κ₁",I,5.92738735048191e-13,1.0e-8,true
+"spring residual, ω=5, n=4, gap=6/κ₁",I,2.220446049250313e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=5, n=8, gap=6/κ₁",I,2.288570302834342e-12,1.0e-8,true
+"mirror symmetry, ω=5, n=8, gap=6/κ₁",I,5.11088241029815e-12,1.0e-8,true
+"spring residual, ω=5, n=8, gap=6/κ₁",I,2.220446049250313e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=5, n=16, gap=6/κ₁",I,9.188266774572624e-12,1.0e-8,true
+"mirror symmetry, ω=5, n=16, gap=6/κ₁",I,3.308225050745286e-11,1.0e-8,true
+"spring residual, ω=5, n=16, gap=6/κ₁",I,2.220446049250313e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=9.8, n=4, gap=6/κ₁",I,2.113770856943669e-12,1.0e-8,true
+"mirror symmetry, ω=9.8, n=4, gap=6/κ₁",I,5.4069626015109085e-12,1.0e-8,true
+"spring residual, ω=9.8, n=4, gap=6/κ₁",I,2.220513810852149e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=9.8, n=8, gap=6/κ₁",I,3.2105678802099856e-11,1.0e-8,true
+"mirror symmetry, ω=9.8, n=8, gap=6/κ₁",I,1.1431674712677016e-10,1.0e-8,true
+"spring residual, ω=9.8, n=8, gap=6/κ₁",I,2.220513810852149e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=9.8, n=16, gap=6/κ₁",I,1.897982893914945e-10,1.0e-8,true
+"mirror symmetry, ω=9.8, n=16, gap=6/κ₁",I,1.0061547461371424e-9,1.0e-8,true
+"spring residual, ω=9.8, n=16, gap=6/κ₁",I,2.220513810852149e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10, n=4, gap=6/κ₁",I,7.415104467403817e-13,1.0e-8,true
+"mirror symmetry, ω=10, n=4, gap=6/κ₁",I,2.9754455754276407e-12,1.0e-8,true
+"spring residual, ω=10, n=4, gap=6/κ₁",I,2.220513810852149e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10, n=8, gap=6/κ₁",I,4.457832385011815e-11,1.0e-8,true
+"mirror symmetry, ω=10, n=8, gap=6/κ₁",I,1.7815258173238115e-10,1.0e-8,true
+"spring residual, ω=10, n=8, gap=6/κ₁",I,2.220513810852149e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10, n=16, gap=6/κ₁",I,1.6598477904865709e-9,1.0e-8,true
+"mirror symmetry, ω=10, n=16, gap=6/κ₁",I,1.956638047501193e-9,1.0e-8,true
+"spring residual, ω=10, n=16, gap=6/κ₁",I,2.220513810852149e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10.2, n=4, gap=6/κ₁",I,9.689219358290466e-12,1.0e-8,true
+"mirror symmetry, ω=10.2, n=4, gap=6/κ₁",I,1.093533329063326e-11,1.0e-8,true
+"spring residual, ω=10.2, n=4, gap=6/κ₁",I,2.220717083251841e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10.2, n=8, gap=6/κ₁",I,9.014889817357062e-12,1.0e-8,true
+"mirror symmetry, ω=10.2, n=8, gap=6/κ₁",I,9.356651801235676e-11,1.0e-8,true
+"spring residual, ω=10.2, n=8, gap=6/κ₁",I,2.220717083251841e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10.2, n=16, gap=6/κ₁",I,1.0982541019383361e-9,1.0e-8,true
+"mirror symmetry, ω=10.2, n=16, gap=6/κ₁",I,1.4210582112955488e-9,1.0e-8,true
+"spring residual, ω=10.2, n=16, gap=6/κ₁",I,2.220717083251841e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=2, n=32, gap=6/κ₁",I,9.724450764291728e-11,1.0e-8,true
+"mirror symmetry, ω=2, n=32, gap=6/κ₁",I,1.7754809159901094e-10,1.0e-8,true
+"spring residual, ω=2, n=32, gap=6/κ₁",I,4.441434166503682e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=5, n=32, gap=6/κ₁",I,1.0972608689500157e-10,1.0e-8,true
+"mirror symmetry, ω=5, n=32, gap=6/κ₁",I,3.654432113407272e-10,1.0e-8,true
+"spring residual, ω=5, n=32, gap=6/κ₁",I,2.2247786310271853e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=2, n=16, gap=4/κ₁",I,6.852718512524867e-13,1.0e-8,true
+"mirror symmetry, ω=2, n=16, gap=4/κ₁",I,2.300170702120692e-11,1.0e-8,true
+"spring residual, ω=2, n=16, gap=4/κ₁",I,2.2215299868541707e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=2, n=16, gap=8/κ₁",I,1.239194871967128e-12,1.0e-8,true
+"mirror symmetry, ω=2, n=16, gap=8/κ₁",I,1.0668902895803576e-11,1.0e-8,true
+"spring residual, ω=2, n=16, gap=8/κ₁",I,2.2247786310271853e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=5, n=16, gap=4/κ₁",I,1.4570793719934485e-11,1.0e-8,true
+"mirror symmetry, ω=5, n=16, gap=4/κ₁",I,5.594818439746348e-11,1.0e-8,true
+"spring residual, ω=5, n=16, gap=4/κ₁",I,2.2247786310271853e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=5, n=16, gap=8/κ₁",I,1.9264225973893944e-11,1.0e-8,true
+"mirror symmetry, ω=5, n=16, gap=8/κ₁",I,4.97330429977779e-11,1.0e-8,true
+"spring residual, ω=5, n=16, gap=8/κ₁",I,2.2247786310271853e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=9.8, n=16, gap=4/κ₁",I,1.2398612894285543e-10,1.0e-8,true
+"mirror symmetry, ω=9.8, n=16, gap=4/κ₁",I,3.883854048685085e-9,1.0e-8,true
+"spring residual, ω=9.8, n=16, gap=4/κ₁",I,2.220513810852149e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=9.8, n=16, gap=8/κ₁",I,2.336907158651049e-10,1.0e-8,true
+"mirror symmetry, ω=9.8, n=16, gap=8/κ₁",I,1.4385474688980429e-9,1.0e-8,true
+"spring residual, ω=9.8, n=16, gap=8/κ₁",I,2.220717083251841e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10, n=16, gap=4/κ₁",I,2.1053735657393638e-10,1.0e-8,true
+"mirror symmetry, ω=10, n=16, gap=4/κ₁",I,7.643619758867972e-10,1.0e-8,true
+"spring residual, ω=10, n=16, gap=4/κ₁",I,2.220446049250313e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10, n=16, gap=8/κ₁",I,3.9742229764242546e-10,1.0e-8,true
+"mirror symmetry, ω=10, n=16, gap=8/κ₁",I,6.671248459540894e-10,1.0e-8,true
+"spring residual, ω=10, n=16, gap=8/κ₁",I,2.220446049250313e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10.2, n=16, gap=4/κ₁",I,2.516392871417789e-10,1.0e-8,true
+"mirror symmetry, ω=10.2, n=16, gap=4/κ₁",I,7.830561697569861e-10,1.0e-8,true
+"spring residual, ω=10.2, n=16, gap=4/κ₁",I,2.2215299868541707e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10.2, n=16, gap=8/κ₁",I,5.007165472787875e-10,1.0e-8,true
+"mirror symmetry, ω=10.2, n=16, gap=8/κ₁",I,6.92341493425789e-10,1.0e-8,true
+"spring residual, ω=10.2, n=16, gap=8/κ₁",I,2.2215299868541707e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=1.999998, n=16, gap=6/κ₁",I,2.0088850642280945e-12,1.0e-8,true
+"mirror symmetry, ω=1.999998, n=16, gap=6/κ₁",I,1.4501273534001392e-11,1.0e-8,true
+"spring residual, ω=1.999998, n=16, gap=6/κ₁",I,3.3306690738754696e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=2.000002, n=16, gap=6/κ₁",I,1.4752845954607228e-12,1.0e-8,true
+"mirror symmetry, ω=2.000002, n=16, gap=6/κ₁",I,2.475200287151283e-11,1.0e-8,true
+"spring residual, ω=2.000002, n=16, gap=6/κ₁",I,2.2215299868541707e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=4.999995, n=16, gap=6/κ₁",I,7.75792705635126e-12,1.0e-8,true
+"mirror symmetry, ω=4.999995, n=16, gap=6/κ₁",I,3.9558600944181106e-11,1.0e-8,true
+"spring residual, ω=4.999995, n=16, gap=6/κ₁",I,2.2215299868541707e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=5.000005, n=16, gap=6/κ₁",I,1.6824427390815073e-11,1.0e-8,true
+"mirror symmetry, ω=5.000005, n=16, gap=6/κ₁",I,2.8646429892190643e-11,1.0e-8,true
+"spring residual, ω=5.000005, n=16, gap=6/κ₁",I,2.2215299868541707e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=9.79999, n=16, gap=6/κ₁",I,2.2086540418044342e-10,1.0e-8,true
+"mirror symmetry, ω=9.79999, n=16, gap=6/κ₁",I,4.0331827887228265e-10,1.0e-8,true
+"spring residual, ω=9.79999, n=16, gap=6/κ₁",I,1.1107649934270853e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=9.80001, n=16, gap=6/κ₁",I,1.5674101221431938e-10,1.0e-8,true
+"mirror symmetry, ω=9.80001, n=16, gap=6/κ₁",I,5.682590504639778e-10,1.0e-8,true
+"spring residual, ω=9.80001, n=16, gap=6/κ₁",I,2.220717083251841e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=9.99999, n=16, gap=6/κ₁",I,1.553293314907738e-9,1.0e-8,true
+"mirror symmetry, ω=9.99999, n=16, gap=6/κ₁",I,1.8178487806353999e-9,1.0e-8,true
+"spring residual, ω=9.99999, n=16, gap=6/κ₁",I,2.220446049250313e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10.00001, n=16, gap=6/κ₁",I,1.2709236642535163e-9,1.0e-8,true
+"mirror symmetry, ω=10.00001, n=16, gap=6/κ₁",I,3.188566254489657e-9,1.0e-8,true
+"spring residual, ω=10.00001, n=16, gap=6/κ₁",I,2.220446049250313e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10.19999, n=16, gap=6/κ₁",I,9.15275798137923e-10,1.0e-8,true
+"mirror symmetry, ω=10.19999, n=16, gap=6/κ₁",I,2.0952562024007272e-9,1.0e-8,true
+"spring residual, ω=10.19999, n=16, gap=6/κ₁",I,2.2215299868541707e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10.20001, n=16, gap=6/κ₁",I,7.375264998567356e-10,1.0e-8,true
+"mirror symmetry, ω=10.20001, n=16, gap=6/κ₁",I,1.7081954496527655e-9,1.0e-8,true
+"spring residual, ω=10.20001, n=16, gap=6/κ₁",I,2.220513810852149e-16,1.0e-12,true
+"mesh: frequency-equivalent change δω/ω (16 vs 32), ω=2",D,9.488416365696083e-6,0.0001,true
+"truncation: δω/ω (6 vs 8 decay lengths), ω=2",D,1.8450128615703975e-8,1.0e-5,true
+"truncation decreases with the gap, ω=2",D,0.018992297544700054,1.0,true
+"mesh: frequency-equivalent change δω/ω (16 vs 32), ω=5",D,3.880680895229596e-6,0.0001,true
+"truncation: δω/ω (6 vs 8 decay lengths), ω=5",D,1.1791905970491154e-9,1.0e-5,true
+"truncation decreases with the gap, ω=5",D,0.02010258495613661,1.0,true
+"mesh: frequency-equivalent change δω/ω (8 vs 16), ω=9.8",D,1.3813536853808095e-5,0.0001,true
+"truncation: δω/ω (6 vs 8 decay lengths), ω=9.8",D,2.1965304440715943e-9,1.0e-5,true
+"truncation decreases with the gap, ω=9.8",D,0.0525405540168153,1.0,true
+"mesh: frequency-equivalent change δω/ω (8 vs 16), ω=10",D,1.1764110849854267e-5,0.0001,true
+"truncation: δω/ω (6 vs 8 decay lengths), ω=10",D,6.596034056974999e-10,1.0e-5,true
+"truncation decreases with the gap, ω=10",D,0.01916562922213961,1.0,true
+"mesh: frequency-equivalent change δω/ω (8 vs 16), ω=10.2",D,9.66618844116181e-6,0.0001,true
+"truncation: δω/ω (6 vs 8 decay lengths), ω=10.2",D,1.4111790187562199e-9,1.0e-5,true
+"truncation decreases with the gap, ω=10.2",D,0.10407860863957864,1.0,true

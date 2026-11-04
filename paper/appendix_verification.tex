@@ -1,0 +1,126 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%================================================
+% Appendix C: verification details (moved from Sec. 6.1 and 6.3, WP 0.2).
+% Input after lrmm_appen_case1 (which issues \appendix).
+%================================================
+{\color{red}
+\section{Verification details}\label{app:verification}
+
+This appendix collects the convergence studies of Section~\ref{subsec:num_verification_A} and the identities of Section~\ref{subsec:num_configB} that hold to round-off. The setup, the post-processing and the acceptance criteria are those of Section~\ref{subsubsec:num_setup_A}.
+
+\subsection{Bare host: convergence and frequency sweep}\label{app:ver_L1_1}
+
+\paragraph{Results.} Figure~\ref{fig:num_L1_1_convergence} and Table~\ref{tab:num_L1_1} show the convergence at $\omega=10~\si{\radian\per\second}$. With $p=2$ all four quantities converge at order $2.0$ from $10$ elements per wavelength on, with the wavenumber about four times more accurate than the radiated amplitude and the near field. With five elements per wavelength the solution is not yet in the asymptotic range: the radiative width is in error by $28\%$. With $p=3$ the errors are three to five orders of magnitude smaller at equal mesh size and fall below $10^{-6}$ with $40$ elements per wavelength, where the real part of the near field and the radiative width level off at about $10^{-6}$ and $2.5\times10^{-7}$, respectively. The frequency sweep (Figures~\ref{fig:num_L1_1_sweep_k} and~\ref{fig:num_L1_1_sweep_gamma}) confirms this picture over the whole range: with $p=2$ the observed order of the wavenumber error is close to $4$ at low frequency, where the bending term is negligible and the wave is essentially a long gravity wave under an inertial plate, and decreases to the order $2$ of the C/DG bending discretisation above $\omega\approx3~\si{\radian\per\second}$, where bending controls the dispersion. The errors increase with frequency and are smaller with pre-tension; on the finest meshes they remain below $1.0\times10^{-4}$ (wavenumber) and $4.1\times10^{-4}$ (radiative width) for $p=2$, and below $2.5\times10^{-8}$ and $7\times10^{-7}$ for $p=3$. At $\omega\le1~\si{\radian\per\second}$ the sponges reflect all the incident energy, and the extraction of the amplitudes, which is exact under reflection, still gives errors between $10^{-10}$ and $10^{-6}$.
+
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}{0.49\linewidth}
+        \includegraphics[width=\linewidth]{figures/L1_1_convergence_p2.png}
+        \caption{$p=2$}
+    \end{subfigure}
+    \begin{subfigure}{0.49\linewidth}
+        \includegraphics[width=\linewidth]{figures/L1_1_convergence_p3.png}
+        \caption{$p=3$}
+    \end{subfigure}
+    \caption{Bare host at $\omega=10~\si{\radian\per\second}$, $T_\rho=0$ (Section~\ref{subsubsec:num_L1_1}): relative errors against the number of elements per wavelength. Dashed: order $2(p-1)$.}
+    \label{fig:num_L1_1_convergence}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/L1_1_sweep_k.png}
+    \caption{Discrete wavenumber over the frequency range, $T_\rho=0$ (left) and $T_\rho=9.8~\si{\meter\cubed\per\second\squared}$ (right). Top: relative error $|k_h/k_0-1|$ for $p=2$ (black) and $p=3$ (blue) on three meshes (dotted, dashed, solid from coarse to fine). Bottom: observed order between the two finest meshes; dashed lines at $2(p-1)$.}
+    \label{fig:num_L1_1_sweep_k}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/L1_1_sweep_gamma.png}
+    \caption{Radiative width from the far field over the frequency range; layout as in Figure~\ref{fig:num_L1_1_sweep_k}.}
+    \label{fig:num_L1_1_sweep_gamma}
+\end{figure}
+
+\subsection{Radiative width and energy flux}\label{app:ver_L1_2}\label{subsubsec:num_L1_2}
+
+\paragraph{Test description.} The radiative width $\gamma_r=\operatorname{Im}G(0)$ controls the critical damping and the absorption of every resonator configuration (Section~\ref{subsubsec:energy_flux_single}), and the energy flux~\eqref{eq:energy_flux} normalises the reflection, transmission and absorption coefficients. Both are verified by computing $\gamma_r$ in three independent ways from the same finite element solution of the bare host forced by the patch:
+\begin{enumerate}
+    \item \emph{far field}: from the radiated amplitudes, as in Section~\ref{subsubsec:num_L1_1};
+    \item \emph{source patch}: in the non-dissipative case $\operatorname{Im}G(x)=\cos(k_0x)/\mathcal{D}_0'(k_0)$ for all $x$, equation~\eqref{eq:lat_green_1d}, so that the average of the patch response over the patch is $\operatorname{Im}\langle G_b\rangle=\operatorname{sinc}^2(k_0b/2)/\mathcal{D}_0'(k_0)$; the finite element average $\langle\widehat{\eta}_h\rangle$, computed by Gauss quadrature on the two patch elements and corrected for the waves returning from the sponges, gives $\gamma_h=\operatorname{Im}\langle\widehat{\eta}_h\rangle/(F\operatorname{sinc}^2(k_0b/2))$;
+    \item \emph{work--flux balance}: the work done by the load, $P=\tfrac12\omega\operatorname{Im}(\overline{F}\langle\widehat{\eta}_h\rangle)$, which is equation~\eqref{eq:point_power} for a distributed load, is compared with the net flux $\tfrac14\omega\mathcal{D}_0'(k_0)\sum(|A_\mathrm{out}|^2-|A_\mathrm{in}|^2)$ through both probe windows, equation~\eqref{eq:energy_flux}; the error is $|P/P_\mathrm{flux}-1|$.
+\end{enumerate}
+The test is performed at $\omega\in\{2,5,10\}~\si{\radian\per\second}$ for both pre-tensions.
+
+\paragraph{Results.} The three measures agree with each other and with $\gamma_r$ for all cases (Table~\ref{tab:num_L1_2} and Figure~\ref{fig:num_L1_2}). With $p=2$ they converge at order $2.0$ (observed orders $1.98$--$2.26$) to errors between $2.5\times10^{-6}$ and $4.1\times10^{-4}$ with $80$ elements per wavelength. The errors increase with frequency, as the bending term becomes dominant, and are two to eight times smaller with pre-tension. With $p=3$ all errors are below $3.3\times10^{-7}$ with $40$ elements per wavelength; at $\omega=10~\si{\radian\per\second}$ they reach the same level of $2$--$3\times10^{-7}$ found for the far field in Section~\ref{subsubsec:num_L1_1}. That the work done by the load equals the flux of the radiated waves to this accuracy confirms that equation~\eqref{eq:energy_flux}, derived from the Green function, is the energy flux of the discrete coupled fluid--structure system, and therefore that the reflection, transmission and absorption coefficients of Section~\ref{subsubsec:num_L1_3} are correctly normalised.
+
+\begin{table}[t]
+    \centering
+    \caption{Radiative width: exact value $\gamma_r=1/\mathcal{D}_0'(k_0)$ (density-normalised symbol) and relative errors of the three finite element measures on the finest mesh ($n_\lambda=80$ for $p=2$, $40$ for $p=3$). $T_\rho$ in \si{\meter\cubed\per\second\squared}, $\omega$ in \si{\radian\per\second}.}
+    \label{tab:num_L1_2}
+    \footnotesize
+    \begin{tabular}{rrcrccc}
+        \hline
+        $T_\rho$ & $\omega$ & $\gamma_r$ & $p$ & far field & source patch & work--flux \\
+        \hline
+        0   & 2  & 0.0415 & 2 & $5.9\times10^{-6}$ & $5.9\times10^{-6}$ & $5.9\times10^{-6}$ \\
+            &    &        & 3 & $4.8\times10^{-9}$ & $4.8\times10^{-9}$ & $1.4\times10^{-9}$ \\
+        0   & 5  & 0.0534 & 2 & $3.8\times10^{-4}$ & $3.8\times10^{-4}$ & $3.8\times10^{-4}$ \\
+            &    &        & 3 & $1.6\times10^{-7}$ & $4.9\times10^{-8}$ & $5.7\times10^{-8}$ \\
+        0   & 10 & 0.0186 & 2 & $4.1\times10^{-4}$ & $4.1\times10^{-4}$ & $4.1\times10^{-4}$ \\
+            &    &        & 3 & $2.5\times10^{-7}$ & $2.1\times10^{-7}$ & $2.6\times10^{-7}$ \\
+        9.8 & 2  & 0.0263 & 2 & $2.5\times10^{-6}$ & $2.5\times10^{-6}$ & $2.6\times10^{-6}$ \\
+            &    &        & 3 & $1.4\times10^{-8}$ & $1.3\times10^{-8}$ & $2.4\times10^{-9}$ \\
+        9.8 & 5  & 0.0224 & 2 & $4.9\times10^{-5}$ & $4.8\times10^{-5}$ & $4.9\times10^{-5}$ \\
+            &    &        & 3 & $1.4\times10^{-7}$ & $9.9\times10^{-8}$ & $2.1\times10^{-9}$ \\
+        9.8 & 10 & 0.0127 & 2 & $1.3\times10^{-4}$ & $1.3\times10^{-4}$ & $1.3\times10^{-4}$ \\
+            &    &        & 3 & $3.1\times10^{-7}$ & $3.2\times10^{-7}$ & $2.8\times10^{-7}$ \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/L1_2_convergence_p2.png}\\
+    \includegraphics[width=\linewidth]{figures/L1_2_convergence_p3.png}
+    \caption{Radiative width from the far field, from the source patch and from the work--flux balance, for $p=2$ (top) and $p=3$ (bottom); colour: frequency, marker: pre-tension. Dashed: order $2(p-1)$.}
+    \label{fig:num_L1_2}
+\end{figure}
+
+\subsection{Single resonator: extraction of the coefficients and convergence}\label{app:ver_L1_3}
+
+Equation~\eqref{eq:single_force} states that the resonator force is $F_1=\widehat{\eta}_f(x_1)/(1/\alpha-G(0))$, where $\widehat{\eta}_f(x_1)$ is the field of the bare structure at the attachment point. In the computational setting $\widehat{\eta}_f$ contains, besides the incident wave of amplitude $A^+$ and the wave $B^-$ returning from the downstream sponge, the tail of the near field of the source, $E=FG_{b,\mathrm{near}}(x_1-x_s)$, where $G_{b,\mathrm{near}}$ denotes equation~\eqref{eq:num_patch_green} without the propagating term. Although small, about $2\times10^{-3}$ of the incident wave for the slowest evanescent mode at a distance of $10~\si{\meter}$, this contribution must be included: treating the incident wave as the only drive introduces a phase error of the same size in $\mathcal{R}$, which shifts the computed resonance by an amount proportional to the resonance width ($-1.8\times10^{-5}$ in relative terms for $T_\rho=0$) and independent of the mesh. The coefficients are therefore obtained as follows. The exact near fields of the source and of the resonator, $FG_{b,\mathrm{near}}(x-x_s)$ and $F_1G_\mathrm{near}(x-x_1)$ with $F_1=\omega^2m_{\rho,r}q_1$ from the computed resonator motion, are subtracted from the probe samples, which are then fitted by the two propagating waves of equation~\eqref{eq:num_wave_fit} only, with the discrete wavenumber measured on the bare plate. The resonator radiates the same amplitude $S$ to both sides, $S=B^+-A^+=A^--B^-$, so that
+\begin{equation}\label{eq:num_point_scattering}
+    \mathcal{R}=\frac{S}{A^++B^-+E},\qquad \mathcal{T}=1+\mathcal{R},\qquad \mathcal{A}=1-|\mathcal{R}|^2-|\mathcal{T}|^2,
+\end{equation}
+in agreement with equations~\eqref{eq:lat_RT} and~\eqref{eq:lat_energy_1d} for one resonator. The two estimates of $S$ agree to better than $10^{-6}$ relative, which provides an independent consistency check.
+
+Figure~\ref{fig:num_L1_3_convergence} shows the convergence of the errors reported in Table~\ref{tab:num_L1_3}.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/L1_3_convergence_p2.png}\\
+    \includegraphics[width=\linewidth]{figures/L1_3_convergence_p3.png}
+    \caption{Single resonator: relative errors of the renormalised resonance, of the half-power bandwidth and of the peak response against the number of elements per wavelength, for $p=2$ (top) and $p=3$ (bottom); colour: dashpot and attachment, marker: pre-tension. Dashed: order $2(p-1)$.}
+    \label{fig:num_L1_3_convergence}
+\end{figure}
+
+\subsection{Configuration B: reciprocity, truncation and Woodbury residuals}\label{app:ver_configB}
+
+\paragraph{Transfer compliance.} $\mathbf{G}_{B,h}$ is computed for $L_p=20~\si{\meter}$ at $25$ points: $20$ regular points at $x=0.5,1.5,\ldots,19.5~\si{\meter}$ and $5$ random points. The frequencies are $\omega\in\{2,5,9.8,10,10.2\}~\si{\radian\per\second}$, i.e.\ from $\lambda_p\approx L_p$ down to $\lambda_p\approx L_p/9$. The meshes have $n\in\{4,8,16\}$, plus $n=32$ at $\omega\in\{2,5\}$. The open-water length is varied between $4$, $6$ and $8$ decay lengths $1/\kappa_1$.
+
+Reciprocity, $\|\mathbf{G}_{B,h}-\mathbf{G}_{B,h}^{\mathsf T}\|/\|\mathbf{G}_{B,h}\|$, holds to between $10^{-14}$ and $1.7\times10^{-9}$ in all $37$ cases. The mirror symmetry of the regular block about the plate centre holds to $4\times10^{-9}$. These residuals grow with the number of unknowns as round-off does, so they confirm that the discrete problem with the Sommerfeld condition is complex-symmetric. On the two finest meshes the equivalent frequency shift~\eqref{eq:num_freq_equivalent} is $\delta\omega/\omega\le1.4\times10^{-5}$ at every frequency, at an observed order between $2.0$ and $2.7$. Increasing the open water from $6$ to $8$ decay lengths changes $\mathbf{G}_{B,h}$ by $\delta\omega/\omega\le1.8\times10^{-8}$, between $2\%$ and $10\%$ of the change from $4$ to $6$, consistent with the evanescent decay $\mathrm{e}^{-2\kappa_1\Delta}$.
+
+\paragraph{Woodbury equivalence.} Resonators are attached at the $20$ regular points of Section~\ref{subsubsec:num_L2_1}, and the plate is loaded by a point force at $x=7.25~\si{\meter}$. Three resonator sets are considered: identical resonators, random resonator frequencies, and graded resonator frequencies. The frequencies are $12$ values of $\omega$ in $[2,12]~\si{\radian\per\second}$, refined around $\omega_r=10~\si{\radian\per\second}$, with $n=8$. The plate deflections $\boldsymbol{\eta}_a$ and resonator displacements $\qvec$ of the monolithic solution, with the resonators as unknowns, are compared with the solution of equation~\eqref{eq:lat_woodbury}, with $\mathbf{G}_{B,h}$ and $\boldsymbol{\eta}_a^\mathrm{inc}$ from the bare model on the same mesh.
+
+The two solutions agree to between $9\times10^{-13}$ and $2.6\times10^{-10}$ (relative) in all $36$ cases, for both $\boldsymbol{\eta}_a$ and $\qvec$ (Figure~\ref{fig:num_L2_2}). This is the level of the reciprocity residual on the same systems, at most $8.9\times10^{-11}$, which is a pure round-off measure. Equation~\eqref{eq:lat_woodbury} is therefore an identity of the discrete model and not an approximation. Any resonator set can be evaluated from one bare factorisation and an $N\times N$ solve per frequency, which Sections~\ref{subsubsec:num_L2_4}--\ref{subsubsec:num_L2_6} use.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/L2_2_woodbury.png}
+    \caption{Woodbury equivalence for $20$ resonators on a free plate ($L_p=20~\si{\meter}$). Left: relative difference between the monolithic solution and equation~\eqref{eq:lat_woodbury} with the finite element transfer compliance, for the three resonator sets; dashed: tolerance $10^{-8}$. Right: plate deflection at the attachment points at $\omega=10~\si{\radian\per\second}$.}
+    \label{fig:num_L2_2}
+\end{figure*}
+
+\subsection{Time-domain energy identity}\label{app:ver_energy}
+
+\textbf{[PENDING L0-3: semi-discrete energy identity, Proposition~\ref{prop:energy}, in the time domain; one figure.]}
+}

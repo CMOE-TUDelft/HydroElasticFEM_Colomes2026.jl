@@ -1,0 +1,97 @@
+name,kind,value,tolerance,passed
+"ω̃, finest mesh, T=0, ωr=1, c/c_crit=0.25",D,3.8064055879472036e-5,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=1, c/c_crit=0.25",D,7.460226400468617e-6,0.001,true
+"ω̃, finest mesh, T=0, ωr=1, c/c_crit=0.5",D,3.8064055926212426e-5,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=1, c/c_crit=0.5",D,5.756239083165582e-6,0.001,true
+"ω̃, finest mesh, T=0, ωr=1, c/c_crit=1",D,3.806405611550545e-5,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=1, c/c_crit=1",D,1.887203171513363e-10,0.001,true
+"ω̃, finest mesh, T=0, ωr=1, c/c_crit=2",D,3.806405687667436e-5,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=1, c/c_crit=2",D,5.7564673471288685e-6,0.001,true
+"ω̃, finest mesh, T=0, ωr=1, c/c_crit=4",D,3.806405993100892e-5,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=1, c/c_crit=4",D,7.460223895972007e-6,0.001,true
+"ω̃, finest mesh, T=0, ωr=2, c/c_crit=0.25",D,4.939584221652638e-7,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=2, c/c_crit=0.25",D,1.1502191021861563e-7,0.001,true
+"ω̃, finest mesh, T=0, ωr=2, c/c_crit=0.5",D,4.939584676844078e-7,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=2, c/c_crit=0.5",D,8.874313184303873e-8,0.001,true
+"ω̃, finest mesh, T=0, ωr=2, c/c_crit=1",D,4.93958560277008e-7,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=2, c/c_crit=1",D,2.502442697505103e-13,0.001,true
+"ω̃, finest mesh, T=0, ωr=2, c/c_crit=2",D,4.939587225916142e-7,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=2, c/c_crit=2",D,8.874439244577204e-8,0.001,true
+"ω̃, finest mesh, T=0, ωr=2, c/c_crit=4",D,4.939584794527718e-7,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=2, c/c_crit=4",D,1.1503305197280156e-7,0.001,true
+"ω̃, finest mesh, T=0, ωr=5, c/c_crit=0.25",D,2.839530832687842e-10,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=5, c/c_crit=0.25",D,6.348810421830109e-9,0.001,true
+"ω̃, finest mesh, T=0, ωr=5, c/c_crit=0.5",D,2.3784441083307684e-10,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=5, c/c_crit=0.5",D,4.92337748347893e-9,0.001,true
+"ω̃, finest mesh, T=0, ωr=5, c/c_crit=1",D,5.738298725077584e-11,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=5, c/c_crit=1",D,1.963373907898358e-12,0.001,true
+"ω̃, finest mesh, T=0, ωr=5, c/c_crit=2",D,6.712848055201448e-10,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=5, c/c_crit=2",D,5.2864257416018745e-9,0.001,true
+"ω̃, finest mesh, T=0, ωr=5, c/c_crit=4",D,3.795026182196182e-9,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=5, c/c_crit=4",D,8.517188954115795e-9,0.001,true
+"ω̃, finest mesh, T=0, ωr=10, c/c_crit=0.25",D,2.6040647416181173e-10,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=10, c/c_crit=0.25",D,9.316743154741403e-9,0.001,true
+"ω̃, finest mesh, T=0, ωr=10, c/c_crit=0.5",D,2.342441796088224e-10,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=10, c/c_crit=0.5",D,7.1549919322677624e-9,0.001,true
+"ω̃, finest mesh, T=0, ωr=10, c/c_crit=1",D,1.2471634835975465e-10,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=10, c/c_crit=1",D,4.962752431225681e-12,0.001,true
+"ω̃, finest mesh, T=0, ωr=10, c/c_crit=2",D,3.0835400899320575e-10,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=10, c/c_crit=2",D,6.965488075216797e-9,0.001,true
+"ω̃, finest mesh, T=0, ωr=10, c/c_crit=4",D,1.8296906212356134e-9,0.001,true
+"𝒜(ω̃), finest mesh, T=0, ωr=10, c/c_crit=4",D,8.408008733695738e-9,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=1, c/c_crit=0.25",D,1.4240277373178678e-5,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=1, c/c_crit=0.25",D,2.369164587123773e-6,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=1, c/c_crit=0.5",D,1.4240277425914272e-5,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=1, c/c_crit=0.5",D,1.8280472409148985e-6,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=1, c/c_crit=1",D,1.4240277637633802e-5,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=1, c/c_crit=1",D,1.9032331266544134e-11,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=1, c/c_crit=2",D,1.4240278484400903e-5,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=1, c/c_crit=2",D,1.8280711291951413e-6,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=1, c/c_crit=4",D,1.4240281870470106e-5,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=1, c/c_crit=4",D,2.3691677385473398e-6,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=2, c/c_crit=0.25",D,1.930650346815277e-6,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=2, c/c_crit=0.25",D,9.825447555567024e-8,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=2, c/c_crit=0.5",D,1.9306514409400677e-6,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=2, c/c_crit=0.5",D,7.581405037093703e-8,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=2, c/c_crit=1",D,1.930655821213989e-6,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=2, c/c_crit=1",D,1.6930901125533637e-14,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=2, c/c_crit=2",D,1.9306733521906594e-6,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=2, c/c_crit=2",D,7.581733613148955e-8,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=2, c/c_crit=4",D,1.930743533384849e-6,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=2, c/c_crit=4",D,9.826735136719833e-8,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=5, c/c_crit=0.25",D,2.5166433159640178e-8,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=5, c/c_crit=0.25",D,1.8359218423302792e-8,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=5, c/c_crit=0.5",D,2.5166080330762952e-8,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=5, c/c_crit=0.5",D,1.416700090572931e-8,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=5, c/c_crit=1",D,2.516442565436705e-8,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=5, c/c_crit=1",D,6.319944567678704e-13,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=5, c/c_crit=2",D,2.5157033345379887e-8,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=5, c/c_crit=2",D,1.4191296970889056e-8,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=5, c/c_crit=4",D,2.5122818270162384e-8,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=5, c/c_crit=4",D,1.8462482875847286e-8,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=10, c/c_crit=0.25",D,1.2580980701670796e-8,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=10, c/c_crit=0.25",D,1.8559001002671494e-8,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=10, c/c_crit=0.5",D,1.2083833933473898e-8,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=10, c/c_crit=0.5",D,1.4474428045030407e-8,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=10, c/c_crit=1",D,1.0093219149354127e-8,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=10, c/c_crit=1",D,3.944955473400569e-12,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=10, c/c_crit=2",D,2.1138817363208773e-9,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=10, c/c_crit=2",D,1.749248473847942e-8,0.001,true
+"ω̃, finest mesh, T=9.8, ωr=10, c/c_crit=4",D,3.0020845032119325e-8,0.001,true
+"𝒜(ω̃), finest mesh, T=9.8, ωr=10, c/c_crit=4",D,3.484091282146551e-8,0.001,true
+"|𝒜(ω̃) − ½| at c_crit, T=0, ωr=1",D,1.887203171513363e-10,0.001,true
+"FE maximum of 𝒜 at c_crit (relative), T=0, ωr=1",D,3.5897744917745555e-5,0.01,true
+"|𝒜(ω̃) − ½| at c_crit, T=0, ωr=2",D,4.851674617611934e-13,0.001,true
+"FE maximum of 𝒜 at c_crit (relative), T=0, ωr=2",D,6.087252436559609e-6,0.01,true
+"|𝒜(ω̃) − ½| at c_crit, T=0, ωr=5",D,6.777283401149248e-9,0.001,true
+"FE maximum of 𝒜 at c_crit (relative), T=0, ωr=5",D,0.00027211196082610467,0.01,true
+"|𝒜(ω̃) − ½| at c_crit, T=0, ωr=10",D,2.1374164882459468e-8,0.001,true
+"FE maximum of 𝒜 at c_crit (relative), T=0, ωr=10",D,0.0004534464143811645,0.01,true
+"|𝒜(ω̃) − ½| at c_crit, T=9.8, ωr=1",D,1.9032331266544134e-11,0.001,true
+"FE maximum of 𝒜 at c_crit (relative), T=9.8, ωr=1",D,1.1393663830405742e-5,0.01,true
+"|𝒜(ω̃) − ½| at c_crit, T=9.8, ωr=2",D,1.887379141862766e-14,0.001,true
+"FE maximum of 𝒜 at c_crit (relative), T=9.8, ωr=2",D,1.3805526477561614e-6,0.01,true
+"|𝒜(ω̃) − ½| at c_crit, T=9.8, ωr=5",D,8.696909858940671e-11,0.001,true
+"FE maximum of 𝒜 at c_crit (relative), T=9.8, ωr=5",D,1.9315160963095934e-5,0.01,true
+"|𝒜(ω̃) − ½| at c_crit, T=9.8, ωr=10",D,2.995568626484868e-9,0.001,true
+"FE maximum of 𝒜 at c_crit (relative), T=9.8, ωr=10",D,0.00013593353985741352,0.01,true

@@ -1,0 +1,376 @@
+name,kind,value,tolerance,passed
+"G_B,h evaluation matrix vs spring columns, frequency, ω=2, n=8",I,7.762279910768089e-13,1.0e-8,true
+"reciprocity of G_B,h, frequency, ω=2, n=8",I,3.4952807402135693e-12,1.0e-8,true
+"energy balance (max over arrays), frequency, ω=2, n=8",I,3.95716948098368e-9,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, frequency, ω=2, n=8",I,1.6674728264831629e-9,0.001,true
+"sponge reflection, frequency, ω=2, n=8",D,0.00017497388987821257,0.01,true
+"G_B,h evaluation matrix vs spring columns, frequency, ω=3, n=8",I,5.040253443927982e-12,1.0e-8,true
+"reciprocity of G_B,h, frequency, ω=3, n=8",I,8.223243392195687e-11,1.0e-8,true
+"energy balance (max over arrays), frequency, ω=3, n=8",I,3.45692985348478e-8,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, frequency, ω=3, n=8",I,7.258489365113974e-10,0.001,true
+"sponge reflection, frequency, ω=3, n=8",D,0.00015759230317620188,0.01,true
+"G_B,h evaluation matrix vs spring columns, frequency, ω=5, n=8",I,5.04177643803335e-12,1.0e-8,true
+"reciprocity of G_B,h, frequency, ω=5, n=8",I,2.0869371349743726e-10,1.0e-8,true
+"energy balance (max over arrays), frequency, ω=5, n=8",I,9.253032252631854e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, frequency, ω=5, n=8",I,2.1321019905151672e-7,0.001,true
+"sponge reflection, frequency, ω=5, n=8",D,7.29862518447697e-5,0.01,true
+"G_B,h evaluation matrix vs spring columns, frequency, ω=7, n=8",I,2.7907445037490716e-11,1.0e-8,true
+"reciprocity of G_B,h, frequency, ω=7, n=8",I,6.371369480815651e-11,1.0e-8,true
+"energy balance (max over arrays), frequency, ω=7, n=8",I,3.04018609176282e-8,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, frequency, ω=7, n=8",I,5.394456570328998e-8,0.001,true
+"sponge reflection, frequency, ω=7, n=8",D,0.00034129332033380007,0.01,true
+"G_B,h evaluation matrix vs spring columns, frequency, ω=5, n=12",I,1.4538637735820277e-11,1.0e-8,true
+"reciprocity of G_B,h, frequency, ω=5, n=12",I,2.651304880854215e-10,1.0e-8,true
+"energy balance (max over arrays), frequency, ω=5, n=12",I,1.0377781389792062e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, frequency, ω=5, n=12",I,2.1169175856705635e-8,0.001,true
+"sponge reflection, frequency, ω=5, n=12",D,7.301981323037001e-5,0.01,true
+"G_B,h evaluation matrix vs spring columns, frequency, ω=7, n=12",I,3.347945717609005e-10,1.0e-8,true
+"reciprocity of G_B,h, frequency, ω=7, n=12",I,1.7230311506123634e-9,1.0e-8,true
+"energy balance (max over arrays), frequency, ω=7, n=12",I,1.8710292093437886e-8,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, frequency, ω=7, n=12",I,6.536208019269907e-9,0.001,true
+"sponge reflection, frequency, ω=7, n=12",D,0.00034132185924087453,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10, n=12",I,7.535486800593031e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10, n=12",I,1.5411218805934223e-9,1.0e-8,true
+"energy balance (max over arrays), density, ω=10, n=12",I,7.29040799854307e-8,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10, n=12",I,2.9232000153811555e-9,0.001,true
+"sponge reflection, density, ω=10, n=12",D,0.001268314459506438,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.5, n=8",I,2.0016793485115332e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.5, n=8",I,2.470871547886793e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.5, n=8",I,1.6522401946605925e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.5, n=8",I,2.166268497916235e-9,0.001,true
+"sponge reflection, density, ω=9.5, n=8",D,0.0011182904225254652,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.525, n=8",I,9.741721562961535e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.525, n=8",I,1.2118603189070585e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.525, n=8",I,1.7534312768408e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.525, n=8",I,1.5891162830072858e-9,0.001,true
+"sponge reflection, density, ω=9.525, n=8",D,0.0011259441362775867,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.55, n=8",I,9.353752911837686e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.55, n=8",I,1.155214629222694e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.55, n=8",I,1.7148741937589307e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.55, n=8",I,9.328608774339386e-9,0.001,true
+"sponge reflection, density, ω=9.55, n=8",D,0.0011335819333063014,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.575, n=8",I,1.1301277242772643e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.575, n=8",I,1.2696164054552244e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.575, n=8",I,1.851698667731938e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.575, n=8",I,8.401699447269095e-9,0.001,true
+"sponge reflection, density, ω=9.575, n=8",D,0.001141209925908742,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.6, n=8",I,1.2480348852998152e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.6, n=8",I,3.716400847137581e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.6, n=8",I,1.7205661162478236e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.6, n=8",I,4.7136667902236695e-9,0.001,true
+"sponge reflection, density, ω=9.6, n=8",D,0.0011488157467961768,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.625, n=8",I,9.690076225043684e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.625, n=8",I,5.449736510390362e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.625, n=8",I,1.832699428883089e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.625, n=8",I,3.863755981825534e-9,0.001,true
+"sponge reflection, density, ω=9.625, n=8",D,0.0011564198703809495,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.65, n=8",I,1.9269094830024437e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.65, n=8",I,8.896457917585578e-11,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.65, n=8",I,1.8455244821247163e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.65, n=8",I,8.929946893054819e-9,0.001,true
+"sponge reflection, density, ω=9.65, n=8",D,0.0011639853495778922,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.675, n=8",I,2.0430317263980286e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.675, n=8",I,1.6090576700607596e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.675, n=8",I,1.6975048100498213e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.675, n=8",I,1.163205798349054e-8,0.001,true
+"sponge reflection, density, ω=9.675, n=8",D,0.0011715391959318594,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.7, n=8",I,5.746348249238883e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.7, n=8",I,5.636882943712961e-11,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.7, n=8",I,1.5709360545734796e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.7, n=8",I,1.5846524981100174e-8,0.001,true
+"sponge reflection, density, ω=9.7, n=8",D,0.0011790890743188641,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.725, n=8",I,5.223489820085393e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.725, n=8",I,1.9040975039811706e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.725, n=8",I,1.6353935960999877e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.725, n=8",I,1.63664859442747e-9,0.001,true
+"sponge reflection, density, ω=9.725, n=8",D,0.0011866097005860249,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.75, n=8",I,2.1136223806692423e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.75, n=8",I,5.867088942812059e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.75, n=8",I,1.5105217388011738e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.75, n=8",I,5.429713567650651e-9,0.001,true
+"sponge reflection, density, ω=9.75, n=8",D,0.0011941258673871136,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.775, n=8",I,1.5417329755134758e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.775, n=8",I,2.2415287406734063e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.775, n=8",I,1.4026310668491249e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.775, n=8",I,2.7568256566468108e-9,0.001,true
+"sponge reflection, density, ω=9.775, n=8",D,0.0012016283883765533,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.8, n=8",I,1.1104847745569383e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.8, n=8",I,2.9495885513826665e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.8, n=8",I,1.444809449857587e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.8, n=8",I,2.698145040724853e-9,0.001,true
+"sponge reflection, density, ω=9.8, n=8",D,0.0012090939428242,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.825, n=8",I,1.861295397952262e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.825, n=8",I,1.2620626780347795e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.825, n=8",I,1.3592608116841376e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.825, n=8",I,2.607033033896755e-9,0.001,true
+"sponge reflection, density, ω=9.825, n=8",D,0.0012165636362339587,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.85, n=8",I,1.0036766771366513e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.85, n=8",I,1.125403666918536e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.85, n=8",I,1.4202107734284652e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.85, n=8",I,6.762086557365876e-9,0.001,true
+"sponge reflection, density, ω=9.85, n=8",D,0.0012240083829224474,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.875, n=8",I,1.4888002969890438e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.875, n=8",I,2.3293743948600547e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.875, n=8",I,1.42739752462262e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.875, n=8",I,8.869782686105054e-9,0.001,true
+"sponge reflection, density, ω=9.875, n=8",D,0.001231437263193104,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.9, n=8",I,1.600786529502767e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.9, n=8",I,1.9118337614597894e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.9, n=8",I,1.4003313297816788e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.9, n=8",I,1.024593632159565e-9,0.001,true
+"sponge reflection, density, ω=9.9, n=8",D,0.0012388523374247619,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.925, n=8",I,9.16358282496953e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.925, n=8",I,2.612295220479325e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.925, n=8",I,1.4063804776309752e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.925, n=8",I,6.306675404132989e-9,0.001,true
+"sponge reflection, density, ω=9.925, n=8",D,0.0012462421236908567,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.95, n=8",I,1.6416910241716243e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.95, n=8",I,9.023957341732708e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.95, n=8",I,1.53314481554645e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.95, n=8",I,1.7754869796604567e-9,0.001,true
+"sponge reflection, density, ω=9.95, n=8",D,0.001253627629671585,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=9.975, n=8",I,4.642999764116697e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=9.975, n=8",I,2.3893391541140695e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=9.975, n=8",I,1.0941269918354028e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=9.975, n=8",I,1.5026015987018582e-9,0.001,true
+"sponge reflection, density, ω=9.975, n=8",D,0.0012609952441478792,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10, n=8",I,1.066208078971359e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10, n=8",I,4.685870976498014e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10, n=8",I,1.1559321011489487e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10, n=8",I,1.1645666209147976e-8,0.001,true
+"sponge reflection, density, ω=10, n=8",D,0.00126833289258057,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.03, n=8",I,8.69059311095909e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.03, n=8",I,2.4056349984934903e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.03, n=8",I,6.724402476871821e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.03, n=8",I,2.2293898394032396e-8,0.001,true
+"sponge reflection, density, ω=10.03, n=8",D,0.0012756567850204226,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.05, n=8",I,9.245928731183161e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.05, n=8",I,1.6589922428254105e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.05, n=8",I,3.264275959562997e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.05, n=8",I,1.5201444547585652e-9,0.001,true
+"sponge reflection, density, ω=10.05, n=8",D,0.0012829631826298828,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.07, n=8",I,2.500010543515953e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.07, n=8",I,3.30554325061057e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.07, n=8",I,1.3428315925878564e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.07, n=8",I,6.652254969097271e-9,0.001,true
+"sponge reflection, density, ω=10.07, n=8",D,0.0012902572725298628,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.1, n=8",I,3.678419437017506e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.1, n=8",I,8.746127307504553e-11,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.1, n=8",I,1.21587263812728e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.1, n=8",I,7.219336906061358e-9,0.001,true
+"sponge reflection, density, ω=10.1, n=8",D,0.0012975475110300198,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.12, n=8",I,1.5357458116282083e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.12, n=8",I,1.234076842393914e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.12, n=8",I,1.227472670173313e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.12, n=8",I,3.2644105196766304e-9,0.001,true
+"sponge reflection, density, ω=10.12, n=8",D,0.0013047840636487692,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.15, n=8",I,1.4392569727216052e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.15, n=8",I,1.7464717497083882e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.15, n=8",I,1.318512684589379e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.15, n=8",I,9.777590070925157e-9,0.001,true
+"sponge reflection, density, ω=10.15, n=8",D,0.001312019257530067,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.18, n=8",I,2.425799814736077e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.18, n=8",I,2.7713943664827323e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.18, n=8",I,1.2439428098698357e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.18, n=8",I,5.804908109752205e-9,0.001,true
+"sponge reflection, density, ω=10.18, n=8",D,0.0013192409454746588,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.2, n=8",I,2.42523679764235e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.2, n=8",I,2.4064654967758446e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.2, n=8",I,1.176172039762946e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.2, n=8",I,2.2923352105408412e-9,0.001,true
+"sponge reflection, density, ω=10.2, n=8",D,0.0013264438238821624,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.22, n=8",I,5.995106325514687e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.22, n=8",I,1.125806954143336e-9,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.22, n=8",I,1.0954885409919513e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.22, n=8",I,8.50382964046048e-9,0.001,true
+"sponge reflection, density, ω=10.22, n=8",D,0.0013336263555966013,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.25, n=8",I,6.36518196988509e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.25, n=8",I,1.849039770125774e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.25, n=8",I,9.888110585887233e-8,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.25, n=8",I,3.0836442288517674e-9,0.001,true
+"sponge reflection, density, ω=10.25, n=8",D,0.0013407933804276942,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.28, n=8",I,8.106028804206774e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.28, n=8",I,8.790206495659142e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.28, n=8",I,9.791844723938681e-8,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.28, n=8",I,4.6341352977208317e-10,0.001,true
+"sponge reflection, density, ω=10.28, n=8",D,0.0013479409370147771,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.3, n=8",I,2.5225373189745777e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.3, n=8",I,1.7807319911172189e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.3, n=8",I,1.2074826660768423e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.3, n=8",I,6.281986819622887e-9,0.001,true
+"sponge reflection, density, ω=10.3, n=8",D,0.0013550667099469752,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.32, n=8",I,1.3593236843429082e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.32, n=8",I,9.559848471830767e-11,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.32, n=8",I,1.0147087470269156e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.32, n=8",I,1.8383101707541982e-9,0.001,true
+"sponge reflection, density, ω=10.32, n=8",D,0.001362174748473525,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.35, n=8",I,1.1408997980084876e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.35, n=8",I,4.86791206919256e-11,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.35, n=8",I,1.0082632062591301e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.35, n=8",I,2.3974677798577204e-10,0.001,true
+"sponge reflection, density, ω=10.35, n=8",D,0.001369276868794152,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.38, n=8",I,1.1779572108499e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.38, n=8",I,8.667663024367243e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.38, n=8",I,9.385113153292934e-8,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.38, n=8",I,6.006345643072564e-9,0.001,true
+"sponge reflection, density, ω=10.38, n=8",D,0.0013763363102018116,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.4, n=8",I,3.628625556014836e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.4, n=8",I,1.8033766037829744e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.4, n=8",I,1.0876432920969847e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.4, n=8",I,3.1698620395204102e-9,0.001,true
+"sponge reflection, density, ω=10.4, n=8",D,0.001383393779454864,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.43, n=8",I,2.7020923315936524e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.43, n=8",I,2.714984069201427e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.43, n=8",I,1.0775330450130127e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.43, n=8",I,1.9365932191206525e-9,0.001,true
+"sponge reflection, density, ω=10.43, n=8",D,0.001390430566691947,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.45, n=8",I,7.159094900450276e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.45, n=8",I,1.1606281719744577e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.45, n=8",I,1.0200283240280328e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.45, n=8",I,2.1181234544087602e-10,0.001,true
+"sponge reflection, density, ω=10.45, n=8",D,0.0013974517286687185,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.47, n=8",I,2.120424947340078e-10,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.47, n=8",I,4.1797000945971126e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.47, n=8",I,1.1548958556151234e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.47, n=8",I,1.0250078563700527e-9,0.001,true
+"sponge reflection, density, ω=10.47, n=8",D,0.0014044443175460937,0.01,true
+"G_B,h evaluation matrix vs spring columns, density, ω=10.5, n=8",I,8.079182273163672e-11,1.0e-8,true
+"reciprocity of G_B,h, density, ω=10.5, n=8",I,1.0231613555934224e-10,1.0e-8,true
+"energy balance (max over arrays), density, ω=10.5, n=8",I,1.1498896435035988e-7,0.001,true
+"bare transmission W1 → W2, |T₀| − 1, density, ω=10.5, n=8",I,1.6529604351944727e-9,0.001,true
+"sponge reflection, density, ω=10.5, n=8",D,0.001411422449988967,0.01,true
+"peak within Δx/2 of x*, a=0.25, linear, uniform, ζ=0.02, ω=2",A,0.03915868531412091,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, uniform, ζ=0.02, ω=2",A,0.6318703253091094,2.0,true
+"peak within Δx/2 of x*, a=0.25, linear, uniform, ζ=0.05, ω=2",A,0.05,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, uniform, ζ=0.05, ω=2",A,1.002370830389981,2.0,true
+"peak within Δx/2 of x*, a=0.25, linear, graded, ζ=0.02, ω=2",A,0.12269938650306748,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, graded, ζ=0.02, ω=2",A,0.2903467201578568,2.0,false
+"peak within Δx/2 of x*, a=0.25, exp, graded, ζ=0.02, ω=2",A,0.33397492290859093,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, graded, ζ=0.02, ω=2",A,0.4981352195151168,2.0,false
+"peak within Δx/2 of x*, a=0.25, exp, uniform, ζ=0.05, ω=2",A,0.20937912434100325,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, uniform, ζ=0.05, ω=2",A,1.042606092090398,2.0,true
+"peak within Δx/2 of x*, a=0.25, exp, uniform, ζ=0.02, ω=2",A,0.1556622342744896,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, uniform, ζ=0.02, ω=2",A,0.671643296003506,2.0,true
+"peak within Δx/2 of x*, a=0.25, exp, uniform, ζ=0.01, ω=2",A,0.09300833777189615,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, uniform, ζ=0.01, ω=2",A,0.3408831234672743,2.0,false
+"peak within Δx/2 of x*, a=0.25, linear, uniform, ζ=0.01, ω=2",A,0.03915868531412091,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, uniform, ζ=0.01, ω=2",A,0.32203758270751753,2.0,false
+"peak within Δx/2 of x*, a=0.25, linear, uniform, ζ=0.02, ω=3",A,0.12370043406704537,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, uniform, ζ=0.02, ω=3",A,0.5036255932962467,2.0,true
+"peak within Δx/2 of x*, a=0.25, linear, uniform, ζ=0.05, ω=3",A,0.2833333333333333,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, uniform, ζ=0.05, ω=3",A,1.1585156932835199,2.0,true
+"peak within Δx/2 of x*, a=0.25, linear, graded, ζ=0.02, ω=3",A,0.2147239263803681,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, graded, ζ=0.02, ω=3",A,0.4558053122114305,2.0,false
+"peak within Δx/2 of x*, a=0.25, exp, graded, ζ=0.02, ω=3",A,0.5151705786867243,0.5,false
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, graded, ζ=0.02, ω=3",A,0.7943862087493994,2.0,true
+"peak within Δx/2 of x*, a=0.25, exp, uniform, ζ=0.05, ω=3",A,0.8097280432593607,0.5,false
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, uniform, ζ=0.05, ω=3",A,1.711471376680945,2.0,true
+"peak within Δx/2 of x*, a=0.25, exp, uniform, ζ=0.02, ω=3",A,0.386717290865203,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, uniform, ζ=0.02, ω=3",A,0.8344745687730446,2.0,true
+"peak within Δx/2 of x*, a=0.25, exp, uniform, ζ=0.01, ω=3",A,0.21176953411323884,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, uniform, ζ=0.01, ω=3",A,0.44936499232806376,2.0,false
+"peak within Δx/2 of x*, a=0.25, linear, uniform, ζ=0.01, ω=3",A,0.07068596232402592,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, uniform, ζ=0.01, ω=3",A,0.264013629014972,2.0,false
+"peak within Δx/2 of x*, a=0.25, linear, uniform, ζ=0.02, ω=5",A,0.23588404234060062,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, uniform, ζ=0.02, ω=5",A,0.6241289212260517,2.0,true
+"peak within Δx/2 of x*, a=0.25, linear, uniform, ζ=0.05, ω=5",A,0.6087330124918725,0.5,false
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, uniform, ζ=0.05, ω=5",A,1.5371661605957656,2.0,true
+"peak within Δx/2 of x*, a=0.25, linear, graded, ζ=0.02, ω=5",A,0.27607361963190186,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, graded, ζ=0.02, ω=5",A,0.6454625103660149,2.0,true
+"peak within Δx/2 of x*, a=0.25, exp, graded, ζ=0.02, ω=5",A,0.4855655249076395,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, graded, ζ=0.02, ω=5",A,0.8972690929199004,2.0,true
+"peak within Δx/2 of x*, a=0.25, exp, uniform, ζ=0.05, ω=5",A,1.0093339727601103,0.5,false
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, uniform, ζ=0.05, ω=5",A,1.8591223722047725,2.0,true
+"peak within Δx/2 of x*, a=0.25, exp, uniform, ζ=0.02, ω=5",A,0.44625593620512816,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, uniform, ζ=0.02, ω=5",A,0.9342781861512899,2.0,true
+"peak within Δx/2 of x*, a=0.25, exp, uniform, ζ=0.01, ω=5",A,0.22939480050489855,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, uniform, ζ=0.01, ω=5",A,0.5150239892780395,2.0,true
+"peak within Δx/2 of x*, a=0.25, linear, uniform, ζ=0.01, ω=5",A,0.1065282771860777,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, uniform, ζ=0.01, ω=5",A,0.31492751951722386,2.0,false
+"peak within Δx/2 of x*, a=0.25, linear, uniform, ζ=0.02, ω=7",A,0.3372697462880073,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, uniform, ζ=0.02, ω=7",A,0.8134224876709724,2.0,true
+"peak within Δx/2 of x*, a=0.25, linear, uniform, ζ=0.05, ω=7",A,0.8672650618834465,0.5,false
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, uniform, ζ=0.05, ω=7",A,1.9874112991132489,2.0,true
+"peak within Δx/2 of x*, a=0.25, linear, graded, ζ=0.02, ω=7",A,0.35495179666958854,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, graded, ζ=0.02, ω=7",A,0.796082358786133,2.0,true
+"peak within Δx/2 of x*, a=0.25, exp, graded, ζ=0.02, ω=7",A,0.45506100575909436,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, graded, ζ=0.02, ω=7",A,0.8659331301395276,2.0,true
+"peak within Δx/2 of x*, a=0.25, exp, uniform, ζ=0.05, ω=7",A,0.9893804225804779,0.5,false
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, uniform, ζ=0.05, ω=7",A,1.7816534495791,2.0,true
+"peak within Δx/2 of x*, a=0.25, exp, uniform, ζ=0.02, ω=7",A,0.4463761310567869,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, uniform, ζ=0.02, ω=7",A,0.9159794174425698,2.0,true
+"peak within Δx/2 of x*, a=0.25, exp, uniform, ζ=0.01, ω=7",A,0.2271507959695825,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, exp, uniform, ζ=0.01, ω=7",A,0.508443908595789,2.0,true
+"peak within Δx/2 of x*, a=0.25, linear, uniform, ζ=0.01, ω=7",A,0.1589985946786323,0.5,true
+"FWHM/Δx ∈ [0.5, 2], a=0.25, linear, uniform, ζ=0.01, ω=7",A,0.4088952785895039,2.0,false
+mass-graded exponential: max/min FWHM over ω,A,1.8012560802131181,1.3,false
+"taper vs abrupt, band-averaged |R|² ratio, L_g=5λ, ζ=0",A,0.7716651293188385,1.0,true
+"taper vs abrupt, band-averaged |R|² ratio, L_g=5λ, ζ=0.02",A,0.7938921351775555,1.0,true
+"taper vs abrupt, band-averaged |R|² ratio, L_g=20λ, ζ=0",A,0.8603940680081853,1.0,true
+"taper vs abrupt, band-averaged |R|² ratio, L_g=20λ, ζ=0.02",A,0.944644354299449,1.0,true
+"taper vs abrupt, band-averaged |R|² ratio, L_g=100λ, ζ=0",A,0.9197291309444761,1.0,true
+"taper vs abrupt, band-averaged |R|² ratio, L_g=100λ, ζ=0.02",A,0.9886410952102057,1.0,true
+"mesh 8 vs 12: peak shift/Δx, linear_a=0.25_zeta=0.02_uniform, ω=5",D,0.0,0.05,true
+"mesh 8 vs 12: FWHM, linear_a=0.25_zeta=0.02_uniform, ω=5",D,8.958949498283353e-5,0.05,true
+"mesh 8 vs 12: absorbed fraction, linear_a=0.25_zeta=0.02_uniform, ω=5",D,8.168224422400172e-7,0.01,true
+"mesh 8 vs 12: peak shift/Δx, linear_a=0.25_zeta=0.05_uniform, ω=5",D,0.0,0.05,true
+"mesh 8 vs 12: FWHM, linear_a=0.25_zeta=0.05_uniform, ω=5",D,4.652791866621708e-5,0.05,true
+"mesh 8 vs 12: absorbed fraction, linear_a=0.25_zeta=0.05_uniform, ω=5",D,8.183218843660356e-7,0.01,true
+"mesh 8 vs 12: peak shift/Δx, linear_a=0.25_zeta=0.02_graded, ω=5",D,0.0,0.05,true
+"mesh 8 vs 12: FWHM, linear_a=0.25_zeta=0.02_graded, ω=5",D,2.2471323873007876e-5,0.05,true
+"mesh 8 vs 12: absorbed fraction, linear_a=0.25_zeta=0.02_graded, ω=5",D,8.234594714995325e-7,0.01,true
+"mesh 8 vs 12: peak shift/Δx, exp_a=0.25_zeta=0.02_graded, ω=5",D,0.003067484662576687,0.05,true
+"mesh 8 vs 12: FWHM, exp_a=0.25_zeta=0.02_graded, ω=5",D,0.00013936590783925062,0.05,true
+"mesh 8 vs 12: absorbed fraction, exp_a=0.25_zeta=0.02_graded, ω=5",D,8.186286095668294e-7,0.01,true
+"mesh 8 vs 12: peak shift/Δx, exp_a=0.25_zeta=0.05_uniform, ω=5",D,0.0038045813280742037,0.05,true
+"mesh 8 vs 12: FWHM, exp_a=0.25_zeta=0.05_uniform, ω=5",D,1.3518136283363624e-5,0.05,true
+"mesh 8 vs 12: absorbed fraction, exp_a=0.25_zeta=0.05_uniform, ω=5",D,8.194690572782548e-7,0.01,true
+"mesh 8 vs 12: peak shift/Δx, exp_a=0.25_zeta=0.02_uniform, ω=5",D,0.0038045813280742037,0.05,true
+"mesh 8 vs 12: FWHM, exp_a=0.25_zeta=0.02_uniform, ω=5",D,7.96896665167246e-6,0.05,true
+"mesh 8 vs 12: absorbed fraction, exp_a=0.25_zeta=0.02_uniform, ω=5",D,8.196699344820146e-7,0.01,true
+"mesh 8 vs 12: peak shift/Δx, exp_a=0.25_zeta=0.01_uniform, ω=5",D,0.0038045813280742037,0.05,true
+"mesh 8 vs 12: FWHM, exp_a=0.25_zeta=0.01_uniform, ω=5",D,6.995567540402092e-5,0.05,true
+"mesh 8 vs 12: absorbed fraction, exp_a=0.25_zeta=0.01_uniform, ω=5",D,8.20884820340595e-7,0.01,true
+"mesh 8 vs 12: peak shift/Δx, linear_a=0.25_zeta=0.01_uniform, ω=5",D,0.0,0.05,true
+"mesh 8 vs 12: FWHM, linear_a=0.25_zeta=0.01_uniform, ω=5",D,0.00014294202856179883,0.05,true
+"mesh 8 vs 12: absorbed fraction, linear_a=0.25_zeta=0.01_uniform, ω=5",D,8.130300166442339e-7,0.01,true
+"mesh 8 vs 12: peak shift/Δx, linear_a=0.25_zeta=0.02_uniform, ω=7",D,0.0048181392326858115,0.05,true
+"mesh 8 vs 12: FWHM, linear_a=0.25_zeta=0.02_uniform, ω=7",D,4.717307150658989e-5,0.05,true
+"mesh 8 vs 12: absorbed fraction, linear_a=0.25_zeta=0.02_uniform, ω=7",D,3.9584126310110435e-8,0.01,true
+"mesh 8 vs 12: peak shift/Δx, linear_a=0.25_zeta=0.05_uniform, ω=7",D,0.0,0.05,true
+"mesh 8 vs 12: FWHM, linear_a=0.25_zeta=0.05_uniform, ω=7",D,5.6527215401169784e-5,0.05,true
+"mesh 8 vs 12: absorbed fraction, linear_a=0.25_zeta=0.05_uniform, ω=7",D,8.202394874423646e-9,0.01,true
+"mesh 8 vs 12: peak shift/Δx, linear_a=0.25_zeta=0.02_graded, ω=7",D,0.0,0.05,true
+"mesh 8 vs 12: FWHM, linear_a=0.25_zeta=0.02_graded, ω=7",D,4.1900374638803584e-5,0.05,true
+"mesh 8 vs 12: absorbed fraction, linear_a=0.25_zeta=0.02_graded, ω=7",D,6.119439210916511e-8,0.01,true
+"mesh 8 vs 12: peak shift/Δx, exp_a=0.25_zeta=0.02_graded, ω=7",D,0.003067484662576687,0.05,true
+"mesh 8 vs 12: FWHM, exp_a=0.25_zeta=0.02_graded, ω=7",D,7.52633757850063e-6,0.05,true
+"mesh 8 vs 12: absorbed fraction, exp_a=0.25_zeta=0.02_graded, ω=7",D,5.498896082922755e-8,0.01,true
+"mesh 8 vs 12: peak shift/Δx, exp_a=0.25_zeta=0.05_uniform, ω=7",D,0.003372697462880068,0.05,true
+"mesh 8 vs 12: FWHM, exp_a=0.25_zeta=0.05_uniform, ω=7",D,3.3889149375632144e-7,0.05,true
+"mesh 8 vs 12: absorbed fraction, exp_a=0.25_zeta=0.05_uniform, ω=7",D,3.251121594161077e-9,0.01,true
+"mesh 8 vs 12: peak shift/Δx, exp_a=0.25_zeta=0.02_uniform, ω=7",D,0.0,0.05,true
+"mesh 8 vs 12: FWHM, exp_a=0.25_zeta=0.02_uniform, ω=7",D,1.43250610136203e-5,0.05,true
+"mesh 8 vs 12: absorbed fraction, exp_a=0.25_zeta=0.02_uniform, ω=7",D,2.3429449713674444e-8,0.01,true
+"mesh 8 vs 12: peak shift/Δx, exp_a=0.25_zeta=0.01_uniform, ω=7",D,0.0,0.05,true
+"mesh 8 vs 12: FWHM, exp_a=0.25_zeta=0.01_uniform, ω=7",D,5.022954603828289e-5,0.05,true
+"mesh 8 vs 12: absorbed fraction, exp_a=0.25_zeta=0.01_uniform, ω=7",D,3.841485474165296e-8,0.01,true
+"mesh 8 vs 12: peak shift/Δx, linear_a=0.25_zeta=0.01_uniform, ω=7",D,0.0,0.05,true
+"mesh 8 vs 12: FWHM, linear_a=0.25_zeta=0.01_uniform, ω=7",D,3.82765499176152e-5,0.05,true
+"mesh 8 vs 12: absorbed fraction, linear_a=0.25_zeta=0.01_uniform, ω=7",D,5.6570275130951586e-8,0.01,true
+"mesh 8 vs 12: |R|, abrupt_Lg=5.0lambda_zeta=0.02, ω=10",D,7.454654544714057e-6,0.01,true
+"mesh 8 vs 12: |R|, taper_Lg=1.0lambda_zeta=0.0, ω=10",D,3.814792951528645e-6,0.01,true
+"mesh 8 vs 12: |R|, taper_Lg=100.0lambda_zeta=0.0, ω=10",D,4.759034902679371e-5,0.01,true
+"mesh 8 vs 12: |R|, taper_Lg=1.0lambda_zeta=0.02, ω=10",D,5.732164876093293e-7,0.01,true
+"mesh 8 vs 12: |R|, abrupt_Lg=1.0lambda_zeta=0.02, ω=10",D,2.1064771385526093e-6,0.01,true
+"mesh 8 vs 12: |R|, taper_Lg=5.0lambda_zeta=0.0, ω=10",D,5.959176630598861e-6,0.01,true
+"mesh 8 vs 12: |R|, abrupt_Lg=100.0lambda_zeta=0.0, ω=10",D,1.7996739691827912e-5,0.01,true
+"mesh 8 vs 12: |R|, abrupt_Lg=20.0lambda_zeta=0.0, ω=10",D,0.001554328517582304,0.01,true
+"mesh 8 vs 12: |R|, abrupt_Lg=20.0lambda_zeta=0.02, ω=10",D,7.385146676419652e-6,0.01,true
+"mesh 8 vs 12: |R|, taper_Lg=100.0lambda_zeta=0.02, ω=10",D,7.32347109272391e-6,0.01,true
+"mesh 8 vs 12: |R|, abrupt_Lg=5.0lambda_zeta=0.0, ω=10",D,0.0005427577412884244,0.01,true
+"mesh 8 vs 12: |R|, taper_Lg=20.0lambda_zeta=0.0, ω=10",D,5.602318073893997e-7,0.01,true
+"mesh 8 vs 12: |R|, abrupt_Lg=100.0lambda_zeta=0.02, ω=10",D,7.3851371338862215e-6,0.01,true
+"mesh 8 vs 12: |R|, taper_Lg=5.0lambda_zeta=0.02, ω=10",D,6.237402062625463e-6,0.01,true
+"mesh 8 vs 12: |R|, taper_Lg=20.0lambda_zeta=0.02, ω=10",D,7.081010051257497e-6,0.01,true
+"mesh 8 vs 12: |R|, abrupt_Lg=1.0lambda_zeta=0.0, ω=10",D,3.5066906525105246e-5,0.01,true

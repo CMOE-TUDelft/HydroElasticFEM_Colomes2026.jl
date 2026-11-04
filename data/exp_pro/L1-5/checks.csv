@@ -1,0 +1,37 @@
+name,kind,value,tolerance,passed
+"ω_X, finest mesh, T=0, p=2",D,1.2169358478475445e-5,0.0001,true
+"ω_Γ, finest mesh, T=0, p=2",D,1.7006457544432863e-6,0.0001,true
+"gap ω_Γ − ω_X, finest mesh, T=0, p=2",D,0.00029556593520341234,0.001,true
+"band samples, finest mesh, T=0, p=2",D,4.559637108991765e-6,0.0001,true
+"bare ω₀(π/a), finest mesh, T=0, p=2",D,8.329161281173114e-5,0.0001,true
+"rate err_X, T=0, p=2",D,1.9946272811829933,1.7,true
+"rate err_gamma, T=0, p=2",D,1.9627681711578115,1.7,true
+"rate err_bare, T=0, p=2",D,1.9998448625365277,1.7,true
+"Bloch projection leakage, T=0, p=2",I,5.305633574112429e-13,1.0e-6,true
+"ω_X, finest mesh, T=0, p=3",D,1.7002443897240482e-10,0.0001,true
+"ω_Γ, finest mesh, T=0, p=3",D,2.76667577736589e-13,0.0001,true
+"gap ω_Γ − ω_X, finest mesh, T=0, p=3",D,4.819835641711734e-9,0.001,true
+"band samples, finest mesh, T=0, p=3",D,9.049938576310979e-11,0.0001,true
+"bare ω₀(π/a), finest mesh, T=0, p=3",D,3.2159719332014447e-10,0.0001,true
+"Bloch projection leakage, T=0, p=3",I,4.554205034549363e-12,1.0e-6,true
+"ω_X closer to lattice sum than to ω₋(π/a) (ratio), T=0, p=3",M,9.85230956879468e-9,0.01,true
+"ω_Γ closer to lattice sum than to ω_r (ratio), T=0, p=3",M,1.936508140627838e-10,0.01,true
+"gap / anticrossing width, T=0, p=3",M,0.20795938406068384,0.5,true
+"ω_X, finest mesh, T=9.8, p=2",D,1.3636825884066894e-6,0.0001,true
+"ω_Γ, finest mesh, T=9.8, p=2",D,1.0269616683711291e-6,0.0001,true
+"gap ω_Γ − ω_X, finest mesh, T=9.8, p=2",D,4.422061812059397e-5,0.001,true
+"band samples, finest mesh, T=9.8, p=2",D,1.559339123602399e-6,0.0001,true
+"bare ω₀(π/a), finest mesh, T=9.8, p=2",D,3.106918740325426e-5,0.0001,true
+"rate err_X, T=9.8, p=2",D,1.9585785897568466,1.7,true
+"rate err_gamma, T=9.8, p=2",D,1.9431993423498057,1.7,true
+"rate err_bare, T=9.8, p=2",D,2.000515388624248,1.7,true
+"Bloch projection leakage, T=9.8, p=2",I,1.1050734327014798e-11,1.0e-6,true
+"ω_X, finest mesh, T=9.8, p=3",D,2.5295321393059567e-12,0.0001,true
+"ω_Γ, finest mesh, T=9.8, p=3",D,1.0262901639634947e-12,0.0001,true
+"gap ω_Γ − ω_X, finest mesh, T=9.8, p=3",D,2.0097012942699166e-10,0.001,true
+"band samples, finest mesh, T=9.8, p=3",D,2.578715019296851e-11,0.0001,true
+"bare ω₀(π/a), finest mesh, T=9.8, p=3",D,3.0938118733558895e-10,0.0001,true
+"Bloch projection leakage, T=9.8, p=3",I,7.093493267122117e-13,1.0e-6,true
+"ω_X closer to lattice sum than to ω₋(π/a) (ratio), T=9.8, p=3",M,5.87923276621908e-10,0.01,true
+"ω_Γ closer to lattice sum than to ω_r (ratio), T=9.8, p=3",M,1.056365112374015e-9,0.01,true
+"gap / anticrossing width, T=9.8, p=3",M,0.05367984952406589,0.5,true

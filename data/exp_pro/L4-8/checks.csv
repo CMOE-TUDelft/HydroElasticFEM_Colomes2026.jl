@@ -1,0 +1,228 @@
+name,kind,value,tolerance,passed
+"residual (S_ff, every RHS, and forced full solve), L_y=20, H=10, sym, main",I,6.327147443136664e-11,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=20, H=10, sym, main",I,1.5106108306162052e-15,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=20, H=10, sym, main",I,5.966382656171808e-13,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=20, H=10, sym, main",I,2.1094237467877974e-15,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=20, H=10, sym, main",I,4.035123522760988e-8,1.0e-8,false
+"METIS ordering used (0 = yes), L_y=20, H=10, sym, main",I,0.0,0.0,true
+"square: K_B, M_B, A_B invariant under x↔y, L_y=20, H=10, sym, main",I,5.499149025852071e-13,1.0e-8,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=20, H=10, sym, main",I,0.39600572570101855,0.3,true
+"hybrid pair identified: projection ≥ 0.2, L_y=20, H=10, sym, main",I,0.999999949027727,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=20, H=10, sym, main",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=20, H=10, sym, main",D,0.00012283314358363384,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=20, H=10, sym, main",D,0.00013938281162784172,0.001,true
+"forced response to the target load at ω_ref: reduced vs FE, L_y=20, H=10, sym, main",D,0.000837069350318098,0.02,true
+"splitting vs √μ_mode (L2-5: 1–6.5 %), L_y=20, H=10, sym, main",A,0.01921925856123008,0.1,true
+"residual (S_ff, every RHS, and forced full solve), L_y=20, H=10, anti, main",I,1.2011031020320857e-10,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=20, H=10, anti, main",I,1.2839322651739112e-15,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=20, H=10, anti, main",I,5.811206724190393e-13,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=20, H=10, anti, main",I,1.887379141862766e-15,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=20, H=10, anti, main",I,2.6439399809077782e-8,1.0e-8,false
+"METIS ordering used (0 = yes), L_y=20, H=10, anti, main",I,0.0,0.0,true
+"square: K_B, M_B, A_B invariant under x↔y, L_y=20, H=10, anti, main",I,6.70878082360117e-13,1.0e-8,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=20, H=10, anti, main",I,0.8193863451048994,0.3,true
+"hybrid pair identified: projection ≥ 0.2, L_y=20, H=10, anti, main",I,0.9999999634548985,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=20, H=10, anti, main",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=20, H=10, anti, main",D,0.00015012201833841665,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=20, H=10, anti, main",D,0.00023217012554899163,0.001,true
+"forced response to the target load at ω_ref: reduced vs FE, L_y=20, H=10, anti, main",D,0.001103323836251311,0.02,true
+"splitting vs √μ_mode (L2-5: 1–6.5 %), L_y=20, H=10, anti, main",A,0.1280634966292833,0.1,false
+"residual (S_ff, every RHS, and forced full solve), L_y=40, H=10, m10, main",I,7.556253291901328e-11,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=40, H=10, m10, main",I,1.2541108995070158e-15,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=40, H=10, m10, main",I,4.4605604859915566e-13,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=40, H=10, m10, main",I,3.552713678800501e-15,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=40, H=10, m10, main",I,4.305116842414431e-8,1.0e-8,false
+"METIS ordering used (0 = yes), L_y=40, H=10, m10, main",I,0.0,0.0,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=40, H=10, m10, main",I,0.5064986660520241,0.3,true
+"hybrid pair identified: projection ≥ 0.2, L_y=40, H=10, m10, main",I,0.9999999534558475,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=40, H=10, m10, main",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=40, H=10, m10, main",D,0.0002554881383334262,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=40, H=10, m10, main",D,0.00016880383883677297,0.001,true
+"forced response to the target load at ω_ref: reduced vs FE, L_y=40, H=10, m10, main",D,0.0004861276700212599,0.02,true
+"splitting vs √μ_mode (L2-5: 1–6.5 %), L_y=40, H=10, m10, main",A,0.031201086305727932,0.1,true
+"residual (S_ff, every RHS, and forced full solve), L_y=40, H=10, m01, main",I,7.67708653070431e-12,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=40, H=10, m01, main",I,9.132306971977161e-16,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=40, H=10, m01, main",I,1.3136537302283759e-12,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=40, H=10, m01, main",I,5.773159728050814e-15,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=40, H=10, m01, main",I,7.197023825039223e-10,1.0e-8,true
+"METIS ordering used (0 = yes), L_y=40, H=10, m01, main",I,0.0,0.0,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=40, H=10, m01, main",I,0.5609110242569264,0.3,true
+"hybrid pair identified: projection ≥ 0.2, L_y=40, H=10, m01, main",I,0.9999999998593362,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=40, H=10, m01, main",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=40, H=10, m01, main",D,3.143238092029321e-8,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=40, H=10, m01, main",D,0.00015735936759098124,0.001,true
+"forced response to the target load at ω_ref: reduced vs FE, L_y=40, H=10, m01, main",D,0.0006132442361865143,0.02,true
+"splitting vs √μ_mode (L2-5: 1–6.5 %), L_y=40, H=10, m01, main",A,0.08334033677812003,0.1,true
+"residual (S_ff, every RHS, and forced full solve), L_y=80, H=10, m10, main",I,1.1197292235078353e-11,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=80, H=10, m10, main",I,1.1510119922512749e-15,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=80, H=10, m10, main",I,6.281028717083493e-13,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=80, H=10, m10, main",I,9.547918011776346e-15,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=80, H=10, m10, main",I,4.026518644654509e-8,1.0e-8,false
+"METIS ordering used (0 = yes), L_y=80, H=10, m10, main",I,0.0,0.0,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=80, H=10, m10, main",I,0.1357403187774966,0.3,false
+"hybrid pair identified: projection ≥ 0.2, L_y=80, H=10, m10, main",I,0.999999236837377,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=80, H=10, m10, main",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=80, H=10, m10, main",D,0.031046122788407904,0.01,false
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=80, H=10, m10, main",D,0.0018017228607316582,0.001,false
+"forced response to the target load at ω_ref: reduced vs FE, L_y=80, H=10, m10, main",D,0.005586489526469852,0.02,true
+"splitting vs √μ_mode (L2-5: 1–6.5 %), L_y=80, H=10, m10, main",A,0.06397790641682222,0.1,true
+"residual (S_ff, every RHS, and forced full solve), L_y=80, H=10, m01, main",I,4.915207779322586e-11,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=80, H=10, m01, main",I,4.0652142931893653e-16,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=80, H=10, m01, main",I,1.1407014503007191e-12,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=80, H=10, m01, main",I,6.772360450213455e-15,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=80, H=10, m01, main",I,3.5586052347347736e-12,1.0e-8,true
+"METIS ordering used (0 = yes), L_y=80, H=10, m01, main",I,0.0,0.0,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=80, H=10, m01, main",I,0.5986970591227899,0.3,true
+"hybrid pair identified: projection ≥ 0.2, L_y=80, H=10, m01, main",I,0.9999999999944709,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=80, H=10, m01, main",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=80, H=10, m01, main",D,0.00011183284858795606,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=80, H=10, m01, main",D,2.8532960452354317e-5,0.001,true
+"forced response to the target load at ω_ref: reduced vs FE, L_y=80, H=10, m01, main",D,0.0016350568991108335,0.02,true
+"splitting vs √μ_mode (L2-5: 1–6.5 %), L_y=80, H=10, m01, main",A,0.14949849843698382,0.1,false
+"residual (S_ff, every RHS, and forced full solve), L_y=20, H=50, sym, main",I,1.7651922701099097e-11,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=20, H=50, sym, main",I,1.2763587766782248e-15,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=20, H=50, sym, main",I,6.881670831451897e-13,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=20, H=50, sym, main",I,6.661338147750939e-16,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=20, H=50, sym, main",I,6.67346235956272e-8,1.0e-8,false
+"METIS ordering used (0 = yes), L_y=20, H=50, sym, main",I,0.0,0.0,true
+"square: K_B, M_B, A_B invariant under x↔y, L_y=20, H=50, sym, main",I,7.347131876271679e-13,1.0e-8,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=20, H=50, sym, main",I,0.41279998702231235,0.3,true
+"hybrid pair identified: projection ≥ 0.2, L_y=20, H=50, sym, main",I,0.9999999503980664,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=20, H=50, sym, main",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=20, H=50, sym, main",D,0.00011020913251802433,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=20, H=50, sym, main",D,0.00014917851334361742,0.001,true
+"forced response to the target load at ω_ref: reduced vs FE, L_y=20, H=50, sym, main",D,0.0008344929689850323,0.02,true
+"splitting vs √μ_mode (L2-5: 1–6.5 %), L_y=20, H=50, sym, main",A,0.028066680662041765,0.1,true
+"residual (S_ff, every RHS, and forced full solve), L_y=20, H=50, anti, main",I,6.353786034576831e-11,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=20, H=50, anti, main",I,1.220473313258592e-15,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=20, H=50, anti, main",I,7.367522212752342e-13,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=20, H=50, anti, main",I,1.3322676295501878e-15,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=20, H=50, anti, main",I,5.762522901241037e-8,1.0e-8,false
+"METIS ordering used (0 = yes), L_y=20, H=50, anti, main",I,0.0,0.0,true
+"square: K_B, M_B, A_B invariant under x↔y, L_y=20, H=50, anti, main",I,6.591982802051637e-13,1.0e-8,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=20, H=50, anti, main",I,0.8214494627556753,0.3,true
+"hybrid pair identified: projection ≥ 0.2, L_y=20, H=50, anti, main",I,0.9999999637623422,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=20, H=50, anti, main",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=20, H=50, anti, main",D,0.00014713495315832326,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=20, H=50, anti, main",D,0.00023325954485931,0.001,true
+"forced response to the target load at ω_ref: reduced vs FE, L_y=20, H=50, anti, main",D,0.0011056133092913196,0.02,true
+"splitting vs √μ_mode (L2-5: 1–6.5 %), L_y=20, H=50, anti, main",A,0.13108560913089096,0.1,false
+"residual (S_ff, every RHS, and forced full solve), L_y=40, H=50, m10, main",I,4.5901967677272534e-11,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=40, H=50, m10, main",I,8.715741162530648e-16,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=40, H=50, m10, main",I,4.2999737570005106e-13,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=40, H=50, m10, main",I,1.1102230246251565e-16,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=40, H=50, m10, main",I,9.233454758670008e-8,1.0e-8,false
+"METIS ordering used (0 = yes), L_y=40, H=50, m10, main",I,0.0,0.0,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=40, H=50, m10, main",I,0.5246801213493271,0.3,true
+"hybrid pair identified: projection ≥ 0.2, L_y=40, H=50, m10, main",I,0.9999999588235183,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=40, H=50, m10, main",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=40, H=50, m10, main",D,0.0001967370635316268,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=40, H=50, m10, main",D,0.00017772722367115357,0.001,true
+"forced response to the target load at ω_ref: reduced vs FE, L_y=40, H=50, m10, main",D,0.0005018637011505335,0.02,true
+"splitting vs √μ_mode (L2-5: 1–6.5 %), L_y=40, H=50, m10, main",A,0.04278594243531875,0.1,true
+"residual (S_ff, every RHS, and forced full solve), L_y=40, H=50, m01, main",I,8.147570474902829e-12,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=40, H=50, m01, main",I,9.618324820929243e-16,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=40, H=50, m01, main",I,1.2301035525397153e-12,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=40, H=50, m01, main",I,1.021405182655144e-14,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=40, H=50, m01, main",I,3.609838089344078e-8,1.0e-8,false
+"METIS ordering used (0 = yes), L_y=40, H=50, m01, main",I,0.0,0.0,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=40, H=50, m01, main",I,0.6022566519499556,0.3,true
+"hybrid pair identified: projection ≥ 0.2, L_y=40, H=50, m01, main",I,0.9999999998647657,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=40, H=50, m01, main",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=40, H=50, m01, main",D,2.7669828817300512e-5,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=40, H=50, m01, main",D,0.0001752811177995195,0.001,true
+"forced response to the target load at ω_ref: reduced vs FE, L_y=40, H=50, m01, main",D,0.000644748533969229,0.02,true
+"splitting vs √μ_mode (L2-5: 1–6.5 %), L_y=40, H=50, m01, main",A,0.09982874884544524,0.1,true
+"residual (S_ff, every RHS, and forced full solve), L_y=80, H=50, m10, main",I,1.5120018656194282e-11,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=80, H=50, m10, main",I,1.0443620132085313e-15,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=80, H=50, m10, main",I,3.904627537089182e-13,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=80, H=50, m10, main",I,4.440892098500626e-15,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=80, H=50, m10, main",I,1.1516065637218955e-7,1.0e-8,false
+"METIS ordering used (0 = yes), L_y=80, H=50, m10, main",I,0.0,0.0,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=80, H=50, m10, main",I,0.27991217676873525,0.3,false
+"hybrid pair identified: projection ≥ 0.2, L_y=80, H=50, m10, main",I,0.9999999303273657,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=80, H=50, m10, main",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=80, H=50, m10, main",D,0.008111484425091575,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=80, H=50, m10, main",D,0.002765463464905471,0.001,false
+"forced response to the target load at ω_ref: reduced vs FE, L_y=80, H=50, m10, main",D,0.006329044252999603,0.02,true
+"splitting vs √μ_mode (L2-5: 1–6.5 %), L_y=80, H=50, m10, main",A,0.042412137394340244,0.1,true
+"residual (S_ff, every RHS, and forced full solve), L_y=80, H=50, m01, main",I,5.0196733040036515e-12,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=80, H=50, m01, main",I,6.395960403837734e-16,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=80, H=50, m01, main",I,2.640817831495786e-12,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=80, H=50, m01, main",I,1.3322676295501878e-14,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=80, H=50, m01, main",I,1.3737778011571624e-8,1.0e-8,false
+"METIS ordering used (0 = yes), L_y=80, H=50, m01, main",I,0.0,0.0,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=80, H=50, m01, main",I,0.47003750969689784,0.3,true
+"hybrid pair identified: projection ≥ 0.2, L_y=80, H=50, m01, main",I,0.9999999999974779,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=80, H=50, m01, main",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=80, H=50, m01, main",D,0.00017377675147189908,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=80, H=50, m01, main",D,4.603045967344066e-5,0.001,true
+"forced response to the target load at ω_ref: reduced vs FE, L_y=80, H=50, m01, main",D,0.0009260217807096638,0.02,true
+"splitting vs √μ_mode (L2-5: 1–6.5 %), L_y=80, H=50, m01, main",A,0.18493695225677054,0.1,false
+"residual (S_ff, every RHS, and forced full solve), L_y=40, H=10, m10, buffer",I,9.127745844652923e-11,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=40, H=10, m10, buffer",I,1.201802087087744e-15,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=40, H=10, m10, buffer",I,4.335922796595072e-13,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=40, H=10, m10, buffer",I,3.9968028886505635e-15,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=40, H=10, m10, buffer",I,3.6234001282402796e-9,1.0e-8,true
+"METIS ordering used (0 = yes), L_y=40, H=10, m10, buffer",I,0.0,0.0,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=40, H=10, m10, buffer",I,0.5014327220172486,0.3,true
+"hybrid pair identified: projection ≥ 0.2, L_y=40, H=10, m10, buffer",I,0.9999999536049338,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=40, H=10, m10, buffer",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=40, H=10, m10, buffer",D,0.00021856600483483035,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=40, H=10, m10, buffer",D,0.0001717008060451164,0.001,true
+"forced response to the target load at ω_ref: reduced vs FE, L_y=40, H=10, m10, buffer",D,0.0004887991677857087,0.02,true
+"residual (S_ff, every RHS, and forced full solve), L_y=40, H=10, m01, buffer",I,1.206939075261367e-10,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=40, H=10, m01, buffer",I,9.40364822236819e-16,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=40, H=10, m01, buffer",I,1.1302197312796233e-12,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=40, H=10, m01, buffer",I,2.6645352591003757e-15,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=40, H=10, m01, buffer",I,2.6156952496346503e-11,1.0e-8,true
+"METIS ordering used (0 = yes), L_y=40, H=10, m01, buffer",I,0.0,0.0,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=40, H=10, m01, buffer",I,0.5599586562913701,0.3,true
+"hybrid pair identified: projection ≥ 0.2, L_y=40, H=10, m01, buffer",I,0.9999999998587159,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=40, H=10, m01, buffer",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=40, H=10, m01, buffer",D,3.2042373420915204e-5,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=40, H=10, m01, buffer",D,0.00015874454904030166,0.001,true
+"forced response to the target load at ω_ref: reduced vs FE, L_y=40, H=10, m01, buffer",D,0.0006137297106815648,0.02,true
+"residual (S_ff, every RHS, and forced full solve), L_y=40, H=10, m10, mesh",I,2.933043703889373e-10,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=40, H=10, m10, mesh",I,4.013325217164729e-15,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=40, H=10, m10, mesh",I,2.3012294371191725e-12,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=40, H=10, m10, mesh",I,1.532107773982716e-14,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=40, H=10, m10, mesh",I,4.2918175387706e-8,1.0e-8,false
+"METIS ordering used (0 = yes), L_y=40, H=10, m10, mesh",I,0.0,0.0,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=40, H=10, m10, mesh",I,0.5061966437388261,0.3,true
+"hybrid pair identified: projection ≥ 0.2, L_y=40, H=10, m10, mesh",I,0.9999999537963121,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=40, H=10, m10, mesh",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=40, H=10, m10, mesh",D,0.0002568730345728909,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=40, H=10, m10, mesh",D,0.0001655403323572724,0.001,true
+"forced response to the target load at ω_ref: reduced vs FE, L_y=40, H=10, m10, mesh",D,0.0005621406755241242,0.02,true
+"residual (S_ff, every RHS, and forced full solve), L_y=40, H=10, m01, mesh",I,3.5611611725976014e-11,1.0e-8,true
+"S_ss linear in ω² (third grid ω), L_y=40, H=10, m01, mesh",I,1.3354071956035676e-15,1.0e-8,true
+"dry mass M_B = m_ρ N, L_y=40, H=10, m01, mesh",I,2.626245238679209e-12,1.0e-8,true
+"heave stiffness K_B,00 = g·area, L_y=40, H=10, m01, mesh",I,1.7763568394002505e-15,1.0e-8,true
+"symmetry of Re A_B (reciprocity), L_y=40, H=10, m01, mesh",I,7.153146306983069e-10,1.0e-8,true
+"METIS ordering used (0 = yes), L_y=40, H=10, m01, mesh",I,0.0,0.0,true
+"wet mode identified: MAC(ψ, dry target) ≥ 0.3, L_y=40, H=10, m01, mesh",I,0.5605515716527599,0.3,true
+"hybrid pair identified: projection ≥ 0.2, L_y=40, H=10, m01, mesh",I,0.99999999986075,0.2,true
+"ω_mn, ω± inside the interpolation grid (0 = yes), L_y=40, H=10, m01, mesh",I,0.0,0.0,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: splitting, L_y=40, H=10, m01, mesh",D,3.768321777952721e-6,0.01,true
+"basis truncation {0,1,3,5} vs {0,1,3,5,7}: ω_mn, L_y=40, H=10, m01, mesh",D,0.00015694615114125732,0.001,true
+"forced response to the target load at ω_ref: reduced vs FE, L_y=40, H=10, m01, mesh",D,0.0005729795398608314,0.02,true
+"buffer variant: splitting, L_y=40, H=10, m10",D,0.00649361291136108,0.02,true
+"buffer variant: ω_mn, L_y=40, H=10, m10",D,0.000495635733722688,0.002,true
+"buffer variant: splitting, L_y=40, H=10, m01",D,0.0043935109462589494,0.02,true
+"buffer variant: ω_mn, L_y=40, H=10, m01",D,0.00017021607059164445,0.002,true
+"mesh variant: splitting, L_y=40, H=10, m10",D,0.0001699147787292965,0.02,true
+"mesh variant: ω_mn, L_y=40, H=10, m10",D,4.316391906522554e-5,0.002,true
+"mesh variant: splitting, L_y=40, H=10, m01",D,0.00020998535907867932,0.02,true
+"mesh variant: ω_mn, L_y=40, H=10, m01",D,6.302887169251647e-5,0.002,true
+"2D Ritz vs L2-5 eigWet: ω₁, L=23, H=10",A,3.66974068162218e-5,0.002,true
+"2D Ritz vs L2-5 eigWet: splitting, L=23, H=10",A,7.213827176100196e-5,0.02,true
+"2D Ritz vs L2-5 eigWet: ω₁, L=46, H=10",A,3.0094258335333635e-5,0.002,true
+"2D Ritz vs L2-5 eigWet: splitting, L=46, H=10",A,8.704781821178287e-5,0.02,true
+"trend: μ₁₀/μ₀₁ increases with L_y/L_x (min step ratio), H=10",A,1.7516450425257164,1.000001,true
+"μ₁₀/μ₀₁ vs eq:mode_dilution (finite H), L_y/L_x=2, H=10",A,0.27482404962558016,0.25,false
+"μ₁₀/μ₀₁ vs eq:mode_dilution (finite H), L_y/L_x=4, H=10",A,0.5926943794043964,0.25,false
+"trend: μ₁₀/μ₀₁ increases with L_y/L_x (min step ratio), H=50",A,1.6222633182369934,1.000001,true
+"μ₁₀/μ₀₁ vs eq:mode_dilution (finite H), L_y/L_x=2, H=50",A,0.15643588511347928,0.25,true
+"μ₁₀/μ₀₁ vs eq:mode_dilution (finite H), L_y/L_x=4, H=50",A,0.31903631049380154,0.25,false
+"deep water (H=50): exponent of μ₁₀/μ₀₁ vs L_y/L_x, |s − 1|",A,0.20750754699529972,0.3,true

@@ -1,0 +1,59 @@
+name,kind,value,tolerance,passed
+"splitting vs lattice sums, T=0, C=0.049, H=10, ωr=10, ε=1/4",D,2.0200703332307057e-9,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.049, H=10, ωr=10, ε=1/4",D,3.626197120354391e-10,0.0001,true
+"splitting vs lattice sums, T=0, C=0.049, H=10, ωr=10, ε=1/8",D,1.2279466332643096e-10,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.049, H=10, ωr=10, ε=1/8",D,1.2696665940836738e-10,0.0001,true
+"splitting vs lattice sums, T=0, C=0.049, H=10, ωr=10, ε=1/16",D,1.8077046526343565e-9,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.049, H=10, ωr=10, ε=1/16",D,2.060089876465554e-10,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=2, ωr=10, ε=1/4",D,1.4727956632043515e-9,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=2, ωr=10, ε=1/4",D,5.600304664454825e-10,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=2, ωr=10, ε=1/8",D,1.2385997782971003e-9,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=2, ωr=10, ε=1/8",D,3.292801586951555e-10,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=2, ωr=10, ε=1/16",D,5.05936215144942e-9,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=2, ωr=10, ε=1/16",D,4.77112349628328e-10,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=10, ωr=2, ε=1/4",D,6.2723437554979e-10,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=10, ωr=2, ε=1/4",D,1.1090144358405496e-9,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=10, ωr=2, ε=1/8",D,4.0524827937815644e-10,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=10, ωr=2, ε=1/8",D,2.524773723422413e-10,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=10, ωr=2, ε=1/16",D,2.374713758968028e-10,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=10, ωr=2, ε=1/16",D,7.571632210101598e-11,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=10, ωr=5, ε=1/4",D,7.979394922585925e-12,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=10, ωr=5, ε=1/4",D,2.2066259930397791e-10,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=10, ωr=5, ε=1/8",D,3.749698329613693e-10,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=10, ωr=5, ε=1/8",D,6.68343158594098e-11,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=10, ωr=5, ε=1/16",D,2.207343197113687e-10,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=10, ωr=5, ε=1/16",D,8.312683874578397e-11,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=10, ωr=10, ε=1/4",D,1.1039948955016143e-9,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=10, ωr=10, ε=1/4",D,3.3186320358424837e-10,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=10, ωr=10, ε=1/8",D,2.2046396930264223e-9,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=10, ωr=10, ε=1/8",D,2.3922752667715486e-10,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=10, ωr=10, ε=1/16",D,1.5623515814411348e-9,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=10, ωr=10, ε=1/16",D,5.07948128003477e-10,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=100, ωr=10, ε=1/4",D,2.3732693588129905e-10,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=100, ωr=10, ε=1/4",D,1.3405554444290146e-10,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=100, ωr=10, ε=1/8",D,2.071852134299945e-9,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=100, ωr=10, ε=1/8",D,2.3781354663299226e-10,0.0001,true
+"splitting vs lattice sums, T=0, C=0.49, H=100, ωr=10, ε=1/16",D,2.438975688079381e-10,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=0, C=0.49, H=100, ωr=10, ε=1/16",D,4.1940761974501584e-10,0.0001,true
+"splitting vs lattice sums, T=9.8, C=0.49, H=10, ωr=10, ε=1/4",D,1.4748005039422196e-9,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=9.8, C=0.49, H=10, ωr=10, ε=1/4",D,1.3294587652978862e-10,0.0001,true
+"splitting vs lattice sums, T=9.8, C=0.49, H=10, ωr=10, ε=1/8",D,9.719580695843888e-11,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=9.8, C=0.49, H=10, ωr=10, ε=1/8",D,2.2175150604653027e-11,0.0001,true
+"splitting vs lattice sums, T=9.8, C=0.49, H=10, ωr=10, ε=1/16",D,3.1618396789667713e-10,0.0001,true
+"ω₋(k_c), ω₊(k_c) vs lattice sums, T=9.8, C=0.49, H=10, ωr=10, ε=1/16",D,1.2922130032677615e-10,0.0001,true
+"discreteness correction decreases with ε, T=0, C=0.49, H=10, ωr=10",A,0.0,0.0,true
+"|split/√μ(k_c) − 1| at ε=1/16, T=0, C=0.49, H=10, ωr=10",A,6.173390976194071e-7,0.001,true
+"discreteness correction decreases with ε, T=9.8, C=0.49, H=10, ωr=10",A,0.0,0.0,true
+"|split/√μ(k_c) − 1| at ε=1/16, T=9.8, C=0.49, H=10, ωr=10",A,2.487625312186381e-6,0.001,true
+"discreteness correction decreases with ε, T=0, C=0.49, H=10, ωr=5",A,0.0,0.0,true
+"|split/√μ(k_c) − 1| at ε=1/16, T=0, C=0.49, H=10, ωr=5",A,9.157830289652225e-7,0.001,true
+"discreteness correction decreases with ε, T=0, C=0.49, H=10, ωr=2",A,0.0,0.0,true
+"|split/√μ(k_c) − 1| at ε=1/16, T=0, C=0.49, H=10, ωr=2",A,4.896100282258953e-5,0.001,true
+"discreteness correction decreases with ε, T=0, C=0.049, H=10, ωr=10",A,0.0,0.0,true
+"|split/√μ(k_c) − 1| at ε=1/16, T=0, C=0.049, H=10, ωr=10",A,1.1343371298933036e-6,0.001,true
+"discreteness correction decreases with ε, T=0, C=0.49, H=2, ωr=10",A,0.0,0.0,true
+"|split/√μ(k_c) − 1| at ε=1/16, T=0, C=0.49, H=2, ωr=10",A,6.239395995422115e-7,0.001,true
+"discreteness correction decreases with ε, T=0, C=0.49, H=100, ωr=10",A,0.0,0.0,true
+"|split/√μ(k_c) − 1| at ε=1/16, T=0, C=0.49, H=100, ωr=10",A,6.186575508548842e-7,0.001,true
+"depth independence of the splitting (H = 2, 10, 100), ε=1/16",A,1.2658071846150255e-5,0.001,true
+"Bloch projection leakage, all cases",I,6.785755974873071e-12,1.0e-6,true

@@ -1,0 +1,204 @@
+name,kind,value,tolerance,passed
+"residual, case 1 (P, ω = 9.9506)",I,3.958685792859876e-11,1.0e-8,true
+"METIS ordering used, case 1",I,0.0,0.0,true
+"peak RSS < 20 GiB, case 1 (P, ω = 9.9506)",I,10.29290771484375,20.0,true
+"residual, case 2 (P, ω = 9.8206)",I,2.3340951479670218e-11,1.0e-8,true
+"METIS ordering used, case 2",I,0.0,0.0,true
+"peak RSS < 20 GiB, case 2 (P, ω = 9.8206)",I,10.49365234375,20.0,true
+"residual, case 3 (P, ω = 10.0806)",I,6.074758289956161e-12,1.0e-8,true
+"METIS ordering used, case 3",I,0.0,0.0,true
+"peak RSS < 20 GiB, case 3 (P, ω = 10.0806)",I,10.19183349609375,20.0,true
+"residual, case 4 (P, ω = 9.6906)",I,1.218713785598449e-10,1.0e-8,true
+"METIS ordering used, case 4",I,0.0,0.0,true
+"peak RSS < 20 GiB, case 4 (P, ω = 9.6906)",I,8.266494750976562,20.0,true
+"residual, case 5 (P, ω = 10.2106)",I,3.0324585750661354e-11,1.0e-8,true
+"METIS ordering used, case 5",I,0.0,0.0,true
+"peak RSS < 20 GiB, case 5 (P, ω = 10.2106)",I,8.779251098632812,20.0,true
+"residual, case 6 (B, ω = 9.9506)",I,2.6710487956794054e-11,1.0e-8,true
+"METIS ordering used, case 6",I,0.0,0.0,true
+"peak RSS < 20 GiB, case 6 (B, ω = 9.9506)",I,8.562088012695312,20.0,true
+"residual, case 7 (M, ω = 9.9506)",I,2.572741189042546e-11,1.0e-8,true
+"METIS ordering used, case 7",I,0.0,0.0,true
+"peak RSS < 20 GiB, case 7 (M, ω = 9.9506)",I,8.072402954101562,20.0,true
+"residual, case 8 (P, ω = 9.8906)",I,4.2860830328180636e-10,1.0e-8,true
+"METIS ordering used, case 8",I,0.0,0.0,true
+"peak RSS < 20 GiB, case 8 (P, ω = 9.8906)",I,8.190338134765625,20.0,true
+"residual, case 9 (P, ω = 10.0106)",I,1.0511971137075131e-10,1.0e-8,true
+"METIS ordering used, case 9",I,0.0,0.0,true
+"peak RSS < 20 GiB, case 9 (P, ω = 10.0106)",I,9.47369384765625,20.0,true
+"residual, case 10 (P, ω = 9.5506)",I,1.1469943017674008e-10,1.0e-8,true
+"METIS ordering used, case 10",I,0.0,0.0,true
+"peak RSS < 20 GiB, case 10 (P, ω = 9.5506)",I,9.592941284179688,20.0,true
+"residual, case 11 (P, ω = 10.3506)",I,5.40015483641518e-11,1.0e-8,true
+"METIS ordering used, case 11",I,0.0,0.0,true
+"peak RSS < 20 GiB, case 11 (P, ω = 10.3506)",I,8.846694946289062,20.0,true
+"residual, case 12 (P, ω = 9.3906)",I,4.1527028288365115e-11,1.0e-8,true
+"METIS ordering used, case 12",I,0.0,0.0,true
+"peak RSS < 20 GiB, case 12 (P, ω = 9.3906)",I,9.042404174804688,20.0,true
+"residual, case 13 (P, ω = 10.5106)",I,3.4815424372150977e-10,1.0e-8,true
+"METIS ordering used, case 13",I,0.0,0.0,true
+"peak RSS < 20 GiB, case 13 (P, ω = 10.5106)",I,10.21722412109375,20.0,true
+"residual, case 14 (I-quarter, ω = 9.9506)",I,3.8952506693166974e-13,1.0e-8,true
+"METIS ordering used, case 14",I,0.0,0.0,true
+"residual monolithic, case 14",I,2.1931868606350082e-13,1.0e-8,true
+"residual, case 15 (I-full, ω = 9.9506)",I,2.420230197892441e-13,1.0e-8,true
+"METIS ordering used, case 15",I,0.0,0.0,true
+"residual monolithic, case 15",I,1.719772369254273e-13,1.0e-8,true
+quarter (Nitsche symmetry) vs full domain: |ΔG_h(0)|/|G_h(0)|,I,4.542926073054122e-13,1.0e-8,true
+quarter vs full: max |Δη|/|η| at 3 interior points,I,8.392979853507834e-13,1.0e-8,true
+full domain: mirror symmetry of η (4 quadrants),I,6.699894532422337e-13,1.0e-8,true
+"Sherman–Morrison vs monolithic resonator η(0), quarter",I,5.44355836853791e-14,1.0e-8,true
+"Sherman–Morrison vs monolithic resonator η(0), full",I,6.962405274928695e-14,1.0e-8,true
+monolithic: quarter vs full η(0),I,2.0873062971665882e-13,1.0e-8,true
+"|Im G_h(0)/γ_r − 1|, ω = 9.3906",D,0.00017355213871672603,0.02,true
+"|Re G_h(0)/Re G(0) − 1|, ω = 9.3906",D,-0.030303882798474402,0.05,true
+"|C⁺_h/(iγ_r) − 1| (far-field amplitude), ω = 9.3906",D,0.0010278453264372638,0.02,true
+"power balance |P_flux/P_work − 1| (radiation optical theorem), ω = 9.3906",D,-0.0022284349993314523,0.02,true
+"frame reflection |C⁻/C⁺|, ω = 9.3906",D,0.0009253097815327855,0.02,true
+"isotropy max_θ |C⁺(θ)/⟨C⁺⟩ − 1|, ω = 9.3906",D,0.009487890171525752,0.02,true
+"|k_h/k₀ − 1|, ω = 9.3906",D,-0.0003017716419404515,0.01,true
+"|Im G_h(0)/γ_r − 1|, ω = 9.5506",D,0.0009244436335373862,0.02,true
+"|Re G_h(0)/Re G(0) − 1|, ω = 9.5506",D,-0.028276787775633694,0.05,true
+"|C⁺_h/(iγ_r) − 1| (far-field amplitude), ω = 9.5506",D,0.0008870232828656017,0.02,true
+"power balance |P_flux/P_work − 1| (radiation optical theorem), ω = 9.5506",D,-0.0023230663452699085,0.02,true
+"frame reflection |C⁻/C⁺|, ω = 9.5506",D,0.0008895955440783896,0.02,true
+"isotropy max_θ |C⁺(θ)/⟨C⁺⟩ − 1|, ω = 9.5506",D,0.016208157236644264,0.02,true
+"|k_h/k₀ − 1|, ω = 9.5506",D,-0.0003138098920097976,0.01,true
+"|Im G_h(0)/γ_r − 1|, ω = 9.6906",D,0.001986234930192232,0.02,true
+"|Re G_h(0)/Re G(0) − 1|, ω = 9.6906",D,-0.027992686391498767,0.05,true
+"|C⁺_h/(iγ_r) − 1| (far-field amplitude), ω = 9.6906",D,0.0007419432220126012,0.02,true
+"power balance |P_flux/P_work − 1| (radiation optical theorem), ω = 9.6906",D,-0.002404531173428759,0.02,true
+"frame reflection |C⁻/C⁺|, ω = 9.6906",D,0.0008543902573493887,0.02,true
+"isotropy max_θ |C⁺(θ)/⟨C⁺⟩ − 1|, ω = 9.6906",D,0.016661427634365726,0.02,true
+"|k_h/k₀ − 1|, ω = 9.6906",D,-0.000324513359123646,0.01,true
+"|Im G_h(0)/γ_r − 1|, ω = 9.8206",D,0.0029434512946093783,0.02,true
+"|Re G_h(0)/Re G(0) − 1|, ω = 9.8206",D,-0.02916648901790353,0.05,true
+"|C⁺_h/(iγ_r) − 1| (far-field amplitude), ω = 9.8206",D,0.0006283512933398698,0.02,true
+"power balance |P_flux/P_work − 1| (radiation optical theorem), ω = 9.8206",D,-0.002478125987662505,0.02,true
+"frame reflection |C⁻/C⁺|, ω = 9.8206",D,0.0008198415603491616,0.02,true
+"isotropy max_θ |C⁺(θ)/⟨C⁺⟩ − 1|, ω = 9.8206",D,0.012515466828237292,0.02,true
+"|k_h/k₀ − 1|, ω = 9.8206",D,-0.0003345572253160567,0.01,true
+"|Im G_h(0)/γ_r − 1|, ω = 9.8906",D,0.0033443366344088066,0.02,true
+"|Re G_h(0)/Re G(0) − 1|, ω = 9.8906",D,-0.03026932133920035,0.05,true
+"|C⁺_h/(iγ_r) − 1| (far-field amplitude), ω = 9.8906",D,0.0005912204313746212,0.02,true
+"power balance |P_flux/P_work − 1| (radiation optical theorem), ω = 9.8906",D,-0.002517017242844477,0.02,true
+"frame reflection |C⁻/C⁺|, ω = 9.8906",D,0.0008008270670861422,0.02,true
+"isotropy max_θ |C⁺(θ)/⟨C⁺⟩ − 1|, ω = 9.8906",D,0.009081959255127363,0.02,true
+"|k_h/k₀ − 1|, ω = 9.8906",D,-0.0003399932119360072,0.01,true
+"|Im G_h(0)/γ_r − 1|, ω = 9.9506",D,0.0035941091954343474,0.02,true
+"|Re G_h(0)/Re G(0) − 1|, ω = 9.9506",D,-0.031391216991863646,0.05,true
+"|C⁺_h/(iγ_r) − 1| (far-field amplitude), ω = 9.9506",D,0.0005777352376355318,0.02,true
+"power balance |P_flux/P_work − 1| (radiation optical theorem), ω = 9.9506",D,-0.0025500966219081933,0.02,true
+"frame reflection |C⁻/C⁺|, ω = 9.9506",D,0.0007843901757048804,0.02,true
+"isotropy max_θ |C⁺(θ)/⟨C⁺⟩ − 1|, ω = 9.9506",D,0.007774630495763676,0.02,true
+"|k_h/k₀ − 1|, ω = 9.9506",D,-0.0003446631881312001,0.01,true
+"|Im G_h(0)/γ_r − 1|, ω = 10.0106",D,0.003746937720135124,0.02,true
+"|Re G_h(0)/Re G(0) − 1|, ω = 10.0106",D,-0.03260598908412937,0.05,true
+"|C⁺_h/(iγ_r) − 1| (far-field amplitude), ω = 10.0106",D,0.0005814205047943459,0.02,true
+"power balance |P_flux/P_work − 1| (radiation optical theorem), ω = 10.0106",D,-0.002583088608426376,0.02,true
+"frame reflection |C⁻/C⁺|, ω = 10.0106",D,0.0007678546610125547,0.02,true
+"isotropy max_θ |C⁺(θ)/⟨C⁺⟩ − 1|, ω = 10.0106",D,0.00608971445157695,0.02,true
+"|k_h/k₀ − 1|, ω = 10.0106",D,-0.00034934083581683595,0.01,true
+"|Im G_h(0)/γ_r − 1|, ω = 10.0806",D,0.0038002973653379346,0.02,true
+"|Re G_h(0)/Re G(0) − 1|, ω = 10.0806",D,-0.034049351305030506,0.05,true
+"|C⁺_h/(iγ_r) − 1| (far-field amplitude), ω = 10.0806",D,0.000603946091612518,0.02,true
+"power balance |P_flux/P_work − 1| (radiation optical theorem), ω = 10.0806",D,-0.002621677855800364,0.02,true
+"frame reflection |C⁻/C⁺|, ω = 10.0806",D,0.0007484395164267233,0.02,true
+"isotropy max_θ |C⁺(θ)/⟨C⁺⟩ − 1|, ω = 10.0806",D,0.005534411205294282,0.02,true
+"|k_h/k₀ − 1|, ω = 10.0806",D,-0.00035480660711417755,0.01,true
+"|Im G_h(0)/γ_r − 1|, ω = 10.2106",D,0.003578797142137713,0.02,true
+"|Re G_h(0)/Re G(0) − 1|, ω = 10.2106",D,-0.036479113520539896,0.05,true
+"|C⁺_h/(iγ_r) − 1| (far-field amplitude), ω = 10.2106",D,0.0006750271062801486,0.02,true
+"power balance |P_flux/P_work − 1| (radiation optical theorem), ω = 10.2106",D,-0.002694419755802979,0.02,true
+"frame reflection |C⁻/C⁺|, ω = 10.2106",D,0.0007118487041927355,0.02,true
+"isotropy max_θ |C⁺(θ)/⟨C⁺⟩ − 1|, ω = 10.2106",D,0.01008373367374819,0.02,true
+"|k_h/k₀ − 1|, ω = 10.2106",D,-0.0003649850136683286,0.01,true
+"|Im G_h(0)/γ_r − 1|, ω = 10.3506",D,0.003023061669077176,0.02,true
+"|Re G_h(0)/Re G(0) − 1|, ω = 10.3506",D,-0.03827706142151288,0.05,true
+"|C⁺_h/(iγ_r) − 1| (far-field amplitude), ω = 10.3506",D,0.0007538563398123787,0.02,true
+"power balance |P_flux/P_work − 1| (radiation optical theorem), ω = 10.3506",D,-0.002775489850964985,0.02,true
+"frame reflection |C⁻/C⁺|, ω = 10.3506",D,0.0006708986162717182,0.02,true
+"isotropy max_θ |C⁺(θ)/⟨C⁺⟩ − 1|, ω = 10.3506",D,0.013876952312586455,0.02,true
+"|k_h/k₀ − 1|, ω = 10.3506",D,-0.00037600609659727,0.01,true
+"|Im G_h(0)/γ_r − 1|, ω = 10.5106",D,0.0022968592394778664,0.02,true
+"|Re G_h(0)/Re G(0) − 1|, ω = 10.5106",D,-0.038999927238621446,0.05,true
+"|C⁺_h/(iγ_r) − 1| (far-field amplitude), ω = 10.5106",D,0.0008065648500671763,0.02,true
+"power balance |P_flux/P_work − 1| (radiation optical theorem), ω = 10.5106",D,-0.0028724058194670166,0.02,true
+"frame reflection |C⁻/C⁺|, ω = 10.5106",D,0.0006202384393584403,0.02,true
+"isotropy max_θ |C⁺(θ)/⟨C⁺⟩ − 1|, ω = 10.5106",D,0.01335843458820759,0.02,true
+"|k_h/k₀ − 1|, ω = 10.5106",D,-0.00038872519085808577,0.01,true
+"max over (ω, ζ) of σ_abs k₀ ≤ 1 + 0.02 (bound eq:absorption_bound)",D,-0.00394442420076746,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.3906, ζ = 0",D,0.001132383441510895,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.3906, ζ = 0.01289",D,0.00011062036942121092,0.02,true
+"σ_abs k₀ FE vs theory, ω = 9.3906, ζ = 0.01289",D,-0.0006515387686670815,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.3906, ζ = 0.03868",D,-0.0004418045674084815,0.02,true
+"σ_abs k₀ FE vs theory, ω = 9.3906, ζ = 0.03868",D,-0.0009428524706928121,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.5506, ζ = 0",D,-0.00014027363208036467,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.5506, ζ = 0.01289",D,-0.00041631527929490643,0.02,true
+"σ_abs k₀ FE vs theory, ω = 9.5506, ζ = 0.01289",D,-0.0013737893070878693,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.5506, ζ = 0.03868",D,-0.0005815795736024577,0.02,true
+"σ_abs k₀ FE vs theory, ω = 9.5506, ζ = 0.03868",D,-0.0013665165469876617,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.6906, ζ = 0",D,0.0007096042304398343,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.6906, ζ = 0.01289",D,0.0002519913330120591,0.02,true
+"σ_abs k₀ FE vs theory, ω = 9.6906, ζ = 0.01289",D,-0.0030113518187313004,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.6906, ζ = 0.03868",D,-1.0960701990830725e-5,0.02,true
+"σ_abs k₀ FE vs theory, ω = 9.6906, ζ = 0.03868",D,-0.001857667519944095,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.8206, ζ = 0",D,0.002099054851750225,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.8206, ζ = 0.01289",D,0.0011694453123299998,0.02,true
+"σ_abs k₀ FE vs theory, ω = 9.8206, ζ = 0.01289",D,-0.005504394078054253,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.8206, ζ = 0.03868",D,0.0006749357655870576,0.02,true
+"σ_abs k₀ FE vs theory, ω = 9.8206, ζ = 0.03868",D,-0.0021067698862562434,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.8906, ζ = 0",D,0.0027189580375247082,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.8906, ζ = 0.01289",D,0.0015671892868965346,0.02,true
+"σ_abs k₀ FE vs theory, ω = 9.8906, ζ = 0.01289",D,-0.005605215434066002,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.8906, ζ = 0.03868",D,0.000971074847690378,0.02,true
+"σ_abs k₀ FE vs theory, ω = 9.8906, ζ = 0.03868",D,-0.0019552962547578767,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.9506, ζ = 0",D,0.0030622928577523478,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.9506, ζ = 0.01289",D,0.0017887953261400554,0.02,true
+"σ_abs k₀ FE vs theory, ω = 9.9506, ζ = 0.01289",D,-0.003776586350490607,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 9.9506, ζ = 0.03868",D,0.0011430067685790346,0.02,true
+"σ_abs k₀ FE vs theory, ω = 9.9506, ζ = 0.03868",D,-0.0016153117594595034,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.0106, ζ = 0",D,0.0031895976495697016,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.0106, ζ = 0.01289",D,0.0018774090729400351,0.02,true
+"σ_abs k₀ FE vs theory, ω = 10.0106, ζ = 0.01289",D,-0.0009066373651405168,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.0106, ζ = 0.03868",D,0.0012249158235690131,0.02,true
+"σ_abs k₀ FE vs theory, ω = 10.0106, ζ = 0.03868",D,-0.0011168222030014663,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.0806, ζ = 0",D,0.003052295132514069,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.0806, ζ = 0.01289",D,0.0018073620647137646,0.02,true
+"σ_abs k₀ FE vs theory, ω = 10.0806, ζ = 0.01289",D,0.0016588957764190893,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.0806, ζ = 0.03868",D,0.0012029667845598,0.02,true
+"σ_abs k₀ FE vs theory, ω = 10.0806, ζ = 0.03868",D,-0.00044558992167298417,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.2106, ζ = 0",D,0.0021082861999114477,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.2106, ζ = 0.01289",D,0.001260455361545307,0.02,true
+"σ_abs k₀ FE vs theory, ω = 10.2106, ζ = 0.01289",D,0.0025978401791302286,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.2106, ζ = 0.03868",D,0.0008731540757219646,0.02,true
+"σ_abs k₀ FE vs theory, ω = 10.2106, ζ = 0.03868",D,0.0006079411134883861,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.3506, ζ = 0",D,0.0006272790799663105,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.3506, ζ = 0.01289",D,0.00037438277202603623,0.02,true
+"σ_abs k₀ FE vs theory, ω = 10.3506, ζ = 0.01289",D,0.0017965867682498415,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.3506, ζ = 0.03868",D,0.0002855494332744329,0.02,true
+"σ_abs k₀ FE vs theory, ω = 10.3506, ζ = 0.03868",D,0.001110424034605928,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.5106, ζ = 0",D,-0.0006074447169303316,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.5106, ζ = 0.01289",D,-0.0004304404757178194,0.02,true
+"σ_abs k₀ FE vs theory, ω = 10.5106, ζ = 0.01289",D,0.001033963261297649,0.02,true
+"optical theorem |σ_ext − σ_sc − σ_abs|/σ_ext, ω = 10.5106, ζ = 0.03868",D,-0.00031767168896981653,0.02,true
+"σ_abs k₀ FE vs theory, ω = 10.5106, ζ = 0.03868",D,0.0011004993198873159,0.02,true
+"σ_sc k₀ FE vs theory, ζ = 0, ω = 9.3906",D,-0.007056950376440829,0.02,true
+"σ_sc k₀ FE vs theory, ζ = 0, ω = 9.5506",D,-0.007813608452142962,0.02,true
+"σ_sc k₀ FE vs theory, ζ = 0, ω = 9.6906",D,-0.009662157135898686,0.02,true
+"σ_sc k₀ FE vs theory, ζ = 0, ω = 9.8206",D,-0.01362624029469639,0.02,true
+"σ_sc k₀ FE vs theory, ζ = 0, ω = 9.8906",D,-0.013672426766737633,0.02,true
+"σ_sc k₀ FE vs theory, ζ = 0, ω = 9.9506",D,-0.0062739610332032125,0.02,true
+"σ_sc k₀ FE vs theory, ζ = 0, ω = 10.0106",D,0.004610596469090789,0.02,true
+"σ_sc k₀ FE vs theory, ζ = 0, ω = 10.0806",D,0.010578360364542405,0.02,true
+"σ_sc k₀ FE vs theory, ζ = 0, ω = 10.2106",D,0.0106995116669526,0.02,true
+"σ_sc k₀ FE vs theory, ζ = 0, ω = 10.3506",D,0.008333065495680136,0.02,true
+"σ_sc k₀ FE vs theory, ζ = 0, ω = 10.5106",D,0.005814728335120423,0.02,true
+"ω̃_h/ω̃ − 1 (renormalised resonance, eq:renorm_single)",D,0.00015586516677368323,0.001,true
+"ζ_opt,h/ζ_crit − 1 at ω̃_h (critical coupling, eq:critical_coupling)",D,0.003152366658715655,0.02,true
+"bound attained at critical coupling: σ_abs k₀ at (ω̃_h, ζ_opt,h) − 1",D,-0.003436770401702205,0.02,true
+"critical coupling P_abs/P_sc − 1 (ring flux), ω = 9.9506",D,0.002556616240346216,0.02,true
+buffer (frame at 4λ_p vs 4.89λ_p): |ΔG_h(0)|/|G_h(0)| at ω̃,D,0.002027458877582227,0.005,true
+buffer (frame at 4λ_p vs 4.89λ_p): |ΔIm G_h(0)|/γ_r at ω̃,D,0.00020868230471425808,0.005,true
+mesh (h = λ_p/4 vs λ_p/4.5): |ΔG_h(0)|/|G_h(0)| at ω̃,D,0.004585665440374083,0.02,true
+mesh (h = λ_p/4 vs λ_p/4.5): |ΔIm G_h(0)|/γ_r at ω̃,D,0.0018351747682321476,0.02,true

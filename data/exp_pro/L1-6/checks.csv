@@ -1,0 +1,96 @@
+name,kind,value,tolerance,passed
+"ω_X, finest mesh, a=0.25, T=0, p=2",D,2.0094273134318996e-8,0.0001,true
+"ω_Γ, finest mesh, a=0.25, T=0, p=2",D,6.585393785840665e-9,0.0001,true
+"gap, finest mesh, a=0.25, T=0, p=2",D,0.0001743115027805775,0.01,true
+"ω_X, finest mesh, a=0.35, T=0, p=2",D,7.725905071254147e-8,0.0001,true
+"ω_Γ, finest mesh, a=0.35, T=0, p=2",D,2.5296635675076118e-8,0.0001,true
+"gap, finest mesh, a=0.35, T=0, p=2",D,0.00017439323710055632,0.01,true
+"ω_X, finest mesh, a=0.5, T=0, p=2",D,3.2564939367318857e-7,0.0001,true
+"ω_Γ, finest mesh, a=0.5, T=0, p=2",D,1.0534272654183496e-7,0.0001,true
+"gap, finest mesh, a=0.5, T=0, p=2",D,0.00017595468909892276,0.01,true
+"ω_X, finest mesh, a=0.7, T=0, p=2",D,1.3677751848906183e-6,0.0001,true
+"ω_Γ, finest mesh, a=0.7, T=0, p=2",D,4.0487929120480715e-7,0.0001,true
+"gap, finest mesh, a=0.7, T=0, p=2",D,0.00018818456205027534,0.01,true
+"ω_X, finest mesh, a=0.85, T=0, p=2",D,3.7103304606489473e-6,0.0001,true
+"ω_Γ, finest mesh, a=0.85, T=0, p=2",D,8.822685393372609e-7,0.0001,true
+"gap, finest mesh, a=0.85, T=0, p=2",D,0.00021931052547941032,0.01,true
+"ω_X, finest mesh, a=1, T=0, p=2",D,1.2169356488289651e-5,0.0001,true
+"ω_Γ, finest mesh, a=1, T=0, p=2",D,1.7006457533330632e-6,0.0001,true
+"gap, finest mesh, a=1, T=0, p=2",D,0.0002955658787230364,0.01,true
+"ω_X, finest mesh, a=1.1, T=0, p=2",D,3.042561621735551e-5,0.0001,true
+"ω_Γ, finest mesh, a=1.1, T=0, p=2",D,2.5096108304811793e-6,0.0001,true
+"gap, finest mesh, a=1.1, T=0, p=2",D,0.0003447046498236128,0.01,true
+"ω_X, finest mesh, a=0.25, T=0, p=3",D,4.440892098500626e-16,0.0001,true
+"ω_Γ, finest mesh, a=0.25, T=0, p=3",D,1.7763568394002505e-15,0.0001,true
+"gap, finest mesh, a=0.25, T=0, p=3",D,1.8339108009968186e-11,0.01,true
+"ω_X, finest mesh, a=0.35, T=0, p=3",D,1.7208456881689926e-14,0.0001,true
+"ω_Γ, finest mesh, a=0.35, T=0, p=3",D,6.661338147750939e-15,0.0001,true
+"gap, finest mesh, a=0.35, T=0, p=3",D,7.99238453197404e-11,0.01,true
+"ω_X, finest mesh, a=0.5, T=0, p=3",D,1.2634338020234281e-13,0.0001,true
+"ω_Γ, finest mesh, a=0.5, T=0, p=3",D,2.2426505097428162e-14,0.0001,true
+"gap, finest mesh, a=0.5, T=0, p=3",D,8.301515030950668e-11,0.01,true
+"ω_X, finest mesh, a=0.7, T=0, p=3",D,2.853273173286652e-14,0.0001,true
+"ω_Γ, finest mesh, a=0.7, T=0, p=3",D,2.9976021664879227e-14,0.0001,true
+"gap, finest mesh, a=0.7, T=0, p=3",D,1.1508571873264373e-11,0.01,true
+"ω_X, finest mesh, a=0.85, T=0, p=3",D,4.128253294766182e-12,0.0001,true
+"ω_Γ, finest mesh, a=0.85, T=0, p=3",D,1.4432899320127035e-13,0.0001,true
+"gap, finest mesh, a=0.85, T=0, p=3",D,3.1003843936616704e-10,0.01,true
+"ω_X, finest mesh, a=1, T=0, p=3",D,8.19517786965207e-11,0.0001,true
+"ω_Γ, finest mesh, a=1, T=0, p=3",D,6.66355859380019e-13,0.0001,true
+"gap, finest mesh, a=1, T=0, p=3",D,2.3074885335816475e-9,0.01,true
+"ω_X, finest mesh, a=1.1, T=0, p=3",D,4.880595927403419e-10,0.0001,true
+"ω_Γ, finest mesh, a=1.1, T=0, p=3",D,1.7492673975993966e-12,0.0001,true
+"gap, finest mesh, a=1.1, T=0, p=3",D,6.046891320998782e-9,0.01,true
+"ω_X, finest mesh, a=0.25, T=9.8, p=2",D,1.6551176429402403e-8,0.0001,true
+"ω_Γ, finest mesh, a=0.25, T=9.8, p=2",D,6.316528411431932e-9,0.0001,true
+"gap, finest mesh, a=0.25, T=9.8, p=2",D,0.00014952996454598022,0.01,true
+"ω_X, finest mesh, a=0.35, T=9.8, p=2",D,5.418816062530141e-8,0.0001,true
+"ω_Γ, finest mesh, a=0.35, T=9.8, p=2",D,2.3352099809414995e-8,0.0001,true
+"gap, finest mesh, a=0.35, T=9.8, p=2",D,0.0001304223599591925,0.01,true
+"ω_X, finest mesh, a=0.5, T=9.8, p=2",D,1.7204808866466692e-7,0.0001,true
+"ω_Γ, finest mesh, a=0.5, T=9.8, p=2",D,9.011297907868254e-8,0.0001,true
+"gap, finest mesh, a=0.5, T=9.8, p=2",D,0.00010067044485229104,0.01,true
+"ω_X, finest mesh, a=0.7, T=9.8, p=2",D,4.6971412270835344e-7,0.0001,true
+"ω_Γ, finest mesh, a=0.7, T=9.8, p=2",D,3.0498011516222334e-7,0.0001,true
+"gap, finest mesh, a=0.7, T=9.8, p=2",D,6.837411062010634e-5,0.01,true
+"ω_X, finest mesh, a=0.85, T=9.8, p=2",D,8.311037720254433e-7,0.0001,true
+"ω_Γ, finest mesh, a=0.85, T=9.8, p=2",D,5.968815017798335e-7,0.0001,true
+"gap, finest mesh, a=0.85, T=9.8, p=2",D,5.269111931327508e-5,0.01,true
+"ω_X, finest mesh, a=1, T=9.8, p=2",D,1.3636822717710828e-6,0.0001,true
+"ω_Γ, finest mesh, a=1, T=9.8, p=2",D,1.0269615584590497e-6,0.0001,true
+"gap, finest mesh, a=1, T=9.8, p=2",D,4.422059048692084e-5,0.01,true
+"ω_X, finest mesh, a=1.1, T=9.8, p=2",D,1.8538281232327591e-6,0.0001,true
+"ω_Γ, finest mesh, a=1.1, T=9.8, p=2",D,1.4009127373704189e-6,0.0001,true
+"gap, finest mesh, a=1.1, T=9.8, p=2",D,4.208693797747021e-5,0.01,true
+"ω_X, finest mesh, a=0.25, T=9.8, p=3",D,2.1760371282653068e-14,0.0001,true
+"ω_Γ, finest mesh, a=0.25, T=9.8, p=3",D,5.0182080713057076e-14,0.0001,true
+"gap, finest mesh, a=0.25, T=9.8, p=3",D,4.1529424343877963e-10,0.01,true
+"ω_X, finest mesh, a=0.35, T=9.8, p=3",D,5.46229728115577e-14,0.0001,true
+"ω_Γ, finest mesh, a=0.35, T=9.8, p=3",D,3.108624468950438e-14,0.0001,true
+"gap, finest mesh, a=0.35, T=9.8, p=3",D,3.622926403323845e-10,0.01,true
+"ω_X, finest mesh, a=0.5, T=9.8, p=3",D,9.28368493191556e-13,0.0001,true
+"ω_Γ, finest mesh, a=0.5, T=9.8, p=3",D,2.4646951146678475e-13,0.0001,true
+"gap, finest mesh, a=0.5, T=9.8, p=3",D,8.385008243294578e-10,0.01,true
+"ω_X, finest mesh, a=0.7, T=9.8, p=3",D,7.665201806617006e-12,0.0001,true
+"ω_Γ, finest mesh, a=0.7, T=9.8, p=3",D,3.9896974612929625e-12,0.0001,true
+"gap, finest mesh, a=0.7, T=9.8, p=3",D,1.528338899881021e-9,0.01,true
+"ω_X, finest mesh, a=0.85, T=9.8, p=3",D,2.5762503241821832e-11,0.0001,true
+"ω_Γ, finest mesh, a=0.85, T=9.8, p=3",D,1.7596368806493956e-11,0.0001,true
+"gap, finest mesh, a=0.85, T=9.8, p=3",D,1.8403050194848447e-9,0.01,true
+"ω_X, finest mesh, a=1, T=9.8, p=3",D,7.01882996168024e-11,0.0001,true
+"ω_Γ, finest mesh, a=1, T=9.8, p=3",D,5.7474913717214804e-11,0.0001,true
+"gap, finest mesh, a=1, T=9.8, p=3",D,1.6509209554982363e-9,0.01,true
+"ω_X, finest mesh, a=1.1, T=9.8, p=3",D,1.2466538912292435e-10,0.0001,true
+"ω_Γ, finest mesh, a=1.1, T=9.8, p=3",D,1.1253398213284527e-10,0.0001,true
+"gap, finest mesh, a=1.1, T=9.8, p=3",D,1.052307463389468e-9,0.01,true
+"Bloch projection leakage, all cases",I,3.924737467200025e-37,1.0e-6,true
+"slope d ln Δω/d ln a, a ≤ 0.5, T=0, p=3 (|s − 4|)",A,0.011469995577725989,0.3,true
+"gap vs eq:gap_asymptotic, a=0.25, T=0",A,0.015608961145491262,0.02,true
+"gap vs eq:gap_asymptotic, a=0.35, T=0",A,0.015209076514395514,0.02,true
+"gap vs eq:gap_asymptotic, a=0.5, T=0",A,0.013348230166908559,0.02,true
+"gap vs eq:gap_asymptotic, a=0.7, T=0",A,0.004416167330350218,0.02,true
+"gap vs eq:gap_asymptotic, a=0.85, T=0",A,0.01946709271614855,0.02,true
+"gap / truncated-local gap vs 1.89, a=0.25, T=0",A,0.0020771422495446945,0.05,true
+"gap / truncated-local gap vs 1.89, a=0.35, T=0",A,0.0019197321458284122,0.05,true
+"gap / truncated-local gap vs 1.89, a=0.5, T=0",A,0.0014901836152323433,0.05,true
+"gap / truncated-local gap vs 1.89, a=0.7, T=0",A,0.0005060088863604317,0.05,true

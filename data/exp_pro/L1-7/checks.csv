@@ -1,0 +1,49 @@
+name,kind,value,tolerance,passed
+"(i) sweep, max |k_h/k − 1| over 400 ω, T=0",I,9.107762810600661e-8,0.0001,true
+"(i) sweep, max |ω±(k_h)/ω − 1|, T=0",I,1.3671652621116692e-7,0.0001,true
+"(i) sweep, Bloch projection leakage, T=0",I,6.570109221790547e-12,1.0e-6,true
+"(i) sweep, q/η against K/(K − ω²M), T=0",I,3.645181217088862e-14,1.0e-8,true
+"(i-b) sampled ω ≠ ω_r without a real FE root on one branch (count), T=0",I,0.0,0.0,true
+"(i-b) ω < ω_r on ω₋ and ω > ω_r on ω₊ (misassigned count), T=0",I,0.0,0.0,true
+"(i) sweep, max |k_h/k − 1| over 400 ω, T=9.8",I,6.96881320427778e-8,0.0001,true
+"(i) sweep, max |ω±(k_h)/ω − 1|, T=9.8",I,5.867041785734273e-8,0.0001,true
+"(i) sweep, Bloch projection leakage, T=9.8",I,8.739482156894203e-13,1.0e-6,true
+"(i) sweep, q/η against K/(K − ω²M), T=9.8",I,2.73370058270467e-14,1.0e-8,true
+"(i-b) sampled ω ≠ ω_r without a real FE root on one branch (count), T=9.8",I,0.0,0.0,true
+"(i-b) ω < ω_r on ω₋ and ω > ω_r on ω₊ (misassigned count), T=9.8",I,0.0,0.0,true
+"(i) ladder, finest mesh (32/λ), max |k_h/k − 1|, T=0, p=2",I,0.0007942112391506884,0.0001,false
+"(i) ladder, rate of max |k_h/k − 1|, T=0, p=2",I,1.9887037906225644,1.7,true
+"(i) ladder, Bloch projection leakage, T=0, p=2",I,5.692491738803667e-13,1.0e-6,true
+"(i) ladder, finest mesh (16/λ), max |k_h/k − 1|, T=0, p=3",I,9.107762810600661e-8,0.0001,true
+"(i) ladder, Bloch projection leakage, T=0, p=3",I,4.3209042126933266e-13,1.0e-6,true
+"(i) ladder, finest mesh (32/λ), max |k_h/k − 1|, T=9.8, p=2",I,0.0005574305594724382,0.0001,false
+"(i) ladder, rate of max |k_h/k − 1|, T=9.8, p=2",I,1.9929754182830712,1.7,true
+"(i) ladder, Bloch projection leakage, T=9.8, p=2",I,6.5162739157865625e-12,1.0e-6,true
+"(i) ladder, finest mesh (16/λ), max |k_h/k − 1|, T=9.8, p=3",I,6.96881320427778e-8,0.0001,true
+"(i) ladder, Bloch projection leakage, T=9.8, p=3",I,3.164896891533028e-13,1.0e-6,true
+"(ii) ω_Γ against lattice sums, T=0, a=0.5",D,2.2870594307278225e-14,0.0001,true
+"(ii) FE resolution of δ = ω_Γ − ω_r/√(1+Π_L), |δ_h − δ_ref|/|δ_ref|, T=0, a=0.5",D,0.0021525112631403305,0.01,true
+"(ii) |δ|/(ω_r Π_L²), T=0, a=0.5",A,0.0003385262884331347,1.0,true
+"(ii) ω_Γ against lattice sums, T=0, a=1",D,2.1760371282653068e-13,0.0001,true
+"(ii) FE resolution of δ = ω_Γ − ω_r/√(1+Π_L), |δ_h − δ_ref|/|δ_ref|, T=0, a=1",D,2.584586953281059e-6,0.01,true
+"(ii) |δ|/(ω_r Π_L²), T=0, a=1",A,0.01028278078056692,1.0,true
+"(ii) ω_Γ against lattice sums, T=0, a=2",D,4.351830007465196e-11,0.0001,true
+"(ii) FE resolution of δ = ω_Γ − ω_r/√(1+Π_L), |δ_h − δ_ref|/|δ_ref|, T=0, a=2",D,1.3344578958576264e-8,0.01,true
+"(ii) |δ|/(ω_r Π_L²), T=0, a=2",A,0.4405600733701958,1.0,true
+"(ii) ω_Γ against lattice sums, T=0, a=3",D,2.1651203052641677e-10,0.0001,true
+"(ii) FE resolution of δ = ω_Γ − ω_r/√(1+Π_L), |δ_h − δ_ref|/|δ_ref|, T=0, a=3",D,8.412692823636522e-8,0.01,true
+"(ii) |δ|/(ω_r Π_L²), T=0, a=3",A,1.1055029398633043,1.0,false
+"(ii) slope d ln|δ|/d ln Π_L over a ∈ {0.5, 1, 2} (2π/a > k_c), T=0",A,3.1609527023623816,1.7,true
+"(ii) ω_Γ against lattice sums, T=9.8, a=0.5",D,2.466915560717098e-13,0.0001,true
+"(ii) FE resolution of δ = ω_Γ − ω_r/√(1+Π_L), |δ_h − δ_ref|/|δ_ref|, T=9.8, a=0.5",D,0.032885079785974713,0.01,false
+"(ii) |δ|/(ω_r Π_L²), T=9.8, a=0.5",A,0.000308885119134583,1.0,true
+"(ii) ω_Γ against lattice sums, T=9.8, a=1",D,1.0260681193585697e-12,0.0001,true
+"(ii) FE resolution of δ = ω_Γ − ω_r/√(1+Π_L), |δ_h − δ_ref|/|δ_ref|, T=9.8, a=1",D,4.080532905294317e-5,0.01,true
+"(ii) |δ|/(ω_r Π_L²), T=9.8, a=1",A,0.0066473622267103905,1.0,true
+"(ii) ω_Γ against lattice sums, T=9.8, a=2",D,4.027889133340068e-12,0.0001,true
+"(ii) FE resolution of δ = ω_Γ − ω_r/√(1+Π_L), |δ_h − δ_ref|/|δ_ref|, T=9.8, a=2",D,9.95181004194221e-8,0.01,true
+"(ii) |δ|/(ω_r Π_L²), T=9.8, a=2",A,0.11189830127313667,1.0,true
+"(ii) ω_Γ against lattice sums, T=9.8, a=3",D,8.234857240552174e-11,0.0001,true
+"(ii) FE resolution of δ = ω_Γ − ω_r/√(1+Π_L), |δ_h − δ_ref|/|δ_ref|, T=9.8, a=3",D,4.621071604724928e-9,0.01,true
+"(ii) |δ|/(ω_r Π_L²), T=9.8, a=3",A,0.6749419002125738,1.0,true
+"(ii) slope d ln|δ|/d ln Π_L over a ∈ {0.5, 1, 2, 3} (2π/a > k_c), T=9.8",A,3.129003565982179,1.7,true

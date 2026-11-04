@@ -1,0 +1,366 @@
+#=
+export_verification_tables.jl — LaTeX tables of the verification section (§6.1 of
+Paper C), one pair (inputs, results) per configuration: A (plate-covered channel),
+L (periodic supercell), B (free plate in open water), 3D.
+
+Sources:
+  - inputs: the fixed parameters are read from the `@with_kw struct L*_Params`
+    defaults in src/ (function `P`); the study variables (frequencies, ladders,
+    variants) are those of the script headers in scripts/L*-*/ and are written
+    here as strings (each table column names its script);
+  - results: data/exp_pro/<id>/checks.csv (name, kind, value, tolerance, passed),
+    aggregated over the cases named by a regular expression, and a few data files
+    of data/exp_pro/<id>/. A pattern that matches no check is an error, so a
+    renamed check cannot silently drop a table cell.
+
+Only the `tabular` environments are written; captions, labels and font size are in
+the manuscript, which \input's the files.
+
+Usage (Base Julia only):
+  julia scripts/export_verification_tables.jl [--out DIR]
+    default DIR: paper/tables/ of this repository
+=#
+
+using Printf
+
+const REPO = normpath(joinpath(@__DIR__, ".."))
+const EXP = joinpath(REPO, "data", "exp_pro")
+const SRC = joinpath(REPO, "src")
+
+# ─── 1. Reading ────────────────────────────────────────────────────────────────
+
+"Split one CSV line, honouring double quotes."
+function splitcsv(line::AbstractString)
+    out = String[]; buf = IOBuffer(); q = false
+    for c in line
+        if c == '"'
+            q = !q
+        elseif c == ',' && !q
+            push!(out, String(take!(buf)))
+        else
+            print(buf, c)
+        end
+    end
+    push!(out, String(take!(buf)))
+    return out
+end
+
+"Rows of data/exp_pro/<id>/<file> as Dicts column → string."
+function table(id, file)
+    lines = filter(!isempty, readlines(joinpath(EXP, id, file)))
+    head = splitcsv(lines[1])
+    return [Dict(zip(head, splitcsv(l))) for l in lines[2:end]]
+end
+
+num(s) = (x = tryparse(Float64, s); x === nothing ? NaN : x)
+
+"Values of the checks of test `id` whose name matches `pat`."
+function checks(id, pat::Regex)
+    v = [num(r["value"]) for r in table(id, "checks.csv") if occursin(pat, r["name"])]
+    isempty(v) && error("$(id): no check matches $(pat)")
+    return v
+end
+cmax(id, pat) = maximum(abs, checks(id, pat))
+cmin(id, pat) = minimum(abs, checks(id, pat))
+crange(id, pat) = extrema(checks(id, pat))
+
+"Values of column `col` of a data file, over the rows where every `where` predicate holds."
+function dcol(id, file, col; where=Dict{String,Function}())
+    v = [num(r[col]) for r in table(id, file) if all(f(num(r[k])) for (k, f) in where)]
+    isempty(v) && error("$(id)/$(file): no row for $(col)")
+    return v
+end
+
+"Values of column `col` over the rows of a data file for which `pred(row)` holds."
+function dsel(id, file, col, pred)
+    v = [num(r[col]) for r in table(id, file) if pred(r)]
+    isempty(v) && error("$(id)/$(file): no row for $(col)")
+    return v
+end
+isp3(r) = num(r["order"]) == 3
+
+
+"Default of field `field` of the parameter struct in src/<file>.jl (the literal text)."
+function P(file, field)
+    src = read(joinpath(SRC, file * ".jl"), String)
+    m = match(Regex("\\n\\s*" * field * "::[^=\\n]+=\\s*([^#\\n]+)"), src)
+    m === nothing && error("$(file): no default for $(field)")
+    v = strip(m.captures[1])
+    return occursin(r"^-?\d+\.0$", v) ? v[1:end-2] : v      # 10.0 → 10
+end
+
+# ─── 2. Formatting ─────────────────────────────────────────────────────────────
+
+"Error or residual, two significant digits; scientific below 1e-2."
+function E(x)
+    isfinite(x) || return "--"
+    x == 0 && return "\$0\$"
+    a = abs(x)
+    a >= 1e-2 && return @sprintf("\$%.2g\$", x)
+    e = floor(Int, log10(a)); m = a / 10.0^e
+    m = round(m; digits=1)
+    m >= 10 && (m /= 10; e += 1)
+    return @sprintf("\$%s%.1f\\times10^{%d}\$", x < 0 ? "-" : "", m, e)
+end
+pct(x) = @sprintf("\$%.2g\\,\\%%\$", 100x)
+ord(x) = @sprintf("\$%.1f\$", x)
+ordr((a, b)) = round(a; digits=1) == round(b; digits=1) ? ord(a) : @sprintf("\$%.1f\$--\$%.1f\$", a, b)
+"""
+Observed-order cell: the range of `rates`, or "floor" when the finest-mesh error is
+below `FLOOR`, where extraction and round-off set the error and the order means nothing.
+"""
+obs(err, rates) = err < FLOOR ? "floor" : ordr(extrema(rates))
+const FLOOR = 1e-6
+"Observed order between two meshes of ratio `r`."
+rate(e1, e2, r) = log(abs(e1 / e2)) / log(r)
+
+# ─── 3. Writers ────────────────────────────────────────────────────────────────
+
+"""
+Inputs table. `tests`: column heads; `common`: (label, text) rows spanning all tests;
+`rows`: (label, [cell per test]). `w`: column widths (cm), label first.
+"""
+function inputs_tex(tests, common, rows; w)
+    n = length(tests)
+    spec = "@{}>{\\raggedright\\arraybackslash}p{$(w[1])cm}" *
+           join([">{\\raggedright\\arraybackslash}p{$(w[2])cm}" for _ in 1:n]) * "@{}"
+    io = IOBuffer()
+    println(io, "% Generated by HydroElasticFEM_xxx2026.jl/scripts/export_verification_tables.jl; do not edit.")
+    println(io, "\\begin{tabular}{$spec}")
+    println(io, "\\toprule")
+    println(io, " & ", join(tests, " & "), " \\\\")
+    println(io, "\\midrule")
+    for (lab, txt) in common
+        println(io, lab, " & \\multicolumn{$n}{>{\\raggedright\\arraybackslash}p{$(round(n*w[2] + 2*(n-1)*0.211; digits=2))cm}@{}}{", txt, "} \\\\")
+    end
+    println(io, "\\midrule")
+    for (lab, cells) in rows
+        length(cells) == n || error("row $(lab): $(length(cells)) cells for $(n) tests")
+        println(io, lab, " & ", join(cells, " & "), " \\\\")
+    end
+    println(io, "\\bottomrule")
+    println(io, "\\end{tabular}")
+    return String(take!(io))
+end
+
+"""
+Results table: rows (test, quantity, reference, error, observed order); a row
+that is a single string is a group heading.
+"""
+function results_tex(rows; order=true, w=order ? (1.0, 4.7, 4.4, 2.8, 1.7) : (1.0, 6.4, 4.4, 2.8))
+    spec = "@{}" * join([">{\\raggedright\\arraybackslash}p{$(x)cm}" for x in w]) * "@{}"
+    io = IOBuffer()
+    println(io, "% Generated by HydroElasticFEM_xxx2026.jl/scripts/export_verification_tables.jl; do not edit.")
+    println(io, "\\begin{tabular}{$spec}")
+    println(io, "\\toprule")
+    println(io, "Test & Quantity of interest & Reference & Error, finest mesh", order ? " & Observed order" : "", " \\\\")
+    println(io, "\\midrule")
+    for r in rows
+        if r isa AbstractString
+            println(io, "\\multicolumn{$(length(w))}{@{}l}{\\textit{", r, "}} \\\\")
+        else
+            println(io, join(order ? r : r[1:4], " & "), " \\\\")
+        end
+    end
+    println(io, "\\bottomrule")
+    println(io, "\\end{tabular}")
+    return String(take!(io))
+end
+
+# ─── 4. Configuration A: plate-covered channel with sponges ────────────────────
+
+function config_A()
+    f3 = "L1_3_single_line_resonator"
+    common = [
+        ("Fluid", "\$\\rho=$(P(f3,"ρ"))~\\si{\\kilogram\\per\\meter\\cubed}\$, \$g=$(P(f3,"g"))~\\si{\\meter\\per\\second\\squared}\$, \$H=$(P(f3,"H"))~\\si{\\meter}\$"),
+        ("Plate", "\$m_\\rho=$(P(f3,"m_ρ"))~\\si{\\meter}\$, \$C_\\rho=$(P(f3,"C_ρ"))~\\si{\\meter\\tothe{5}\\per\\second\\squared}\$ (Table~\\ref{tab:parameters})"),
+        ("Channel", "length \$(n+\\tfrac14)\\lambda_0\$, rigid end walls; structural sponges of length $(P(f3,"sponge_wavelengths"))\$\\lambda_0\$ at both ends, loss factor ramped as \$\\xi^{$(P(f3,"sponge_power"))}\$ to \$s=$(P(f3,"sponge_strength"))\$; for \$\\omega_r=1~\\si{\\radian\\per\\second}\$ viscous layers of loss factor \$1\$ instead"),
+        ("Clearance", "source and resonators at least \$$(P(f3,"gap_decays"))/\\kappa_1\$ from the sponges"),
+        ("Forcing", "pressure patch of $(P(f3,"source_elements")) elements, \$F=$(P(f3,"F"))\$ (per unit \$\\rho\$ and width)"),
+        ("Extraction", "wave fit on probes of $(P(f3,"n_samples")) samples with $(P(f3,"n_modes")) non-propagating modes (Appendix~\\ref{app:extraction})"),
+    ]
+    rows = [
+        ("Script", ["L1-3", "L1-3b", "L1-4"]),
+        ("\$T_\\rho\$ (\\si{\\meter\\cubed\\per\\second\\squared})", fill("\$0\$, \$9.8\$", 3)),
+        ("Resonators", [
+            "one, \$m_{\\rho,r}=$(P(f3,"m_ρr"))~\\si{\\meter\\squared}\$, \$\\omega_r=$(P(f3,"ω_r"))\$",
+            "one, \$m_{\\rho,r}=0.01~\\si{\\meter\\squared}\$, \$\\omega_r\\in\\{1,2,5,10\\}\$",
+            "\$N\\in\\{1,2,5,10,20,40\\}\$, \$a=$(P("L1_4_finite_array_foldy","a"))~\\si{\\meter}\$, \$m_{\\rho,r}=0.01~\\si{\\meter\\squared}\$, \$\\omega_r=10\$"]),
+        ("Damping, attachment", [
+            "\$c/c_{\\rm crit}\\in\\{0,1\\}\$ on a node; \$0\$ at an element midpoint",
+            "\$c/c_{\\rm crit}\\in\\{\\tfrac14,\\tfrac12,1,2,4\\}\$, on a node",
+            "\$\\zeta\\in\\{0,0.05\\}\$; \$\\zeta=0.01\$ for \$N\\in\\{10,40\\}\$, \$T_\\rho=0\$"]),
+        ("\$\\omega\$ (\\si{\\radian\\per\\second})", [
+            "\$\\widetilde\\omega_r\$ by secant in \$\\omega_r(1\\pm5/Q_{\\rm rad})\$",
+            "\$\\widetilde\\omega_r\$ by secant", "41 in \$[8,12]\$ and 61 in \$[9.55,10.05]\$; 5 for the mesh study"]),
+        ("Mesh, \$p=3\$", [
+            "10, 20, 40 el./\$\\lambda_p(\\omega_r)\$", "10, 20 el./\$\\lambda_p(\\omega_r)\$",
+            "4 el./cell (\$\\approx9\$/\$\\lambda_p\$); 4, 8, 16 for the mesh study"]),
+    ]
+    tin = inputs_tex(["V1 single resonator", "V2 damping across \$\\omega_r\$", "V3 finite arrays"],
+                     common, rows; w=(2.6, 4.0))
+
+    rows = Any[
+        "Single resonator",
+        ("V1", "Renormalised resonance \$\\widetilde\\omega_r\$, on a node", "Equation~\\eqref{eq:single_force}, Remark~\\ref{rem:renorm}", E(cmax("L1-3", r"^ω̃, finest mesh, .*node, p=3$")), obs(cmax("L1-3", r"^ω̃, finest mesh, .*node, p=3$"), dsel("L1-3", "rates.csv", "rate_err_omega", r -> isp3(r) && r["snap"] == "node"))),
+        ("V1", "Half-power bandwidth, on a node", "As above", E(cmax("L1-3", r"^width, finest mesh, .*node, p=3$")), obs(cmax("L1-3", r"^width, finest mesh, .*node, p=3$"), dsel("L1-3", "rates.csv", "rate_err_width", r -> isp3(r) && r["snap"] == "node"))),
+        ("V1", "\$\\widetilde\\omega_r\$, at an element midpoint", "As above", E(cmax("L1-3", r"^ω̃, finest mesh, .*midelement, p=3$")), obs(cmax("L1-3", r"^ω̃, finest mesh, .*midelement, p=3$"), dsel("L1-3", "rates.csv", "rate_err_omega", r -> isp3(r) && r["snap"] == "midelement"))),
+        ("V1", "Total reflection \$|\\mathcal{R}(\\widetilde\\omega_r)+1|\$, lossless", "\$\\mathcal{R}=-1\$", E(cmax("L1-3", r"^\|R\(ω̃\) \+ 1\|, finest mesh, .*p=3$")), "--"),
+        ("V1", "Resonator response \$q/\\eta\$ at \$\\widetilde\\omega_r\$", "\$\\kappa/(\\kappa-\\omega^2m)\$", E(cmax("L1-3", r"^q/η at ω̃, .*p=3$")), "--"),
+        ("V2", "\$\\widetilde\\omega_r\$, all \$\\omega_r\$ and \$c\$", "Equation~\\eqref{eq:single_force}", E(cmax("L1-3b", r"^ω̃, finest mesh")), "--"),
+        ("V2", "Absorbed fraction \$\\mathcal{A}(\\widetilde\\omega_r)\$", "Equation~\\eqref{eq:absorbed_1d}", E(cmax("L1-3b", r"^𝒜\(ω̃\), finest mesh")), "--"),
+        ("V2", "\$|\\mathcal{A}-\\tfrac12|\$ at critical coupling", "\$\\mathcal{A}=\\tfrac12\$", E(cmax("L1-3b", r"^\|𝒜\(ω̃\) − ½\| at c_crit")), "--"),
+        ("V2", "Damping of maximum absorption against \$c_{\\rm crit}\$ (relative)", "\$\\gamma_d=\\gamma_r\$", E(cmax("L1-3b", r"^FE maximum of 𝒜 at c_crit")), "--"),
+        ("V2", "\$\\zeta\$ of maximum absorption against \$\\zeta_{\\rm opt}\$", "Equation~\\eqref{eq:zeta_opt}", pct(maximum(abs.(dcol("L1-3b", "optimum.csv", "zeta_star") ./ dcol("L1-3b", "optimum.csv", "zeta_opt") .- 1))), "--"),
+        "Finite arrays",
+        ("V3", "\$\\mathcal{R}\$, \$\\mathcal{T}\$, \$\\mathcal{A}\$ over all frequencies, 4 el./cell (absolute)", "Foldy system~\\eqref{eq:foldy}", E(maximum(cmax("L1-4", Regex("^max \\|" * q * "_h − " * q * "\\|, T=")) for q in ("R", "T", "𝒜"))), "--"),
+        ("V3", "\$\\mathcal{T}\$, 16 el./cell (absolute)", "As above", E(cmax("L1-4", r"^max \|T_h − T\|, finest mesh")), "--"),
+        ("V3", "Power balance of the FE solution", "Identity~\\eqref{eq:energy_1d}", E(cmax("L1-4", r"^FE power balance")), "--"),
+        ("V3", "Decay rate in the stop band (\\si{\\per\\meter})", "Foldy system", E(cmax("L1-4", r"^decay rate FE vs Foldy")), "--"),
+    ]
+    return tin, results_tex(rows; order=false, w=(1.0, 7.4, 3.4, 2.8))
+end
+
+# ─── 5. Configuration L: closed periodic supercell ─────────────────────────────
+
+function config_L()
+    f5 = "L1_5_discrete_stop_band"; f8 = "L1_8_fluid_dilution"
+    common = [
+        ("Fluid, plate", "\$H=$(P(f5,"H"))~\\si{\\meter}\$ unless stated; \$m_\\rho=$(P(f5,"m_ρ"))~\\si{\\meter}\$, \$C_\\rho=$(P(f5,"C_ρ"))~\\si{\\meter\\tothe{5}\\per\\second\\squared}\$ unless stated"),
+        ("Resonators", "one per cell, lossless, \$\\omega_r=$(P(f5,"ω_r"))~\\si{\\radian\\per\\second}\$ unless stated"),
+        ("Forcing", "patch force \$F\\mathrm{e}^{\\mathrm{i}Qx_n}\$ of $(P(f5,"source_elements")) elements at each attachment, \$F=$(P(f5,"F"))\$"),
+        ("Pole search", "secant on \$\\operatorname{Re}(1/g)\$, relative tolerance \$10^{-13}\$ (V4), \$10^{-14}\$ (V5, V6)"),
+    ]
+    rows = [
+        ("Script", ["L1-5", "L1-6", "L1-8"]),
+        ("Host", ["\$T_\\rho\\in\\{0,9.8\\}\$", "\$T_\\rho\\in\\{0,9.8\\}\$",
+            "\$(T_\\rho,C_\\rho,H,\\omega_r)\$: \$(0,0.49,10,10)\$, \$(9.8,0.49,10,10)\$, \$(0,0.49,10,5)\$, \$(0,0.49,10,2)\$, \$(0,0.049,10,10)\$, \$(0,0.49,2,10)\$, \$(0,0.49,100,10)\$"]),
+        ("Spacing \$a\$ (\\si{\\meter})", ["\$$(P(f5,"a"))\$", "\$0.25\$, \$0.35\$, \$0.5\$, \$0.7\$, \$0.85\$, \$1.0\$, \$1.1\$", "\$2\\pi\\varepsilon_s/k_c\$"]),
+        ("Loading", ["\$m_{\\rho,r}=$(P(f5,"m_ρr"))~\\si{\\meter\\squared}\$", "\$n_0m_{\\rho,r}=$(P("L1_6_spacing_sweep","loading"))~\\si{\\meter}\$", "\$n_0m_{\\rho,r}=$(P(f8,"loading"))~\\si{\\meter}\$"]),
+        ("Bloch wavenumber", ["\$Q=0\$ (\$M=1\$), \$\\pi/a\$ (\$M=2\$), \$Qa\\in\\{\\tfrac\\pi4,\\tfrac\\pi2,\\tfrac{3\\pi}4\\}\$ (\$M=$(P(f5,"M_band"))\$)",
+            "\$Q=0\$, \$\\pi/a\$", "\$Q=k_c\$, \$\\varepsilon_s=1/M\$, \$M\\in\\{4,8,16\\}\$"]),
+        ("Mesh, \$p=3\$", ["4, 8, 16, 32 el./cell", "4, 8, 16 el./cell", "32, 64 el./\$\\lambda_c\$"]),
+    ]
+    tin = inputs_tex(["V4 band edges", "V5 spacing law", "V6 dilution"], common, rows; w=(2.6, 4.0))
+
+    # Band edges and gap (V4, V5) are shown as convergence
+    # plots in deliverables/19_PaperC/scripts/fig_lattice_convergence.py.
+    rows = Any[
+        ("V4", "Interior band frequencies", "Lattice sums~\\eqref{eq:bloch}", E(cmax("L1-5", r"^band samples, finest mesh, .*p=3$")), "floor"),
+        ("V4", "Bare host \$\\omega_0(\\pi/a)\$", "Dispersion relation", E(cmax("L1-5", r"^bare ω₀\(π/a\), finest mesh, .*p=3$")), "floor"),
+        ("V4", "Bloch leakage \$|\\operatorname{Im}(1/g)|\$ (relative)", "\$0\$", E(cmax("L1-5", r"^Bloch projection leakage, .*p=3$")), "--"),
+        ("V4", "Distance of the FE edges to the lattice sums over their distance to the truncated local edges", "\$\\leq10^{-2}\$", E(cmax("L1-5", r"closer to lattice sum.*p=3$")), "--"),
+        ("V4", "Gap over the homogenised anticrossing width", "\$<\\tfrac12\$", @sprintf("\$%.3f\$--\$%.3f\$", crange("L1-5", r"^gap / anticrossing width, .*p=3$")...), "--"),
+        ("V5", "Exponent of the gap for \$a\\leq0.5~\\si{\\meter}\$", "\$4\$, equation~\\eqref{eq:gap_a4}", @sprintf("\$%.2f\$", 4 + only(checks("L1-6", r"^slope"))), "--"),
+        ("V5", "Gap against the asymptotic law, \$ak_c/\\pi\\leq0.75\$", "Equation~\\eqref{eq:gap_asymptotic}", pct(cmax("L1-6", r"^gap vs eq:gap_asymptotic")), "--"),
+        ("V5", "Gap / truncated-local gap, \$a\\leq0.7~\\si{\\meter}\$", "\$1.89\$", pct(cmax("L1-6", r"^gap / truncated-local gap vs")), "--"),
+        ("V6", "Splitting at \$k_c\$, all variants and \$\\varepsilon_s\$", "Lattice sums", E(cmax("L1-8", r"^splitting vs lattice sums")), "--"),
+        ("V6", "\$\\omega_\\mp(k_c)\$", "Lattice sums", E(cmax("L1-8", r"^ω₋\(k_c\), ω₊\(k_c\) vs lattice sums")), "--"),
+        ("V6", "\$|\\text{splitting}/\\sqrt{\\mu(k_c)}-1|\$ at \$\\varepsilon_s=\\tfrac1{16}\$", "\$\\sqrt{\\mu(k_c)}\$, equation~\\eqref{eq:anticrossing}", E(cmax("L1-8", r"^\|split/√μ\(k_c\) − 1\| at ε=1/16")), "--"),
+        ("V6", "Splitting at \$H\\in\\{2,10,100\\}~\\si{\\meter}\$, \$\\varepsilon_s=\\tfrac1{16}\$", "Independent of \$H\$", E(cmax("L1-8", r"^depth independence")), "--"),
+    ]
+    return tin, results_tex(rows; order=false)
+end
+
+# ─── 6. Configuration B: free plate in open water ──────────────────────────────
+
+function config_B()
+    f1 = "L2_1_transfer_compliance"; f4 = "L2_4_asymmetric_absorption"
+    common = [
+        ("Fluid, plate", "\$H=$(P(f1,"H"))~\\si{\\meter}\$; \$m_\\rho=$(P(f1,"m_ρ"))~\\si{\\meter}\$, \$C_\\rho=$(P(f1,"C_ρ"))~\\si{\\meter\\tothe{5}\\per\\second\\squared}\$, \$T_\\rho=$(P(f1,"T_ρ"))\$, free edges"),
+        ("Open water", "\$\\ell_{\\rm out}=\\max\\{\\lambda_{\\rm out},6/\\kappa_1\\}\$ on each side, radiation condition on \$\\Gouth\$; free-surface stabilisation \$\\beta_h=$(P(f1,"βₕ"))\$"),
+        ("Loads", "unit forces through massless springs, \$k/\\rho=$(P(f1,"k_spring"))\$; plate edges and attachment points on mesh nodes"),
+        ("Mesh measure", "\$h=\\min\\{\\lambda_{\\rm out},\\lambda_p,4\\ell_f\\}/n\$, \$\\ell_f\$ the decay length of the flexural roots"),
+    ]
+    rows = [
+        ("Script", ["L2-1", "L2-2", "L2-4"]),
+        ("\$L_p\$ (\\si{\\meter})", ["\$$(P(f1,"Lp"))\$", "\$$(P("L2_2_woodbury","Lp"))\$", "\$5\$, \$20\$"]),
+        ("Points", ["25: \$x=0.5,1.5,\\dots,19.5\$ and 5 random (fixed seed)", "20 resonators at \$x=0.5,\\dots,19.5\$; point load at \$x=$(P("L2_2_woodbury","x_source"))\$",
+            "one resonator at \$x_1\\in\\{\\tfrac{L_p}2,\\tfrac{L_p}4,\\tfrac{L_p}8,0.25\\}\$ and \$L_p-x_1\$"]),
+        ("Resonators", ["--", "identical (\$m_{\\rho,r}=0.01\$, \$\\omega_r=10\$, \$\\zeta=0.02\$); random (\$m_{\\rho,r}\\in[0.005,0.02]\$, \$\\omega_r\\in[8,12]\$, \$\\zeta\\in[0,0.1]\$); graded (\$\\omega_r\$ from 8 to 12, \$\\zeta=0.02\$)",
+            "\$m_{\\rho,r}=$(P(f4,"m_ρr"))~\\si{\\meter\\squared}\$, \$\\omega_r=$(P(f4,"ω_r"))\$; 41 values of \$\\zeta\$ log-spaced in \$[10^{-3},10^{-1}]\$"]),
+        ("\$\\omega\$ (\\si{\\radian\\per\\second})", ["\$2\$, \$5\$, \$9.8\$, \$10\$, \$10.2\$; \$\\omega(1\\pm10^{-6})\$ for \$\\partial_\\omega\\mathbf{G}_{B,h}\$",
+            "\$2\$, \$5\$, \$8\$, \$8.5\$, \$9\$, \$9.5\$, \$9.8\$, \$10\$, \$10.2\$, \$10.5\$, \$11\$, \$12\$", "\$\\widetilde\\omega_r\$ of the lossless resonator"]),
+        ("Truncation", ["\$4\$, \$6\$, \$8\$ decay lengths", "\$6\$ decay lengths", "\$6\$ decay lengths"]),
+        ("Mesh, \$p=3\$", ["\$n=4,8,16\$; 32 at \$\\omega\\in\\{2,5\\}\$", "\$n=8\$", "\$n=8\$; 16 for \$L_p=5\$ and as a check"]),
+    ]
+    tin = inputs_tex(["V7 transfer compliance", "V8 Woodbury update", "V9 absorption bound"], common, rows; w=(2.6, 4.0))
+
+    # Mesh and truncation changes (V7) and 𝒜 at critical coupling (V9) are shown as
+    # plots in deliverables/19_PaperC/scripts/fig_freeplate_convergence.py.
+    rows = Any[
+        ("V7", "Reciprocity \$\\|\\mathbf{G}_{B,h}-\\mathbf{G}_{B,h}^{\\mathsf T}\\|/\\|\\mathbf{G}_{B,h}\\|\$, 37 cases", "\$0\$, Remark~\\ref{rem:reciprocity}", E(cmax("L2-1", r"^reciprocity")), "--"),
+        ("V7", "Mirror symmetry about the plate centre", "\$0\$", E(cmax("L2-1", r"^mirror symmetry")), "--"),
+        ("V8", "Plate response \$\\boldsymbol\\eta_a\$, monolithic against Woodbury", "Proposition~\\ref{prop:woodbury}", E(cmax("L2-2", r"^η mono vs Foldy")), "--"),
+        ("V8", "Resonator amplitudes \$\\qvec\$", "As above", E(cmax("L2-2", r"^q mono vs Foldy")), "--"),
+        ("V9", "\$\\max_\\zeta\\mathcal{A}\$ against the bound", "Bound~\\eqref{eq:absorbed_B}", E(cmax("L2-4", r"^max_ζ 𝒜 vs bound")), "--"),
+        ("V9", "Bound at \$x_1\$ plus bound at \$L_p-x_1\$", "\$1\$", E(cmax("L2-4", r"^bound\(x1\) \+ bound")), "--"),
+        ("V9", "Radiated power \$\\tfrac12\\omega\\operatorname{Im}G\$ against open-water flux", "Equal", E(cmax("L2-4", r"^radiated power")), "--"),
+        ("V9", "Bound, mesh \$n=8\$ against \$16\$", "--", E(cmax("L2-4", r"^bound, mesh 8 vs 16")), "--"),
+    ]
+    return tin, results_tex(rows; order=false)
+end
+
+# ─── 7. Configuration 3D ───────────────────────────────────────────────────────
+
+function config_3D()
+    f2 = "L3_2_point_resonator"; f3 = "L3_3_single_resonator"
+    pts = table("L3-2", "points.csv")
+    lv = sort(unique([(r["level"], num(r["lambda_p"]) / num(r["hmin"])) for r in pts if num(r["C_over_g"]) == 0.05]))
+    hmin = "\\lambda_p/$(round(Int, lv[1][2]))\$ (level 1) to \$\\lambda_p/$(round(Int, lv[end][2]))\$ (level $(length(lv)))"
+    common = [
+        ("Fluid", "\$H=$(P(f3,"H"))~\\si{\\meter}\$; \$n_z=$(P(f3,"nz"))\$ layers graded to the surface, top cell \$k_0h_{\\rm top}=$(P(f3,"top_k"))\$"),
+        ("Solver", "sparse direct solver with METIS ordering, one factorisation per frequency"),
+    ]
+    rows = [
+        ("Script", ["L3-2", "L3-3"]),
+        ("Plate", ["\$m_\\rho=0.01\$, \$C_\\rho/g\\in\\{0.05,0.005,5\\times10^{-4}\\}\$", "\$m_\\rho=0.01\$, \$C_\\rho=0.49\$, \$T_\\rho=0\$"]),
+        ("Domain", ["channel \$W=2~\\si{\\meter}\$ (scaled with \$\\lambda_p\$ for the variants); damping zones \$4\\lambda_0\$, gaps \$\\lambda_0/2\$, plate \$4\\lambda_p\$ with free lateral edges",
+            "quarter of a square of side \$16\\lambda_p\$, two symmetry planes; plate over the whole surface"]),
+        ("Absorption", ["open-water damping zones", "Kelvin--Voigt frame from \$4.89\\lambda_p\$, width \$3.11\\lambda_p\$, \$\\omega\\tau=$(P(f3,"sponge_strength"))\$, ramp \$\\xi^2\$"]),
+        ("Resonator", ["point, \$M_\\rho=$(P(f2,"M_ρ"))~\\si{\\meter\\cubed}\$, \$\\omega_r=$(P(f2,"ω_r"))\$, at the plate centre",
+            "point, \$m_r=$(P(f3,"m_r"))~\\si{\\meter\\cubed}\$, \$\\omega_r=$(P(f3,"ω_r"))\$; \$\\zeta\$ swept by Sherman--Morrison"]),
+        ("Forcing", ["incident wave (\$\\eta_0=$(P(f2,"η₀"))~\\si{\\meter}\$); unit point load", "unit point load"]),
+        ("\$\\omega\$", ["\$\\omega_r\$, \$0.9\\omega_r\$",
+            "11 values in \$\\widetilde\\omega\\pm0.56\$, \$\\widetilde\\omega=9.9506\$"]),
+        ("Order, penalty", ["\$p=2\$, \$\\gamma=$(P(f2,"γ"))\$", "\$p=3\$, \$\\gamma=$(P(f3,"γ"))\$"]),
+        ("Mesh", ["far field \$\\lambda_p/8\$ (plate), \$\\lambda_0/6.4\$ (open water); graded by \$1.5\$ to \$h_{\\min}=$(hmin)",
+            "\$h=\\lambda_p/$(P(f3,"epw"))\$; variants \$\\lambda_p/4\$ and frame at \$4\\lambda_p\$"]),
+        ("Extraction", ["fit of the \$r^2\\ln r\$ term near \$\\xvec_r\$", "far-field amplitude fitted on rings \$1.5\\lambda_p\\leq r\\leq4.4\\lambda_p\$"]),
+    ]
+    tin = inputs_tex(["V10 point resonator", "V11 capture width"], common, rows; w=(2.6, 6.2))
+
+    zs = table("L3-3", "zeta_sweep.csv")
+    # Driving-point compliance and attachment position (V10), Im G, C⁺, optical theorem and
+    # frame reflection (V11) are shown as plots in deliverables/19_PaperC/scripts/fig_3D_convergence.py.
+    rows = Any[
+        ("V10", "Deflection at \$\\xvec_r\$ at \$\\omega_r\$, lossless resonator", "\$0\$", E(cmax("L3-2", r"^B-P1 .* at node")), "--"),
+        ("V10", "Coefficient of \$r^2\\ln r\$, \$C_\\rho=0.05g\$", "\$f/(8\\pi C_\\rho)\$, Remark~\\ref{rem:point}", pct(only(checks("L3-2", r"^B-P5 .*\(S3.*C=0.05g$"))), "--"),
+        ("V11", "Wavenumber \$|k_h/k_0-1|\$", "Dispersion relation", E(cmax("L3-3", r"^\|k_h/k₀ − 1\|")), "--"),
+        ("V11", "\$|\\operatorname{Re}G_h(\\mathbf{0})/\\operatorname{Re}G(\\mathbf{0})-1|\$", "Green function", E(cmax("L3-3", r"^\|Re G_h")), "--"),
+        ("V11", "Absorption cross-section \$\\sigma_{\\rm abs}k_0\$", "Theory", E(cmax("L3-3", r"^σ_abs k₀ FE vs theory")), "--"),
+        ("V11", "Maximum of \$k_0\\sigma_{\\rm abs}\$", "Bound \$1\$", @sprintf("\$%.3f\$", maximum(num(r["sigma_abs_k0"]) for r in zs)), "--"),
+    ]
+    return tin, results_tex(rows; order=false)
+end
+
+# ─── 8. Main ───────────────────────────────────────────────────────────────────
+
+function main(args)
+    i = findfirst(==("--out"), args)
+    out = i === nothing ? joinpath(REPO, "paper", "tables") : abspath(args[i+1])
+    mkpath(out)
+    for (tag, f) in (("A", config_A), ("L", config_L), ("B", config_B), ("3D", config_3D))
+        tin, tres = f()
+        for (kind, txt) in (("inputs", tin), ("results", tres))
+            path = joinpath(out, "verif_$(tag)_$(kind).tex")
+            write(path, txt)
+            println("wrote ", path)
+        end
+    end
+    return 0
+end
+
+if abspath(PROGRAM_FILE) == @__FILE__
+    exit(main(ARGS))
+end

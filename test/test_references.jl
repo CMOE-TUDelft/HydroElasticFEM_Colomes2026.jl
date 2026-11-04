@@ -1,6 +1,5 @@
 """
-Tests of the parameter sets and of the analytical reference library
-(src/common/parameter_sets.jl, src/common/reference_solutions.jl).
+Tests of the analytical reference library shared by all tests (src/references.jl).
 
 Two kinds of tests: internal consistency (two independent evaluations of the
 same quantity must agree) and pins against published values
@@ -11,8 +10,19 @@ using Test
 using TOML
 using LinearAlgebra
 using HydroElasticFEM_xxx2026
-using HydroElasticFEM_xxx2026.ParameterSets
 using HydroElasticFEM_xxx2026.References
+
+# Baseline sets of the test matrix (§0.1) used by these tests. In the
+# verification tests themselves each test carries its own parameter struct.
+"P1: Table 1 of the paper; ω_r = 10 rad/s, spacing a = 1 m (n₀ = 1 m⁻¹)."
+P1(; T_ρ=0.0, H=10.0) = (host=HostSpec(g=9.8, ρ=1000.0, H=H, m_ρ=0.01, C_ρ=0.49, T_ρ=T_ρ),
+                         resonator=resonator_from_frequency(0.01, 10.0), a=1.0, n0=1.0)
+"P1-LF: low-frequency variant; ω_r = 1 rad/s, a = 5 m (same mass loading n₀m_ρ,r as P1)."
+P1LF(; H=10.0) = (host=HostSpec(g=9.8, ρ=1000.0, H=H, m_ρ=0.01, C_ρ=0.49),
+                  resonator=resonator_from_frequency(0.05, 1.0), a=5.0, n0=0.2)
+"P2: 50 m LDPE membrane of the Results draft (ρ = 1025, T = 10 kN/m, H = 25 m)."
+P2() = (host=HostSpec(g=9.81, ρ=1025.0, H=25.0, m_ρ=910.0 * 0.05 / 1025.0, C_ρ=0.0, T_ρ=1.0e4 / 1025.0),
+        resonator=ResonatorSpec(m_ρ=113.75 / 1025.0, k_ρ=28.4375 / 1025.0))
 
 const PINS = TOML.parsefile(joinpath(@__DIR__, "reference", "paper_values.toml"))
 
@@ -23,25 +33,15 @@ function pinned(value, pin::AbstractDict)
 end
 pinned(value, ref::Real, digits::Int) = pinned(value, Dict("value" => ref, "digits" => digits))
 
-@testset "Parameter sets" begin
+@testset "Resonator parameters" begin
     r = resonator_from_frequency(0.01, 10.0; ζ=0.05)
     @test natural_frequency(r) ≈ 10.0
     @test damping_ratio(r) ≈ 0.05
     @test damping_ratio(with_damping_ratio(r, 0.2)) ≈ 0.2
-
-    p1 = P1()
-    @test p1.host.C_ρ == 0.49 && p1.host.m_ρ == 0.01 && p1.host.H == 10.0
-    @test resonator_density(p1) == 1.0
-    @test resonator_density(P1(dim=3)) == 1.0
-    @test resonator_density(P1LF()) * P1LF().resonator.m_ρ ≈ 0.01   # same mass loading as P1
-    @test natural_frequency(P1LF().resonator) ≈ 1.0
-
-    p2 = P2()
-    @test p2.host.m_ρ ≈ 0.0444 atol = 1e-4                 # values printed in the Results draft
-    @test p2.host.T_ρ ≈ 9.7561 atol = 1e-4
-    @test natural_frequency(p2.resonator) ≈ 0.5
-    @test P3().host.C_ρ ≈ 0.05 * 9.80665
-    @test P4().host.m_ρ ≈ 0.5 && P4().resonator === nothing
+    @test P1LF().n0 * P1LF().resonator.m_ρ ≈ P1().n0 * P1().resonator.m_ρ
+    @test P2().host.m_ρ ≈ 0.0444 atol = 1e-4                # values printed in the Results draft
+    @test P2().host.T_ρ ≈ 9.7561 atol = 1e-4
+    @test natural_frequency(P2().resonator) ≈ 0.5
 end
 
 @testset "Host symbol and roots" begin
@@ -73,6 +73,7 @@ end
     @test 1 / imag(host_roots(P1().host, 10.0)[2]) ≈ dl["flexural_T0"] rtol = 2e-3
     @test 1 / imag(host_roots(P1(T_ρ=9.8).host, 10.0)[2]) ≈ dl["flexural_T98"] rtol = 2e-3
     @test 1 / imag(host_roots(P1().host, 10.0)[4]) ≈ dl["evanescent_first"] rtol = 2e-3
+    @test kappa1(P1().host, 10.0) ≈ imag(host_roots(P1().host, 10.0)[4])
 
     # matrix §0.2 table (independent SciPy computation)
     for row in PINS["matrix"]["host"]
@@ -149,7 +150,7 @@ end
     lm = PINS["paper"]["local_model"]
     for (T, key) in ((0.0, "T0"), (9.8, "T98"))
         ps = P1(T_ρ=T)
-        h, r, n0 = ps.host, ps.resonator, resonator_density(ps)
+        h, r, n0 = ps.host, ps.resonator, ps.n0
         @test pinned(anticrossing_width(h, r, n0), lm["anticrossing_$(key)"])
         @test pinned(crossing_wavenumber(h, r) * ps.a / π, lm["kc_a_over_pi_$(key)"])
         @test pinned(local_branches(h, r, n0, π / ps.a).lower, lm["lower_at_zone_edge_$(key)"])
@@ -162,15 +163,6 @@ end
                 @test abs(D0(h, k, ω) - ω^2 * (meff - h.m_ρ)) < 1e-9 * ω^2 * added_mass(k, h.H)
             end
         end
-    end
-    # same as the legacy (dimensional) Appendix-A implementation
-    plate, resonator = liu_2025_parameters(tension=9800.0)
-    ps = P1(T_ρ=9.8)
-    for k in (0.1, 1.0, 3.0)
-        legacy = metaplate_dispersion(plate, resonator, k)
-        new = local_branches(ps.host, ps.resonator, resonator_density(ps), k)
-        @test new.lower ≈ legacy.lower rtol = 1e-12
-        @test new.upper ≈ legacy.upper rtol = 1e-12
     end
 end
 

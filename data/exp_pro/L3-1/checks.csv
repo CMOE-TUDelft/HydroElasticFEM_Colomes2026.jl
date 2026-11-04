@@ -1,0 +1,145 @@
+name,kind,value,tolerance,passed
+"residual, max over the 3 RHS, full, θ=30°, ω=10, h=λp/8",I,7.871449887538861e-11,1.0e-8,true
+"reciprocity |G(a,b) − G(b,a)|/|G(a,b)|, point loads, full, θ=30°, ω=10, h=λp/8",I,1.288676951076174e-12,1.0e-8,true
+"METIS ordering used, full, θ=30°, ω=10, h=λp/8",I,1.0,1.0,true
+"wave fit residual at the cell vertices (reported), full, θ=30°, ω=10, h=λp/8",R,2.6446592176017438e-9,Inf,true
+"transverse residual, energy outside e^{ik_y y} (reported), full, θ=30°, ω=10, h=λp/8",R,0.00035276491340791954,Inf,true
+"sponge reflection |A_in/A_out| (reported), full, θ=30°, ω=10, h=λp/8",R,0.0002890026771797779,Inf,true
+"peak RSS of the process (GiB, reported; launch bound 17.0 GB projected), full, θ=30°, ω=10, h=λp/8",R,7.7640228271484375,Inf,true
+"|k_h/k₀ − 1|, full, θ=30°, ω=10, h=λp/8",D,0.004194841666137039,0.015,true
+"left/right symmetry |k_x,h(R) − k_x,h(L)|/k_x, full, θ=30°, ω=10, h=λp/8",I,2.0800012944755118e-13,1.0e-6,true
+"radiated amplitude |γ_h cos θ/γ_r − 1|, full, θ=30°, ω=10, h=λp/8",D,0.02151924717887299,0.05,true
+"energy |net flux/P_in − 1|, full, θ=30°, ω=10, h=λp/8",D,0.022976669572613018,0.05,true
+"isotropy |k_h(θ)/k_h(0°) − 1|, full, θ=30°, ω=10, h=λp/8",D,0.005105427660333728,0.01,true
+"γ_h(θ) cos θ/γ_h(0°) − 1 (reported), full, θ=30°, ω=10, h=λp/8",R,0.01435188834071588,Inf,true
+"residual, max over the 3 RHS, full, θ=0°, ω=10, h=λp/8",I,8.417260654993158e-12,1.0e-8,true
+"reciprocity |G(a,b) − G(b,a)|/|G(a,b)|, point loads, full, θ=0°, ω=10, h=λp/8",I,2.7969551207607297e-14,1.0e-8,true
+"METIS ordering used, full, θ=0°, ω=10, h=λp/8",I,1.0,1.0,true
+"wave fit residual at the cell vertices (reported), full, θ=0°, ω=10, h=λp/8",R,1.891409720505382e-6,Inf,true
+"transverse residual, energy outside e^{ik_y y} (reported), full, θ=0°, ω=10, h=λp/8",R,9.889769746203149e-15,Inf,true
+"sponge reflection |A_in/A_out| (reported), full, θ=0°, ω=10, h=λp/8",R,0.00041810660476930897,Inf,true
+"peak RSS of the process (GiB, reported; launch bound 17.0 GB projected), full, θ=0°, ω=10, h=λp/8",R,7.7640228271484375,Inf,true
+"|k_h/k₀ − 1|, full, θ=0°, ω=10, h=λp/8",D,0.009253028658018358,0.015,true
+"left/right symmetry |k_x,h(R) − k_x,h(L)|/k_x, full, θ=0°, ω=10, h=λp/8",I,1.1769255179559732e-10,1.0e-6,true
+"radiated amplitude |γ_h cos θ/γ_r − 1|, full, θ=0°, ω=10, h=λp/8",D,0.0353636010657673,0.05,true
+"energy |net flux/P_in − 1|, full, θ=0°, ω=10, h=λp/8",D,0.03830176065176172,0.05,true
+"residual, max over the 3 RHS, full, θ=60°, ω=10, h=λp/8",I,3.01757299456104e-10,1.0e-8,true
+"reciprocity |G(a,b) − G(b,a)|/|G(a,b)|, point loads, full, θ=60°, ω=10, h=λp/8",I,1.587265690637824e-11,1.0e-8,true
+"METIS ordering used, full, θ=60°, ω=10, h=λp/8",I,1.0,1.0,true
+"wave fit residual at the cell vertices (reported), full, θ=60°, ω=10, h=λp/8",R,5.864232263834726e-11,Inf,true
+"transverse residual, energy outside e^{ik_y y} (reported), full, θ=60°, ω=10, h=λp/8",R,0.002041771185634702,Inf,true
+"sponge reflection |A_in/A_out| (reported), full, θ=60°, ω=10, h=λp/8",R,0.0015101830414139894,Inf,true
+"peak RSS of the process (GiB, reported; launch bound 17.0 GB projected), full, θ=60°, ω=10, h=λp/8",R,7.7640228271484375,Inf,true
+"|k_h/k₀ − 1|, full, θ=60°, ω=10, h=λp/8",D,0.0045380337146787575,0.015,true
+"left/right symmetry |k_x,h(R) − k_x,h(L)|/k_x, full, θ=60°, ω=10, h=λp/8",I,9.298252640002316e-14,1.0e-6,true
+"radiated amplitude |γ_h cos θ/γ_r − 1|, full, θ=60°, ω=10, h=λp/8",D,0.019523027595330644,0.05,true
+"energy |net flux/P_in − 1|, full, θ=60°, ω=10, h=λp/8",D,0.018502665607207813,0.05,true
+"isotropy |k_h(θ)/k_h(0°) − 1|, full, θ=60°, ω=10, h=λp/8",D,0.0047590303879032625,0.01,true
+"γ_h(θ) cos θ/γ_h(0°) − 1 (reported), full, θ=60°, ω=10, h=λp/8",R,0.05689877421351586,Inf,true
+"residual, max over the 3 RHS, full, θ=30°, ω=5, h=λp/8",I,4.660152527996969e-9,1.0e-8,true
+"reciprocity |G(a,b) − G(b,a)|/|G(a,b)|, point loads, full, θ=30°, ω=5, h=λp/8",I,5.262043961192932e-10,1.0e-8,true
+"METIS ordering used, full, θ=30°, ω=5, h=λp/8",I,1.0,1.0,true
+"wave fit residual at the cell vertices (reported), full, θ=30°, ω=5, h=λp/8",R,5.6543007747406425e-9,Inf,true
+"transverse residual, energy outside e^{ik_y y} (reported), full, θ=30°, ω=5, h=λp/8",R,0.0003527632224752423,Inf,true
+"sponge reflection |A_in/A_out| (reported), full, θ=30°, ω=5, h=λp/8",R,0.000379433337012536,Inf,true
+"peak RSS of the process (GiB, reported; launch bound 17.0 GB projected), full, θ=30°, ω=5, h=λp/8",R,9.734359741210938,Inf,true
+"|k_h/k₀ − 1|, full, θ=30°, ω=5, h=λp/8",D,0.003238957213189675,0.015,true
+"left/right symmetry |k_x,h(R) − k_x,h(L)|/k_x, full, θ=30°, ω=5, h=λp/8",I,2.421726172023663e-12,1.0e-6,true
+"radiated amplitude |γ_h cos θ/γ_r − 1|, full, θ=30°, ω=5, h=λp/8",D,0.01928563721484433,0.05,true
+"energy |net flux/P_in − 1|, full, θ=30°, ω=5, h=λp/8",D,0.020551471396810128,0.05,true
+"isotropy |k_h(θ)/k_h(0°) − 1|, full, θ=30°, ω=5, h=λp/8",D,0.0039188199747342,0.01,true
+"γ_h(θ) cos θ/γ_h(0°) − 1 (reported), full, θ=30°, ω=5, h=λp/8",R,0.014568940374188655,Inf,true
+"residual, max over the 3 RHS, full, θ=0°, ω=5, h=λp/8",I,2.1161020084387167e-12,1.0e-8,true
+"reciprocity |G(a,b) − G(b,a)|/|G(a,b)|, point loads, full, θ=0°, ω=5, h=λp/8",I,3.009592326249994e-14,1.0e-8,true
+"METIS ordering used, full, θ=0°, ω=5, h=λp/8",I,1.0,1.0,true
+"wave fit residual at the cell vertices (reported), full, θ=0°, ω=5, h=λp/8",R,1.256738495838479e-7,Inf,true
+"transverse residual, energy outside e^{ik_y y} (reported), full, θ=0°, ω=5, h=λp/8",R,2.4753346443083917e-15,Inf,true
+"sponge reflection |A_in/A_out| (reported), full, θ=0°, ω=5, h=λp/8",R,0.0003373794051609937,Inf,true
+"peak RSS of the process (GiB, reported; launch bound 17.0 GB projected), full, θ=0°, ω=5, h=λp/8",R,9.96728515625,Inf,true
+"|k_h/k₀ − 1|, full, θ=0°, ω=5, h=λp/8",D,0.00712983664167588,0.015,true
+"left/right symmetry |k_x,h(R) − k_x,h(L)|/k_x, full, θ=0°, ω=5, h=λp/8",I,3.5855845683236757e-13,1.0e-6,true
+"radiated amplitude |γ_h cos θ/γ_r − 1|, full, θ=0°, ω=5, h=λp/8",D,0.03336843485130436,0.05,true
+"energy |net flux/P_in − 1|, full, θ=0°, ω=5, h=λp/8",D,0.035886317780273846,0.05,true
+"residual, max over the 3 RHS, full, θ=30°, ω=2, h=λp/8",I,1.3961738780204505e-11,1.0e-8,true
+"reciprocity |G(a,b) − G(b,a)|/|G(a,b)|, point loads, full, θ=30°, ω=2, h=λp/8",I,3.2727273146125585e-14,1.0e-8,true
+"METIS ordering used, full, θ=30°, ω=2, h=λp/8",I,1.0,1.0,true
+"wave fit residual at the cell vertices (reported), full, θ=30°, ω=2, h=λp/8",R,1.1170345508822695e-10,Inf,true
+"transverse residual, energy outside e^{ik_y y} (reported), full, θ=30°, ω=2, h=λp/8",R,0.00035223847360943964,Inf,true
+"sponge reflection |A_in/A_out| (reported), full, θ=30°, ω=2, h=λp/8",R,0.0007001228032049741,Inf,true
+"peak RSS of the process (GiB, reported; launch bound 17.0 GB projected), full, θ=30°, ω=2, h=λp/8",R,9.96728515625,Inf,true
+"|k_h/k₀ − 1|, full, θ=30°, ω=2, h=λp/8",D,0.00017179280753976123,0.015,true
+"left/right symmetry |k_x,h(R) − k_x,h(L)|/k_x, full, θ=30°, ω=2, h=λp/8",I,3.1879884723149733e-12,1.0e-6,true
+"radiated amplitude |γ_h cos θ/γ_r − 1|, full, θ=30°, ω=2, h=λp/8",D,0.0009662831566645824,0.05,true
+"energy |net flux/P_in − 1|, full, θ=30°, ω=2, h=λp/8",D,0.001572298163759478,0.05,true
+"isotropy |k_h(θ)/k_h(0°) − 1|, full, θ=30°, ω=2, h=λp/8",D,0.00018174534189996372,0.01,true
+"γ_h(θ) cos θ/γ_h(0°) − 1 (reported), full, θ=30°, ω=2, h=λp/8",R,0.0007507018848198488,Inf,true
+"residual, max over the 3 RHS, full, θ=0°, ω=2, h=λp/8",I,7.858920185741734e-13,1.0e-8,true
+"reciprocity |G(a,b) − G(b,a)|/|G(a,b)|, point loads, full, θ=0°, ω=2, h=λp/8",I,4.8011650534363177e-14,1.0e-8,true
+"METIS ordering used, full, θ=0°, ω=2, h=λp/8",I,1.0,1.0,true
+"wave fit residual at the cell vertices (reported), full, θ=0°, ω=2, h=λp/8",R,8.568276564732449e-10,Inf,true
+"transverse residual, energy outside e^{ik_y y} (reported), full, θ=0°, ω=2, h=λp/8",R,1.0161257267712297e-14,Inf,true
+"sponge reflection |A_in/A_out| (reported), full, θ=0°, ω=2, h=λp/8",R,0.0003927181940550136,Inf,true
+"peak RSS of the process (GiB, reported; launch bound 17.0 GB projected), full, θ=0°, ω=2, h=λp/8",R,9.96728515625,Inf,true
+"|k_h/k₀ − 1|, full, θ=0°, ω=2, h=λp/8",D,0.00035347390720352756,0.015,true
+"left/right symmetry |k_x,h(R) − k_x,h(L)|/k_x, full, θ=0°, ω=2, h=λp/8",I,9.854247660577711e-11,1.0e-6,true
+"radiated amplitude |γ_h cos θ/γ_r − 1|, full, θ=0°, ω=2, h=λp/8",D,0.0017156970644643943,0.05,true
+"energy |net flux/P_in − 1|, full, θ=0°, ω=2, h=λp/8",D,0.002817467671294094,0.05,true
+"residual, max over the 3 RHS, short, θ=30°, ω=10, h=λp/6",I,1.3062144438407902e-11,1.0e-8,true
+"reciprocity |G(a,b) − G(b,a)|/|G(a,b)|, point loads, short, θ=30°, ω=10, h=λp/6",I,2.8522692962691815e-12,1.0e-8,true
+"METIS ordering used, short, θ=30°, ω=10, h=λp/6",I,1.0,1.0,true
+"wave fit residual at the cell vertices (reported), short, θ=30°, ω=10, h=λp/6",R,5.259076517740079e-12,Inf,true
+"transverse residual, energy outside e^{ik_y y} (reported), short, θ=30°, ω=10, h=λp/6",R,0.0008442273100297998,Inf,true
+"sponge reflection |A_in/A_out| (reported), short, θ=30°, ω=10, h=λp/6",R,0.00430629855509769,Inf,true
+"peak RSS of the process (GiB, reported; launch bound 17.0 GB projected), short, θ=30°, ω=10, h=λp/6",R,9.96728515625,Inf,true
+"residual, max over the 3 RHS, short, θ=30°, ω=10, h=λp/8",I,1.262470257243155e-9,1.0e-8,true
+"reciprocity |G(a,b) − G(b,a)|/|G(a,b)|, point loads, short, θ=30°, ω=10, h=λp/8",I,1.6187126353163605e-10,1.0e-8,true
+"METIS ordering used, short, θ=30°, ω=10, h=λp/8",I,1.0,1.0,true
+"wave fit residual at the cell vertices (reported), short, θ=30°, ω=10, h=λp/8",R,4.073411316701205e-11,Inf,true
+"transverse residual, energy outside e^{ik_y y} (reported), short, θ=30°, ω=10, h=λp/8",R,0.00035276494657818344,Inf,true
+"sponge reflection |A_in/A_out| (reported), short, θ=30°, ω=10, h=λp/8",R,0.004267951932581803,Inf,true
+"peak RSS of the process (GiB, reported; launch bound 17.0 GB projected), short, θ=30°, ω=10, h=λp/8",R,9.96728515625,Inf,true
+"residual, max over the 3 RHS, short, θ=30°, ω=10, h=λp/12",I,1.0095054880851607e-10,1.0e-8,true
+"reciprocity |G(a,b) − G(b,a)|/|G(a,b)|, point loads, short, θ=30°, ω=10, h=λp/12",I,5.121344728474882e-12,1.0e-8,true
+"METIS ordering used, short, θ=30°, ω=10, h=λp/12",I,1.0,1.0,true
+"wave fit residual at the cell vertices (reported), short, θ=30°, ω=10, h=λp/12",R,5.0470009570819705e-11,Inf,true
+"transverse residual, energy outside e^{ik_y y} (reported), short, θ=30°, ω=10, h=λp/12",R,0.00010378609587050821,Inf,true
+"sponge reflection |A_in/A_out| (reported), short, θ=30°, ω=10, h=λp/12",R,0.0042446813725784465,Inf,true
+"peak RSS of the process (GiB, reported; launch bound 17.0 GB projected), short, θ=30°, ω=10, h=λp/12",R,9.96728515625,Inf,true
+"residual, max over the 3 RHS, short, θ=0°, ω=10, h=λp/6",I,3.310445712404485e-11,1.0e-8,true
+"reciprocity |G(a,b) − G(b,a)|/|G(a,b)|, point loads, short, θ=0°, ω=10, h=λp/6",I,3.8022555859100657e-14,1.0e-8,true
+"METIS ordering used, short, θ=0°, ω=10, h=λp/6",I,1.0,1.0,true
+"wave fit residual at the cell vertices (reported), short, θ=0°, ω=10, h=λp/6",R,1.8978487938233572e-6,Inf,true
+"transverse residual, energy outside e^{ik_y y} (reported), short, θ=0°, ω=10, h=λp/6",R,4.6192566851718486e-14,Inf,true
+"sponge reflection |A_in/A_out| (reported), short, θ=0°, ω=10, h=λp/6",R,0.011749391547992706,Inf,true
+"peak RSS of the process (GiB, reported; launch bound 17.0 GB projected), short, θ=0°, ω=10, h=λp/6",R,9.96728515625,Inf,true
+"residual, max over the 3 RHS, short, θ=0°, ω=10, h=λp/8",I,4.0369387617575655e-12,1.0e-8,true
+"reciprocity |G(a,b) − G(b,a)|/|G(a,b)|, point loads, short, θ=0°, ω=10, h=λp/8",I,1.6842041833991513e-13,1.0e-8,true
+"METIS ordering used, short, θ=0°, ω=10, h=λp/8",I,1.0,1.0,true
+"wave fit residual at the cell vertices (reported), short, θ=0°, ω=10, h=λp/8",R,1.927332007047849e-6,Inf,true
+"transverse residual, energy outside e^{ik_y y} (reported), short, θ=0°, ω=10, h=λp/8",R,3.8231433519054985e-15,Inf,true
+"sponge reflection |A_in/A_out| (reported), short, θ=0°, ω=10, h=λp/8",R,0.01106626043296109,Inf,true
+"peak RSS of the process (GiB, reported; launch bound 17.0 GB projected), short, θ=0°, ω=10, h=λp/8",R,9.96728515625,Inf,true
+"residual, max over the 3 RHS, short, θ=0°, ω=10, h=λp/12",I,1.7824376601867522e-9,1.0e-8,true
+"reciprocity |G(a,b) − G(b,a)|/|G(a,b)|, point loads, short, θ=0°, ω=10, h=λp/12",I,2.278969506353056e-13,1.0e-8,true
+"METIS ordering used, short, θ=0°, ω=10, h=λp/12",I,1.0,1.0,true
+"wave fit residual at the cell vertices (reported), short, θ=0°, ω=10, h=λp/12",R,1.877898749919793e-6,Inf,true
+"transverse residual, energy outside e^{ik_y y} (reported), short, θ=0°, ω=10, h=λp/12",R,2.744522832805766e-13,Inf,true
+"sponge reflection |A_in/A_out| (reported), short, θ=0°, ω=10, h=λp/12",R,0.010572182610978972,Inf,true
+"peak RSS of the process (GiB, reported; launch bound 17.0 GB projected), short, θ=0°, ω=10, h=λp/12",R,9.96728515625,Inf,true
+"residual, max over the 3 RHS, short, θ=0°, ω=10, h=λp/16",I,2.9603076772645327e-10,1.0e-8,true
+"reciprocity |G(a,b) − G(b,a)|/|G(a,b)|, point loads, short, θ=0°, ω=10, h=λp/16",I,1.3655498509249912e-12,1.0e-8,true
+"METIS ordering used, short, θ=0°, ω=10, h=λp/16",I,1.0,1.0,true
+"wave fit residual at the cell vertices (reported), short, θ=0°, ω=10, h=λp/16",R,1.8322371071204437e-6,Inf,true
+"transverse residual, energy outside e^{ik_y y} (reported), short, θ=0°, ω=10, h=λp/16",R,2.0871606974793242e-14,Inf,true
+"sponge reflection |A_in/A_out| (reported), short, θ=0°, ω=10, h=λp/16",R,0.010399134542601282,Inf,true
+"peak RSS of the process (GiB, reported; launch bound 17.0 GB projected), short, θ=0°, ω=10, h=λp/16",R,9.96728515625,Inf,true
+mesh study: anisotropy rate p_obs (h = λp/8 → λp/12),D,1.9154960614814611,1.7,true
+"mesh study: anisotropy rate p_obs (h = λp/6 → λp/8, reported)",R,1.8420619443366701,Inf,true
+"mesh study: rate of |k_h/k₀ − 1|, θ = 0 (h = λp/8 → λp/12, reported; nz = 8 fixed)",R,1.911608265691994,Inf,true
+"mesh study: rate of |k_h/k₀ − 1|, θ = 30° (h = λp/8 → λp/12, reported; nz = 8 fixed)",R,1.9219017018628235,Inf,true
+"mesh study: rate of |γ_h cosθ/γ_r − 1|, θ = 0 (h = λp/8 → λp/12, reported; nz = 8 fixed)",R,1.8198221786613527,Inf,true
+"mesh study: rate of |γ_h cosθ/γ_r − 1|, θ = 30° (h = λp/8 → λp/12, reported; nz = 8 fixed)",R,1.9035202644011542,Inf,true
+"mesh study: rate of energy, θ = 0 (h = λp/8 → λp/12, reported; nz = 8 fixed)",R,1.9312631475221862,Inf,true
+"mesh study: rate of energy, θ = 30° (h = λp/8 → λp/12, reported; nz = 8 fixed)",R,1.9935067698217586,Inf,true
+"mesh study: rate of |k_h/k₀ − 1|, θ = 0 (λp/12 → λp/16, reported)",R,1.9251828325918632,Inf,true
+mesh study: anisotropy at h = λp/12,D,0.0023481696052904955,0.003,true

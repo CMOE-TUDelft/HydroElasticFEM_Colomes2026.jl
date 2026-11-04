@@ -1,0 +1,16 @@
+name,kind,value,tolerance,passed
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=2, n=16, gap=6/κ₁",I,8.316424850727394e-13,1.0e-8,true
+"mirror symmetry, ω=2, n=16, gap=6/κ₁",I,2.4634292243981625e-11,1.0e-8,true
+"spring residual, ω=2, n=16, gap=6/κ₁",I,3.3306690738754696e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=5, n=16, gap=6/κ₁",I,8.605030115418834e-12,1.0e-8,true
+"mirror symmetry, ω=5, n=16, gap=6/κ₁",I,2.7228892210312596e-11,1.0e-8,true
+"spring residual, ω=5, n=16, gap=6/κ₁",I,2.237726045655905e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=9.8, n=16, gap=6/κ₁",I,2.2947203908017252e-10,1.0e-8,true
+"mirror symmetry, ω=9.8, n=16, gap=6/κ₁",I,1.5706962099911385e-9,1.0e-8,true
+"spring residual, ω=9.8, n=16, gap=6/κ₁",I,2.2247786310271853e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10, n=16, gap=6/κ₁",I,1.3965041172661011e-9,1.0e-8,true
+"mirror symmetry, ω=10, n=16, gap=6/κ₁",I,2.6216919761538864e-9,1.0e-8,true
+"spring residual, ω=10, n=16, gap=6/κ₁",I,2.2215299868541707e-16,1.0e-12,true
+"reciprocity ‖G − Gᵀ‖/‖G‖, ω=10.2, n=16, gap=6/κ₁",I,8.428710374239944e-10,1.0e-8,true
+"mirror symmetry, ω=10.2, n=16, gap=6/κ₁",I,1.277520312709997e-9,1.0e-8,true
+"spring residual, ω=10.2, n=16, gap=6/κ₁",I,4.441434166503682e-16,1.0e-12,true

@@ -22,11 +22,13 @@ jobs:
             using Pkg;
             Pkg.instantiate()'
 
-      - name: Run verification suite
+      - name: Run every test script
         run: |
-          julia --project=. -O1 -e '
-            using HydroElasticFEM_xxx2026;
-            run_tests("all")'
+          for script in scripts/*/L*.jl; do
+            echo "::group::$script"
+            julia --project=. -O1 "$script"
+            echo "::endgroup::"
+          done
 
       - name: Upload figures, tables and processed data
         uses: actions/upload-artifact@v4

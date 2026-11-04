@@ -1,0 +1,61 @@
+name,kind,value,tolerance,passed
+"ω̃, finest mesh, T=0, c/c_crit=0, midelement, p=2",D,5.388264050276703e-6,0.001,true
+"width, finest mesh, T=0, c/c_crit=0, midelement, p=2",D,0.000370632346974209,0.001,true
+"rate err_omega, T=0, c/c_crit=0, midelement, p=2",D,1.8923625087762526,1.7,true
+"rate err_width, T=0, c/c_crit=0, midelement, p=2",D,1.9966230335366546,1.7,true
+"|R(ω̃) + 1|, finest mesh, T=0, c/c_crit=0, midelement, p=2",D,4.2697377577669415e-8,0.001,true
+"q/η at ω̃, T=0, c/c_crit=0, midelement, p=2",I,1.731948477689129e-14,1.0e-10,true
+"ω̃, finest mesh, T=0, c/c_crit=0, midelement, p=3",D,6.547053699179628e-7,0.001,true
+"width, finest mesh, T=0, c/c_crit=0, midelement, p=3",D,4.0815284418904696e-7,0.001,true
+"|R(ω̃) + 1|, finest mesh, T=0, c/c_crit=0, midelement, p=3",D,1.7947350049903944e-10,0.001,true
+"q/η at ω̃, T=0, c/c_crit=0, midelement, p=3",I,5.5512718695680715e-15,1.0e-10,true
+"ω̃, finest mesh, T=0, c/c_crit=0, node, p=2",D,5.5217753740510744e-6,0.001,true
+"width, finest mesh, T=0, c/c_crit=0, node, p=2",D,0.0003706474425559936,0.001,true
+"rate err_omega, T=0, c/c_crit=0, node, p=2",D,1.9299405931162945,1.7,true
+"rate err_width, T=0, c/c_crit=0, node, p=2",D,1.998866783961482,1.7,true
+"|R(ω̃) + 1|, finest mesh, T=0, c/c_crit=0, node, p=2",D,1.9856483456654994e-8,0.001,true
+"q/η at ω̃, T=0, c/c_crit=0, node, p=2",I,1.199040866595169e-14,1.0e-10,true
+"ω̃, finest mesh, T=0, c/c_crit=0, node, p=3",D,1.010689310021462e-10,0.001,true
+"width, finest mesh, T=0, c/c_crit=0, node, p=3",D,4.575076317792082e-9,0.001,true
+"|R(ω̃) + 1|, finest mesh, T=0, c/c_crit=0, node, p=3",D,9.28177057374077e-11,0.001,true
+"q/η at ω̃, T=0, c/c_crit=0, node, p=3",I,3.06421562781108e-14,1.0e-10,true
+"ω̃, finest mesh, T=0, c/c_crit=1, node, p=2",D,5.492694496123107e-6,0.001,true
+"width, finest mesh, T=0, c/c_crit=1, node, p=2",D,0.00019114829988309268,0.001,true
+"rate err_omega, T=0, c/c_crit=1, node, p=2",D,1.9293903308321065,1.7,true
+"rate err_width, T=0, c/c_crit=1, node, p=2",D,2.002511651422167,1.7,true
+"|𝒜(ω̃) − ½|, finest mesh, T=0, c/c_crit=1, node, p=2",D,8.734152295852837e-8,0.001,true
+"q/η at ω̃, T=0, c/c_crit=1, node, p=2",I,5.62982470713761e-15,1.0e-10,true
+"ω̃, finest mesh, T=0, c/c_crit=1, node, p=3",D,3.104694279443265e-11,0.001,true
+"width, finest mesh, T=0, c/c_crit=1, node, p=3",D,1.2197447496475888e-9,0.001,true
+"|𝒜(ω̃) − ½|, finest mesh, T=0, c/c_crit=1, node, p=3",D,2.1378731951404717e-8,0.001,true
+"q/η at ω̃, T=0, c/c_crit=1, node, p=3",I,6.099380855516084e-15,1.0e-10,true
+"ω̃, finest mesh, T=9.8, c/c_crit=0, midelement, p=2",D,6.846550627992443e-6,0.001,true
+"width, finest mesh, T=9.8, c/c_crit=0, midelement, p=2",D,0.00010362290297660781,0.001,true
+"rate err_omega, T=9.8, c/c_crit=0, midelement, p=2",D,1.8028774091220148,1.7,true
+"rate err_width, T=9.8, c/c_crit=0, midelement, p=2",D,2.020470031607187,1.7,true
+"|R(ω̃) + 1|, finest mesh, T=9.8, c/c_crit=0, midelement, p=2",D,4.72811507360795e-10,0.001,true
+"q/η at ω̃, T=9.8, c/c_crit=0, midelement, p=2",I,1.3211654106839199e-14,1.0e-10,true
+"ω̃, finest mesh, T=9.8, c/c_crit=0, midelement, p=3",D,1.778480998027021e-6,0.001,true
+"width, finest mesh, T=9.8, c/c_crit=0, midelement, p=3",D,3.11233145677825e-6,0.001,true
+"|R(ω̃) + 1|, finest mesh, T=9.8, c/c_crit=0, midelement, p=3",D,1.363979026397282e-11,0.001,true
+"q/η at ω̃, T=9.8, c/c_crit=0, midelement, p=3",I,2.7755576490808806e-14,1.0e-10,true
+"ω̃, finest mesh, T=9.8, c/c_crit=0, node, p=2",D,7.198015606446617e-6,0.001,true
+"width, finest mesh, T=9.8, c/c_crit=0, node, p=2",D,0.00010315672118765828,0.001,true
+"rate err_omega, T=9.8, c/c_crit=0, node, p=2",D,1.8743508040852956,1.7,true
+"rate err_width, T=9.8, c/c_crit=0, node, p=2",D,2.023974693921603,1.7,true
+"|R(ω̃) + 1|, finest mesh, T=9.8, c/c_crit=0, node, p=2",D,2.5479528129670323e-9,0.001,true
+"q/η at ω̃, T=9.8, c/c_crit=0, node, p=2",I,2.9976022471281943e-14,1.0e-10,true
+"ω̃, finest mesh, T=9.8, c/c_crit=0, node, p=3",D,2.9105609034019153e-9,0.001,true
+"width, finest mesh, T=9.8, c/c_crit=0, node, p=3",D,3.857328345624467e-8,0.001,true
+"|R(ω̃) + 1|, finest mesh, T=9.8, c/c_crit=0, node, p=3",D,1.811915583254516e-11,0.001,true
+"q/η at ω̃, T=9.8, c/c_crit=0, node, p=3",I,9.325873406851315e-15,1.0e-10,true
+"ω̃, finest mesh, T=9.8, c/c_crit=1, node, p=2",D,7.203935303179421e-6,0.001,true
+"width, finest mesh, T=9.8, c/c_crit=1, node, p=2",D,4.346783521858022e-5,0.001,true
+"rate err_omega, T=9.8, c/c_crit=1, node, p=2",D,1.874814045727335,1.7,true
+"rate err_width, T=9.8, c/c_crit=1, node, p=2",D,2.066563971155951,1.7,true
+"|𝒜(ω̃) − ½|, finest mesh, T=9.8, c/c_crit=1, node, p=2",D,1.1123615084596139e-8,0.001,true
+"q/η at ω̃, T=9.8, c/c_crit=1, node, p=2",I,9.0182552510313e-16,1.0e-10,true
+"ω̃, finest mesh, T=9.8, c/c_crit=1, node, p=3",D,2.718507641219503e-10,0.001,true
+"width, finest mesh, T=9.8, c/c_crit=1, node, p=3",D,1.1048908454824868e-9,0.001,true
+"|𝒜(ω̃) − ½|, finest mesh, T=9.8, c/c_crit=1, node, p=3",D,2.9984365546020797e-9,0.001,true
+"q/η at ω̃, T=9.8, c/c_crit=1, node, p=3",I,1.5490668944634816e-15,1.0e-10,true

@@ -1,40 +1,60 @@
 # HydroElasticFEM_xxx2026.jl
 
-Numerical verification suite for the locally resonant hydroelastic (LRH)
-formulation of J2025-LRMM, built on
+Numerical verification of the locally resonant hydroelastic (LRH)
+formulation of the paper J2025-LRMM, built on
 [HydroElasticFEM.jl](https://github.com/CMOE-TUDelft/HydroElasticFEM.jl).
-The tests and their parameters are specified in
+The tests and their acceptance criteria are specified in
 [`docs/verification_test_matrix.md`](docs/verification_test_matrix.md).
 
 ## Structure
 
-Each test `Lx-y` of the matrix has
+Every test is self-contained and can be read, run and reproduced on its own.
 
-- `src/Lx_y_<name>.jl` — computational body: a parameter struct and a
-  `run_Lx_y(params)` function returning raw results as a `Dict`;
-- `scripts/Lx-<level>/Lx-y-<name>.jl` — case definitions, DrWatson
-  bookkeeping, acceptance checks, and the paper figures/tables.
+| Location | Content |
+| --- | --- |
+| `src/Lx_y_<name>.jl` | One module per test: relation to the paper, the problem, one parameter struct (fixed and variable parameters), the FE problem written directly with the HydroElasticFEM.jl API, and the observables of one case (`run_case`). |
+| `scripts/<level>/Lx-y_<name>.jl` | One script per test: the cases of the study, DrWatson records, post-processing, acceptance checks, figures and tables. |
+| `src/references.jl` | The only shared code: analytical references of the paper (Sections 3–4), no FE. |
+| `test/` | Tests of the references, of each test's helpers, and a smoke run of each script. |
 
-Shared code lives in `src/common/` (workflow utilities, parameter sets,
-analytical references, FE builders, observables).
+Each test module defines
+
+- `Lx_y_Params` — every parameter of a case, grouped by comments into
+  *variable* (swept by the study) and *fixed* (host, forcing, layout,
+  discretisation, post-processing);
+- `VARIABLE` — the names of the variable fields; they name the simulation
+  record, and a hash of the fixed fields (`fixed_hash`) is appended, so a
+  changed fixed value never reuses an old record;
+- `run_case(p) -> Dict` — the raw observables and references of one case.
+
+## Tests
+
+| Test | Paper | Status |
+| --- | --- | --- |
+| [L1-1](src/L1_1_bare_host_dispersion.jl) bare host: dispersion and Green function (configuration A, vertical section) | `eq:host_symbol`, `eq:lat_green_1d`, `eq:point_power`, `eq:energy_flux`; FE `eq:discreteform_freq` | step 1 (one frequency, mesh convergence) |
+
+## Reproduce a test
+
+```bash
+julia --project -O1 scripts/L1-configA-vertical/L1-1_bare_host_dispersion.jl           # full study
+julia --project -O1 scripts/L1-configA-vertical/L1-1_bare_host_dispersion.jl --smoke   # one coarse case
+julia --project -O1 scripts/L1-configA-vertical/L1-1_bare_host_dispersion.jl --force   # recompute
+```
+
+Outputs, relative to the repository root:
 
 | Location | Content | Committed |
 | --- | --- | --- |
-| `data/sims/<test-id>/` | raw `produce_or_load` records with git commit/patch and HydroElasticFEM version | no |
-| `data/exp_pro/<test-id>/` | processed CSV, including `checks.csv` (pass/fail per acceptance criterion) | yes |
-| `plots/<level>/<test-id>/` | paper figures (`.pdf`, `.png`) and tables (`.tex`) | yes |
+| `data/sims/<test-id>/` | one DrWatson record per case: all parameters, git commit and patch, HydroElasticFEM pin (URL, revision, tree hash), Julia version, wall time | no |
+| `data/exp_pro/<test-id>/` | processed results and `checks.csv` (pass/fail per acceptance criterion) | yes |
+| `plots/<test-id>/` | figures (`.pdf`, `.png`) and tables (`.tex`) | yes |
 
-## Usage
+HydroElasticFEM.jl is tracked from its `main` branch; the Manifest pin is
+stored in every record. Use `-O1`: compilation dominates the run time at the
+default optimisation level.
 
-```julia
-using HydroElasticFEM_xxx2026
-list_tests()                      # registered tests
-run_tests("L1-5")                 # one test
-run_tests("L1")                   # one level
-run_tests("all"; test_suit=true)  # warm-up cases only (smoke test)
+## Tests of the code
+
+```bash
+julia --project -O1 -e 'using Pkg; Pkg.test(julia_args=["-O1"])'
 ```
-
-Run heavy cases with `julia --project -O1 -t <n>`. HydroElasticFEM.jl is
-tracked from its `main` branch (`Pkg.add(url=..., rev="main")`); every
-simulation record stores the Manifest pin (`hefem_rev`, `hefem_tree`).
-To work against a local checkout instead, `Pkg.develop(path="../HydroElasticFEM.jl")`.

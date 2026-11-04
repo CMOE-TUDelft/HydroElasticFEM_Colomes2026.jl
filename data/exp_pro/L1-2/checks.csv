@@ -1,0 +1,55 @@
+name,kind,value,tolerance,passed
+"err_far, finest mesh, T=0, ω=2, p=2",D,5.867476065408379e-6,0.001,true
+"rate err_far, T=0, ω=2, p=2",D,2.1073842341898663,1.7,true
+"err_patch, finest mesh, T=0, ω=2, p=2",D,5.861484546826991e-6,0.001,true
+"rate err_patch, T=0, ω=2, p=2",D,2.1038431130791575,1.7,true
+"err_power, finest mesh, T=0, ω=2, p=2",D,5.948645739550784e-6,0.001,true
+"rate err_power, T=0, ω=2, p=2",D,2.130567756931165,1.7,true
+"err_far, finest mesh, T=0, ω=2, p=3",D,4.834028908783674e-9,0.001,true
+"err_patch, finest mesh, T=0, ω=2, p=3",D,4.763909982520218e-9,0.001,true
+"err_power, finest mesh, T=0, ω=2, p=3",D,1.3958747491216172e-9,0.001,true
+"err_far, finest mesh, T=0, ω=5, p=2",D,0.00037534880888005014,0.001,true
+"rate err_far, T=0, ω=5, p=2",D,1.991515552742092,1.7,true
+"err_patch, finest mesh, T=0, ω=5, p=2",D,0.00037539036716195,0.001,true
+"rate err_patch, T=0, ω=5, p=2",D,1.990193156102591,1.7,true
+"err_power, finest mesh, T=0, ω=5, p=2",D,0.0003753926813585551,0.001,true
+"rate err_power, T=0, ω=5, p=2",D,1.993857002729406,1.7,true
+"err_far, finest mesh, T=0, ω=5, p=3",D,1.5626482474019176e-7,0.001,true
+"err_patch, finest mesh, T=0, ω=5, p=3",D,4.9394765291660484e-8,0.001,true
+"err_power, finest mesh, T=0, ω=5, p=3",D,5.712302164617711e-8,0.001,true
+"err_far, finest mesh, T=0, ω=10, p=2",D,0.00040924698915033466,0.001,true
+"rate err_far, T=0, ω=10, p=2",D,1.985527123624379,1.7,true
+"err_patch, finest mesh, T=0, ω=10, p=2",D,0.00040911975372064427,0.001,true
+"rate err_patch, T=0, ω=10, p=2",D,1.9867067880957574,1.7,true
+"err_power, finest mesh, T=0, ω=10, p=2",D,0.0004095406876647445,0.001,true
+"rate err_power, T=0, ω=10, p=2",D,1.9859961506056434,1.7,true
+"err_far, finest mesh, T=0, ω=10, p=3",D,2.478074667651861e-7,0.001,true
+"err_patch, finest mesh, T=0, ω=10, p=3",D,2.12331804831002e-7,0.001,true
+"err_power, finest mesh, T=0, ω=10, p=3",D,2.6041412115596074e-7,0.001,true
+"err_far, finest mesh, T=9.8, ω=2, p=2",D,2.473514818404744e-6,0.001,true
+"rate err_far, T=9.8, ω=2, p=2",D,2.1478987655391064,1.7,true
+"err_patch, finest mesh, T=9.8, ω=2, p=2",D,2.470963551635872e-6,0.001,true
+"rate err_patch, T=9.8, ω=2, p=2",D,2.144185268718488,1.7,true
+"err_power, finest mesh, T=9.8, ω=2, p=2",D,2.5596895780743978e-6,0.001,true
+"rate err_power, T=9.8, ω=2, p=2",D,2.264117147636815,1.7,true
+"err_far, finest mesh, T=9.8, ω=2, p=3",D,1.357844243437231e-8,0.001,true
+"err_patch, finest mesh, T=9.8, ω=2, p=3",D,1.3497398302304647e-8,0.001,true
+"err_power, finest mesh, T=9.8, ω=2, p=3",D,2.3892039457962255e-9,0.001,true
+"err_far, finest mesh, T=9.8, ω=5, p=2",D,4.855567305502725e-5,0.001,true
+"rate err_far, T=9.8, ω=5, p=2",D,2.0054024415882226,1.7,true
+"err_patch, finest mesh, T=9.8, ω=5, p=2",D,4.8493133914723235e-5,0.001,true
+"rate err_patch, T=9.8, ω=5, p=2",D,2.000756598550706,1.7,true
+"err_power, finest mesh, T=9.8, ω=5, p=2",D,4.864195449516551e-5,0.001,true
+"rate err_power, T=9.8, ω=5, p=2",D,2.006364005569373,1.7,true
+"err_far, finest mesh, T=9.8, ω=5, p=3",D,1.3912078437735662e-7,0.001,true
+"err_patch, finest mesh, T=9.8, ω=5, p=3",D,9.864985640802378e-8,0.001,true
+"err_power, finest mesh, T=9.8, ω=5, p=3",D,2.1147288364886663e-9,0.001,true
+"err_far, finest mesh, T=9.8, ω=10, p=2",D,0.00013000417793511388,0.001,true
+"rate err_far, T=9.8, ω=10, p=2",D,1.992139327303713,1.7,true
+"err_patch, finest mesh, T=9.8, ω=10, p=2",D,0.00012987143928127077,0.001,true
+"rate err_patch, T=9.8, ω=10, p=2",D,1.9905566803596069,1.7,true
+"err_power, finest mesh, T=9.8, ω=10, p=2",D,0.00013015988520148625,0.001,true
+"rate err_power, T=9.8, ω=10, p=2",D,1.9931017307857435,1.7,true
+"err_far, finest mesh, T=9.8, ω=10, p=3",D,3.096358022001457e-7,0.001,true
+"err_patch, finest mesh, T=9.8, ω=10, p=3",D,3.2076687371730627e-7,0.001,true
+"err_power, finest mesh, T=9.8, ω=10, p=3",D,2.7847941597158865e-7,0.001,true

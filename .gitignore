@@ -18,3 +18,6 @@ data/VTKOutput/
 !data/exp_pro/**/*.csv
 !plots/**/*.png
 !plots/**/*.pdf
+
+# Working notes (local only)
+notes/

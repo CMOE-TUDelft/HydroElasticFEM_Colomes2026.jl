@@ -1,0 +1,13 @@
+name,kind,value,tolerance,passed
+"err_k, finest mesh, p=2",D,9.663448301755473e-5,0.001,true
+"rate err_k, p=2",D,2.0009864025519013,1.7,true
+"err_gamma, finest mesh, p=2",D,0.00040924698915033466,0.001,true
+"rate err_gamma, p=2",D,1.985527123624379,1.7,true
+"err_near_re, finest mesh, p=2",D,0.000523727095975959,0.001,true
+"rate err_near_re, p=2",D,1.977999277343449,1.7,true
+"err_near_im, finest mesh, p=2",D,0.0005731471031006253,0.001,true
+"rate err_near_im, p=2",D,2.0020567363696946,1.7,true
+"err_k, finest mesh, p=3",D,4.3066936683544554e-9,0.001,true
+"err_gamma, finest mesh, p=3",D,2.478074667651861e-7,0.001,true
+"err_near_re, finest mesh, p=3",D,1.076076499171731e-6,0.001,true
+"err_near_im, finest mesh, p=3",D,2.9416648637498594e-7,0.001,true

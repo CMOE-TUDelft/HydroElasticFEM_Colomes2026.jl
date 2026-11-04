@@ -1,0 +1,497 @@
+\section{Local effective-medium dispersion theory} \label{sec:dispersion_relation}
+The effective-medium description of a floating plate carrying distributed resonators was introduced in \cite{liu2025metaplate} and used for graded designs in \cite{liu2025metaplate,jin2026low}. In this section we derive it for a damped, pre-tensioned plate with arbitrary, possibly graded, resonator populations. Then, we use the effective-medium theory to isolate the effect that distinguishes a LHR structure, also denoted by floating metaplate in the literature, from a locally resonant structure in vacuo. In the hydroelastic case, the resonators load the supporting structure, denoted also by host, whose inertia includes the fluid added mass. We will show that the fluid-loaded structure inerta depends on wavenumber and diverges at long wavelength. As a consequence, the effective resonator mass ratio becomes wavenumber dependent (see Section~\ref{subsubsec:fluid_dilution}). This mass ratio sets the strength of the resonator--plate hybridisation and prevents the appearence of a complete stop band of the homogenised floating metaplate.
+
+In this section the local relation is derived by effective-medium homogenization, based on a local spatial density of resonators rather than on a globally repeating unit cell. Let $\boldsymbol{\theta}=(\tilde m,\tilde k,\tilde c)$ denote the density-normalised resonator parameters, i.e mass, stiffness and damping, and let $n(\xvec,\boldsymbol{\theta})$ be their local joint number density, so that $n(\xvec,\boldsymbol{\theta})\,\mathrm{d}\boldsymbol{\theta}$ is the number of resonators per unit plate measure near $\xvec$ whose parameters lie in the subset $\mathrm{d}\boldsymbol{\theta}$. This density may vary with position and may describe anisotropic or graded resonator populations. For a population with common fixed set of parameters, $\boldsymbol{\theta}_r$, it reduces to $n(\xvec,\boldsymbol{\theta})=n(\xvec)\,\delta(\boldsymbol{\theta}-\boldsymbol{\theta}_r)$. 
+
+Let $d_s(\xvec)$ denote a local mean nearest-neighbour spacing and let $L_n(\xvec)=n(\xvec)/\lvert\nabla n(\xvec)\rvert$ denote the characteristic length over which the resonator density changes, with $L_n=\infty$ for a uniform density. The effective-medium approximation applies when the resonator spacing and the scale over which this density varies are small compared with the wavelength, while the physical attachment positions remain arbitrary and need not be periodic. With the local wavelength $\lambda(\xvec)=2\pi/\lvert\mathbf{k}(\xvec)\rvert$, the scale-separation requirements are
+\begin{equation}\label{eq:homogenization_scale_separation}
+    \varepsilon_s(\xvec)=\frac{d_s(\xvec)}{\lambda(\xvec)}\ll 1,
+    \qquad
+    \varepsilon_n(\xvec)=\frac{\lambda(\xvec)}{L_n(\xvec)}\ll 1.
+\end{equation}
+%% [2026-10-28 numerical feedback, J2025-LRMM Sec. 6]
+{\color{red}For a line lattice at fixed loading, the finite element results of Section~\ref{subsubsec:num_L1_8} quantify the first condition: the hybridisation of the discrete lattice differs from the local value by a correction of order $\varepsilon_s^{4.5}$, $2.7\times10^{-4}$ at $\varepsilon_s=\tfrac14$ and $6.2\times10^{-7}$ at $\varepsilon_s=\tfrac1{16}$.}
+
+For each discrete resonator, let us define, respectively, the natural frequency and damping ratio as
+\begin{equation}\label{eq:resonator_natural_freq_damping}
+    \omega_{r,i}^2=\frac{k_{\rho,i}}{m_{\rho,i}},
+    \qquad\zeta_i=\frac{c_{\rho,i}}{2\sqrt{k_{\rho,i}m_{\rho,i}}},
+    \qquad i=1,\ldots,N.
+\end{equation}
+
+Assuming an harmonic motion, from equation \eqref{eq:resonators_freq} we can express the resonator motion amplitude as a function of the plate deflection amplitude at the attachment position, $\eta(\xvec_i)$, as
+\begin{equation}\label{eq:resonator_motion}
+    q_i(\omega)=\frac{k_{\rho,i}-i\omega c_{\rho,i}}{-\omega^2m_{\rho,i}+k_{\rho,i}-i\omega c_{\rho,i}}\,\eta(\xvec_i),
+    \qquad i=1,\ldots,N.
+\end{equation}
+
+Using equation \eqref{eq:resonator_motion}, the dynamic force exerted by the $i$-th resonator on the plate can be expressed as
+\begin{equation}\label{eq:resonator_force}
+    F_i(\omega) = \left(k_{\rho,i}-i\omega c_{\rho,i}\right)\left(q_i-\eta(\xvec_i)\right)=\frac{\omega^2 \,m_{\rho,i}\left(k_{\rho,i}-i\omega c_{\rho,i}\right)}{-\omega^2 m_{\rho,i}+k_{\rho,i}-i\omega c_{\rho,i}}\,\eta(\xvec_i)=\omega^2 \, m_{\mathrm{eff,\rho,i}}(\omega)\,\eta(\xvec_i),
+    \qquad i=1,\ldots,N.
+\end{equation}
+Where $m_{\mathrm{eff,\rho,i}}(\omega)$ is the effective dynamic mass of the $i$-th resonator relative to the fluid density, defined as
+\begin{equation}
+    m_{\mathrm{eff,\rho,i}}(\omega)=m_{\rho,i}\frac{\left(k_{\rho,i}-i\omega c_{\rho,i}\right)}{-\omega^2 m_{\rho,i}+k_{\rho,i}-i\omega c_{\rho,i}}=m_{\rho,i}\frac{\left(1-2i\zeta_i \frac{\omega}{\omega_{r,i}}\right)}{1-\left(\frac{\omega}{\omega_{r,i}}\right)^2-2i\zeta_i \frac{\omega}{\omega_{r,i}}}.
+\end{equation}
+
+Considering the homogenized fluid--structure problem, let $\mathcal{Z}_f(\mathbf{k},\omega)$ denote the local pressure-to-displacement impedance obtained from equation~\eqref{eq:dynamic_bc_m_freq} by taking the fluid Schur complement at a given position $\xvec$:
+\begin{equation}\label{eq:fluid_impedance}
+    -i\omega\phi\big|_{\Gm}=\mathcal{Z}_f(\mathbf{k},\omega)\eta.
+\end{equation}
+Here $\mathbf{k}$ is a local wavevector used to probe the homogenized medium, not necessarily a global Bloch wavenumber. The impedance operator is generally complex-valued and may vary with position for general geometries. For a domain with flat bottom of depth $H$ and open boundaries, the local fluid impedance is given by
+\begin{equation}\label{eq:Zf_closed_form}
+\mathcal Z_f(\mathbf{k},\omega)=\dfrac{-\omega^2}{|\mathbf{k}|\tanh(|\mathbf{k}|H)}.
+\end{equation}
+In the deep- and shallow-water limits, equation~\eqref{eq:Zf_closed_form} reduces to $\mathcal Z_f\to-\omega^2/|\mathbf{k}|$ for $|\mathbf{k}|H\to\infty$ and to $\mathcal Z_f\to-\omega^2/(|\mathbf{k}|^2H)$ for $|\mathbf{k}|H\to0$, respectively.
+
+\begin{remark}
+The dimensionless added mass per unit area, normalized by the fluid density, is
+\begin{equation}
+    M_{f,\rho}(\mathbf{k},H)
+    =
+    \frac{1}{|\mathbf{k}|\tanh(|\mathbf{k}|H)},
+    \qquad
+    \left.
+    \frac{\partial M_{f,\rho}}{\partial\omega}
+    \right|_{\mathbf{k},H}
+    =0.
+    \label{eq:plane_wave_added_mass}
+\end{equation}
+The dimensional added mass per unit area is
+$M_f=\rho M_{f,\rho}$. Thus, for the infinite fluid--structure configuration, the hydrodynamic inertia depends on wavenumber and water depth, but not on frequency. The frequency dependence of the
+fluid impedance in Eq.~\eqref{eq:Zf_closed_form} enters
+through the factor $-\omega^2$, whereas its inertial coefficient is fixed for prescribed $\mathbf{k}$ and $H$.
+%
+However, for a finite plate, the resulting fluid response depends on frequency through the propagating free-surface wave number, the radiation condition, and the spatial distribution of the structural motion. Eliminating the fluid field by factorization,
+therefore, produces a frequency-dependent hydrodynamic operator.
+Its inertial and dissipative contributions are commonly interpreted in terms of radiation added mass and radiation damping, respectively.
+
+Therefore, equation \eqref{eq:plane_wave_added_mass} should be understood as a local constitutive result restricted to a uniform medium in an infinite (or periodic) structure. In the finite domain case, the operator and its frequency dependence are instead
+determined by the coupled boundary-value problem, as discussed in
+Section~\ref{sec:finite_domain}.
+\end{remark}
+
+We now use a local plane-wave probe $\eta(\xvec)\propto\exp(i\mathbf{k}\cdot\xvec)$ for the homogenized plate. The pre-tension and bending operators then contribute $T_\rho(1-i\omega\tau)|\mathbf{k}|^2$ and $C_\rho(1-i\omega\tau_b)|\mathbf{k}|^4$, respectively, for an isotropic plate. Replacing the arbitrary point attachments by their local continuous density, following the effective-medium construction of \cite{liu2025metaplate}, gives
+\begin{equation}\label{eq:dispersion_relation}
+\begin{aligned}
+    \mathcal{D}(\mathbf{k},\omega)={}&\mathcal{Z}_f(\mathbf{k},\omega)+g
+    +T_\rho(1-i\omega\tau)|\mathbf{k}|^2
+    +C_\rho(1-i\omega\tau_b)|\mathbf{k}|^4
+    -\omega^2m_{\mathrm{eff},\rho}(\xvec,\omega)=0.
+\end{aligned}
+\end{equation}
+For an anisotropic plate, the bending term in equation~\eqref{eq:dispersion_relation} is replaced by $(\mathbf{C}_\rho(1-i\omega\tau_b):(\mathbf{k}\otimes\mathbf{k})):(\mathbf{k}\otimes\mathbf{k})$. Nonetheless, for the sake of simplicity, we will restrict ourselves to isotropic plates in the following discussion.
+The corresponding local effective dynamic mass density is
+\begin{equation}\label{eq:effective_mass_dispersion}
+    m_{\mathrm{eff},\rho}(\xvec,\omega)
+    =m_\rho+\int_{\boldsymbol{\theta}}
+    n(\xvec,\boldsymbol{\theta})\,
+    \tilde m\,\frac{\tilde k-i\omega \tilde c}
+    {\tilde k-\omega^2\tilde m-i\omega \tilde c}
+    \,\mathrm{d}\boldsymbol{\theta},
+    \qquad \boldsymbol{\theta}=(\tilde m,\tilde k,\tilde c).
+\end{equation}
+For identical resonators, $n(\xvec,\boldsymbol{\theta})=n(\xvec)\,\delta(\boldsymbol{\theta}-\boldsymbol{\theta}_r)$ with $\boldsymbol{\theta}_r=(m_{\rho,r},k_{\rho,r},c_{\rho,r})$, equation~\eqref{eq:effective_mass_dispersion} reduces to 
+\begin{equation}\label{eq:effective_mass_dispersion_single}
+  m_{\mathrm{eff},\rho}(\xvec,\omega)=m_\rho+n(\xvec)m_{\rho,r}\frac{k_{\rho,r}-i\omega c_{\rho,r}}{k_{\rho,r}-\omega^2m_{\rho,r}-i\omega c_{\rho,r}}.
+\end{equation}
+Thus, the effective dispersion relation can vary with $\xvec$ even though the plate material properties are uniform and all the resonators have same properties. Note also that the dispersion relation for uniformly distributed resonators, i.e. $n(\xvec,\thetavec)=n_0$ with $n_0$ a constant density, can still vary with position if the fluid depth is nonuniform, since the fluid impedance $\mathcal{Z}_f(\mathbf{k},\omega)$ depends on the local depth $H(\xvec)$.
+
+In general, both the plate operators and resonator impedances are damped, therefore, the local roots for frequency and wavenumber at a given point $\xvec$, $\omega(\mathbf{k};\xvec)$ or $\mathbf{k}(\omega;\xvec)$, are generally complex-valued. In the non-damped limit, a negative real part of the effective dynamic mass indicates a local dynamic-inertia reversal, but it is not by itself a sufficient criterion for a complete hydroelastic stop band.
+
+\begin{remark}
+The relation in equation~\eqref{eq:dispersion_relation} is a local constitutive law, not a global Bloch dispersion relation. To capture the full spatial complexity of the resonator array, the exact arbitrary-position model should be considered, i.e. 
+\begin{equation}\label{eq:arbitrary_resonator_distribution}
+    \sum_{i=1}^N (k_{\rho,i}-i\omega c_{\rho,i})\left(\eta(\xvec_i)-q_i\right)
+    \delta(\xvec-\xvec_i).
+\end{equation}
+In this regard, the finite element formulation of Section~\ref{sec:numerical_formulation} retains this point distribution and is suitable for such analysis.
+\end{remark}
+
+Since the general hydroelastic system involves complex-valued, frequency-dependent variables and a transcendental fluid impedance, numerical root-finding is strictly required. However, by imposing targeted physical assumptions, we can reduce the characteristic equation $\mathcal{D}(\mathbf{k}, \omega) = 0$ to closed-form algebraic expressions that clarify the structure of the local dispersion branches.
+
+\subsection{Non-dissipative homogeneous isotropic LRH plate in flat bottom fluid domain}\label{subsubsec:non-dissipative_homogeneous_isotropic_dispersion}
+Let us consider an infinite domain in which the resonators are identical and uniformly distributed, so that $n(\xvec,\boldsymbol{\theta}) = n_0\,\delta(\boldsymbol{\theta}-\boldsymbol{\theta}_r)$ with constant number density $n_0$ (per unit length in 1D, per unit area in 2D) and common resonator parameters $\boldsymbol{\theta}_r=(m_{\rho,r},k_{\rho,r},c_{\rho,r})$. We also assume the non-dissipative limit, i.e. $\tau=0$, $\tau_b=0$, and $c_{\rho,r}=0$. Since the plate is isotropic and the resonator population is spatially uniform, the one- and two-dimensional formulations share the same scalar wavenumber magnitude $k=|\mathbf{k}|$.
+
+Under these assumptions, equation~\eqref{eq:effective_mass_dispersion} reduces to the purely real effective dynamic mass
+\begin{equation}
+    m_{\mathrm{eff},\rho}(\omega)
+    = m_\rho + n_0 m_{\rho,r}\frac{\omega_r^2}{\omega_r^2-\omega^2},
+\end{equation}
+where $\omega_r = \sqrt{k_{\rho,r}/m_{\rho,r}}$ is the undamped resonator natural frequency. Substituting this expression into the local effective dispersion relation~\eqref{eq:dispersion_relation} gives the homogeneous non-dissipative limit
+\begin{equation}
+    g + T_\rho k^2 + C_\rho k^4
+    - \omega^2\left[m_\rho + n_0 m_{\rho,r}\frac{\omega_r^2}{\omega_r^2-\omega^2} + \frac{1}{k\tanh(kH)}\right]=0,
+\end{equation}
+which is equivalent to the scalar dispersion law obtained for $\mathcal{Z}_f$ given by equation~\eqref{eq:Zf_closed_form}, with $|\mathbf{k}|=k$. This form is consistent with the previous definitions of $m_{\mathrm{eff},\rho}$, $n_0$, and the fluid impedance, and it remains a local constitutive relation rather than a global Bloch dispersion law.
+
+%% W-BODY-03: B13 applied per D-n (all option a): E-06 L_g, E-07 ka/pi, E-08 s = omega^2, E-19 (E-09/E-10) D-nu and b(k), E-14 Liu mapping.
+%% W-BODY-03b (R-MAP-03 m-N12): garbled Liu citation fixed ("in \citep[eqn. 3.4]{...} their equation (3.4)" -> "\citep[eq.~(3.4)]{...}"; "than the" -> "to that").
+This simplification leads to a similar effective-plate representation to that derived by Liu et al. \citep[eq.~(3.4)]{liu2025metaplate}, with the only difference being the membrane stiffness term given by the pre-tension $T_\rho$. 
+% In the notation of Liu et al., whose groups are dimensional, the parameters of Table~\ref{tab:dispersion_test_parameters} correspond, in SI units and with lattice spacing $a=1/n_0=1~\si{\meter}$, to $\gamma_0=m_\rho=0.01~\si{\meter}$, $\beta=D/(\rho g)=C_\rho/g=0.05~\si{\meter\tothe{4}}$ and $\gamma_1=m_r/(a\rho)=n_0m_{\rho,r}=0.01~\si{\meter}$.
+The effect of the resonator population is absorbed into a modified inertial term, resulting into a plate with the same host stiffness but an effective frequency-dependent dynamic mass density. Writing
+\begin{equation}
+    m_{\mathrm{eq},\rho}(\omega)
+    = m_\rho + m_{\mathrm{res},\rho}(\omega),
+    \qquad
+    m_{\mathrm{res},\rho}(\omega)
+    = n_0 m_{\rho,r}\frac{1}{1-\left(\frac{\omega}{\omega_r}\right)^2},
+\end{equation}
+we obtain the equivalent-plate law
+\begin{equation}\label{eq:equivalent_isotropic_plate_dispersion}
+    g + T_\rho k^2 + C_\rho k^4
+    - \omega^2\left[m_{\mathrm{eq},\rho}(\omega)+\frac{1}{k\tanh(kH)}\right]=0.
+\end{equation}
+
+In this simplified setting, the roots of the scalar equation can be interpreted as two dispersion branches separated by the local resonance frequency $\omega_r$, and the two branches anticross around $\omega_r$, bracketing it at every wavenumber. Whether a complete stop band exists must be assessed from the full root structure of the above equation over all wavenumbers, or from a Bloch analysis of the discrete resonator lattice.
+%, rather than inferred from the sign of the effective mass or from a finite wavenumber window.
+A closed-form solution for the roots of equation~\eqref{eq:equivalent_isotropic_plate_dispersion} is reported in Appendix~\ref{app:closed_form_isotropic}, not presented here for the sake of brevity.
+
+To visualize the dispersion branches for this particular case, let us consider the set of parameters listed in Table~\ref{tab:dispersion_test_parameters}.
+%
+% This can be removed:
+%-------
+% The material, geometric and resonator parameters used in the homogeneous and graded dispersion tests, Section~\ref{subsec:graded_resonators}, are shown in Table~\ref{tab:dispersion_test_parameters}. The plate quantities $m_\rho$ and $C_\rho$ are the mass and bending-rigidity parameters appearing in the normalized hydroelastic model. The two pre-tension cases use $T_\rho=0$ and $T_\rho=9.8\ \si{\meter\cubed\per\second\squared}$ ($T=9800\ \si{\newton\per\meter}$), respectively. %% ERRATUM E-03 (PI-approved 2026-10-02; D-d)
+% %% E-06 sentence from 04 T-F3-03_slow_grading.md sec.5 (handoff to 13); EV-new (04, eps_n table). L_g = 500a PI-confirmed (D-ah, PI-DECISIONS-2026-10-05).
+% %% W-BODY-03b (R-MAP-03 m-N3): PROVISIONAL marker removed (D-ah); "<= 0.10" -> "\lesssim 0.1 (at most 0.104, at omega = 1)" per 04 T-F3-03 sec.2-3.
+% We take a slow grading, $L_g=500~\si{\meter}=500a$, for which $\varepsilon_n=\lambda/L_g\lesssim0.1$ (at most $0.104$, at $\omega=1~\si{\radian\per\second}$) for exponential frequency grading and for density grading over the whole plotted band $\omega\in[1,10]~\si{\radian\per\second}$ (both pre-tensions), whereas for linear grading the condition holds only for $\omega\gtrsim2.4$--$2.6~\si{\radian\per\second}$ ($T_\rho=0$ and $T_\rho>0$, respectively) because its local grading length $L_g-x$ vanishes at the low-frequency end.
+% ----
+%
+%
+\begin{table}[h!]
+    \centering
+    \caption{Material, geometric and resonator parameters used in the dispersion tests of Sections~3.1 and~3.2.}
+    \label{tab:dispersion_test_parameters}
+    \footnotesize
+    \begin{tabular}{lll}
+        \hline
+        Quantity & Symbol & Value \\
+        \hline
+        Fluid density & $\rho$ & $1000\ \si{\kilogram\per\meter\cubed}$ \\
+        Gravity & $g$ & $9.8\ \si{\meter\per\second\squared}$ \\
+        Fluid depth & $H$ & $10\ \si{\meter}$ \\
+        Plate mass per area & $m_\rho$ & $0.01\ \si{\meter}$ ($m=10\ \si{\kilogram\per\meter\squared}$) \\
+        Bending parameter & $C_\rho$ & $0.49\ \si{\meter\tothe{5}\per\second\squared}$ ($D=490\ \si{\newton\meter}$) \\
+        Pre-tension & $T_\rho$ & $0$ or $9.8\ \si{\meter\cubed\per\second\squared}$ ($T=9800\ \si{\newton\per\meter}$) \\
+        Resonator density & $n_0$ & $1\ \si{\per\meter}$ (1D) \\
+        Resonator mass parameter & $m_{\rho,r}$ & $0.01\ \si{\meter\squared}$ (1D) \\
+        Resonator frequency & $\omega_r$ & $10\ \si{\radian\per\second}$ \\
+        % Grading length & $L_g$ & $500\ \si{\meter}$ ($=500a$) \\
+        % Frequency grading range & $\omega_r(x)$ & $10$ to $1\ \si{\radian\per\second}$ \\
+        % Density grading law & $n(x)$ & $n_0e^{-x/L_g}$ \\
+        \hline
+    \end{tabular}
+\end{table}
+%
+%   HEREEE
+%
+Figure~\ref{fig:subsubsec_non_dissipative_homogeneous_isotropic_dispersion}
+shows the explicit dispersion branches for the LRH plate without (left) and with pre-tension (right). In both cases, the lower branch is continuously connected to the bare hydroelastic plate response at frequencies below the local resonance, while the upper branch is predominantly associated with the resonator motion and approaches $\omega_r$ over a broad wavenumber interval. In the figure, the diamonds mark $\omega_\mp(k_c)$, the values of the lower and upper branches $\omega_-(k)$ and $\omega_+(k)$ evaluated at the wavenumber $k_c$, i.e. where the bare-plate branch crosses $\omega_r$. Note that their separation is the anticrossing gap at that crossing point. Since the two branches bracket $\omega_r$ at every wavenumber (Appendix~\ref{app:closed_form_isotropic}), this separation is not, by itself, a stop band of a discrete structure. The parameters of Table~\ref{tab:dispersion_test_parameters} correspond to those of \cite{liu2025metaplate}. With $a=1/n_0$, their crossing wavenumbers, $k_ca/\pi=0.87$ and $0.61$, give $\varepsilon_s=0.44$ and $0.31$ in equation~\eqref{eq:homogenization_scale_separation}, i.e. outside the strict validity range of the local model. We retain them for a direct comparison with \cite{liu2025metaplate}, and Section~\ref{subsubsec:lat_long_wave} uses them to quantify the error of the local model against the exact discrete lattice.
+
+For $T_\rho=0$, the lower branch is governed by the floating plate and fluid inertia, whereas the resonator produces the upper branch and the anticrossing gap marked in Fig.~\ref{fig:subsubsec_non_dissipative_homogeneous_isotropic_dispersion}. Introducing $T_\rho>0$ increases the bare host hydroelastic branch through $T_\rho k^2$, so that it crosses $\omega_r$ at a smaller wavenumber $k_c$, while the resonator frequency $\omega_r$ remains fixed. Since the fluid added mass increases as the wavenumber decreases, pre-tension also reduces the anticrossing gap, from $0.163$ to $0.138$. In Section~\ref{subsubsec:fluid_dilution} we show that this reduction is precisely given by the fluid added mass at $k_c$.
+\begin{figure}[pos=htbp]
+    \centering
+    \includegraphics[width=0.49\linewidth]{figures/LRH_t0.png}
+    \hfill
+    \includegraphics[width=0.49\linewidth]{figures/LRH_tpositive.png}
+    \caption{Explicit local dispersion branches for the non-dissipative homogeneous isotropic LRH plate considering zero pre-tension, $T_\rho=0$ (left), and positive pre-tension, $T_\rho>0$ (right). Diamonds mark $\omega_\mp(k_c)$ at $\pm k_c a/\pi$, where the bare branch crosses $\omega_r$ (anticrossing gap $(\omega_+-\omega_-)/\omega_r=\sqrt{\mu(k_c)}=0.163$ for $T_\rho=0$ and $0.138$ for $T_\rho>0$, equation~\eqref{eq:anticrossing}).}
+    \label{fig:subsubsec_non_dissipative_homogeneous_isotropic_dispersion}
+\end{figure}
+
+{\color{red} %To review
+\subsubsection{Fluid dilution of the resonator mass ratio}\label{subsubsec:fluid_dilution}
+Dividing the quadratic form of equation~\eqref{eq:equivalent_isotropic_plate_dispersion} (Appendix~\ref{app:closed_form_isotropic}) by the total host inertia, $m_\rho+M_{f,\rho}(k,H)$, shows that the coupling between plate and resonators is controlled by two quantities only. The first is the bare hydroelastic branch, $\omega_0^2(k)=K(k)/\big(m_\rho+M_{f,\rho}(k,H)\big)$, with $K(k)=g+T_\rho k^2+C_\rho k^4$. The second is the wavenumber-dependent mass ratio
+\begin{equation}\label{eq:lat_mu}
+    \mu(k)=\frac{n_0\,m_{\rho,r}}{m_\rho+M_{f,\rho}(k,H)} .
+\end{equation}
+Indeed, with $s=\omega^2$, the homogeneous non-dissipative dispersion relation reads
+\begin{equation}\label{eq:normalised_quadratic}
+    s^2-\big[\omega_0^2(k)+\omega_r^2\big(1+\mu(k)\big)\big]s+\omega_0^2(k)\,\omega_r^2=0 .
+\end{equation}
+In vacuo, $M_{f,\rho}=0$ and $\mu=n_0m_{\rho,r}/m_\rho$ is a constant fixed by the design: it is the mass ratio that sets the local-resonance gap $[\omega_r,\omega_r\sqrt{1+\mu}]$ of a metaplate \cite{xiao2012flexural}. For a floating plate, the fluid added mass enters the denominator of equation~\eqref{eq:lat_mu} and dilutes the resonators. This has two consequences.
+
+\paragraph{Hybridisation strength.} At the crossing wavenumber $k_c$, defined by $\omega_0(k_c)=\omega_r$, the roots of equation~\eqref{eq:normalised_quadratic} satisfy $s_+s_-=\omega_r^4$ and $s_++s_-=\omega_r^2\big(2+\mu(k_c)\big)$. Hence $(\omega_+-\omega_-)^2=s_++s_--2\sqrt{s_+s_-}=\mu(k_c)\,\omega_r^2$, that is,
+\begin{equation}\label{eq:anticrossing}
+    \frac{\omega_+(k_c)-\omega_-(k_c)}{\omega_r}=\sqrt{\mu(k_c)} ,
+\end{equation}
+exactly within the local model. For the parameters of Table~\ref{tab:dispersion_test_parameters}, the plate-only mass ratio is $n_0m_{\rho,r}/m_\rho=1$. The added mass at the crossing, however, is $M_{f,\rho}(k_c,H)=0.365$~m for $T_\rho=0$ and $0.519$~m for $T_\rho>0$. Hence $\mu(k_c)=0.0267$ and $0.0189$, and equation~\eqref{eq:anticrossing} gives the gaps $0.163$ and $0.138$ of Figure~\ref{fig:subsubsec_non_dissipative_homogeneous_isotropic_dispersion}. Relative to the same structure in vacuo, the fluid reduces the hybridisation by the factor $\sqrt{m_\rho/(m_\rho+M_{f,\rho}(k_c,H))}$, i.e. by about $6$ and $7$, respectively. Pre-tension raises $\omega_0(k)$, lowers $k_c$ and increases $M_{f,\rho}(k_c,H)$; at fixed resonator mass, it therefore weakens the hybridisation. In deep water and for $M_{f,\rho}\gg m_\rho$, $M_{f,\rho}\simeq1/k_c$, and equation~\eqref{eq:anticrossing} gives the design rule
+\begin{equation}\label{eq:dilution_design_rule}
+    n_0\,m_{\rho,r}\simeq\Big(\frac{\Delta\omega}{\omega_r}\Big)^2\frac{1}{k_c},
+\end{equation}
+with $\Delta\omega=\omega_+(k_c)-\omega_-(k_c)$. That is, the resonator mass per unit area must be compared with the mass of a fluid layer of thickness $1/k_c=\lambda_c/(2\pi)$, not with the mass of the plate.
+%% [2026-10-28 numerical feedback, J2025-LRMM Sec. 6]
+{\color{red}The finite element model of the discrete lattice confirms the dilution: in seven host and resonator variants its splitting at $k_c$ is $\sqrt{\mu(k_c)}$, between $0.064$ and $0.20$, and not the in-vacuo value $1$; at fixed $k_c$ it does not depend on the depth (Section~\ref{subsubsec:num_L1_8}).}
+
+\paragraph{Absence of a complete local stop band.} As $k\to0$, $M_{f,\rho}(k,H)\to\infty$, so that $\mu(k)\to0$ and $\omega_0(k)\to0$. Equation~\eqref{eq:normalised_quadratic} then tends to $s(s-\omega_r^2)=0$, and $s_+(k)\to\omega_r^2$ from above. As $k\to\infty$, $\omega_0(k)\to\infty$ and $s_-(k)\to\omega_r^2$ from below. Since the two branches bracket $\omega_r$ at every wavenumber (Appendix~\ref{app:closed_form_isotropic}), every frequency other than $\omega_r$ has a real local root. The homogenised floating metaplate therefore has no complete stop band for any choice of parameters, in contrast with the gap $[\omega_r,\omega_r\sqrt{1+\mu}]$ in vacuo. {\color{red}A finite element discretisation of the homogenised model finds a real root at every sampled frequency except $\omega_r$, down to $|\omega-\omega_r|=0.01~\si{\radian\per\second}$ (Section~\ref{subsubsec:num_L1_7}).} Physically, the divergence of $M_{f,\rho}$ expresses incompressibility: a free surface fully covered by the structure cannot heave uniformly without changing the volume of fluid below it. The separation in equation~\eqref{eq:anticrossing} measures the hybridisation at $k_c$, not a frequency interval free of propagating waves. Whether the long-wave, resonator-dominated part of the upper branch is excited by an incident wave is a scattering question, addressed in Section~\ref{sec:discrete_lattice}. That section also shows that a complete stop band can exist in a discrete lattice, where it is set by the lattice near field rather than by the effective mass (Section~\ref{subsubsec:lat_long_wave}).
+}
+
+\subsection{Frequency- and density-graded resonator populations}\label{subsec:graded_resonators}
+ 
+In this section we still restrict the graded-population analysis to a one-dimensional propagation problem, i.e. the plane wave case in a vertical domain. Here, the coordinate $x$ denotes the direction of propagation and $k(x,\omega)$ is the corresponding scalar local wavenumber. This is a deliberate simplification of the general multidimensional effective-medium formulation exposed at the beginning of Section~\ref{sec:dispersion_relation}, in line with the approach followed in existing literature \cite{liu2025metaplate,jin2026low}. Nonetheless, equivalent results can be obtained for higher-dimensional settings using the same local approximation principles.
+
+We now consider a non-constant local resonator number density $n(x,\boldsymbol{\theta})$, given by two physically distinct, closed-form graded profiles built from a single population of identical resonators, $n(x,\boldsymbol{\theta})=n(x)\,\delta(\boldsymbol{\theta}-\boldsymbol{\theta}_r(x))$. First, a \emph{frequency-graded} ensemble, in which the resonant frequency $\omega_r(x)$ varies smoothly along the propagation coordinate while the number density per unit length $n_0$ is held fixed. That means, a uniformly distributed resonators with graded properties. Second, a \emph{density-graded} population, in which the natural resonator frequency $\omega_r$ is fixed for all resonators and $n(x)$ is tapered. Both are one-parameter families that satisfy the scale-separation requirement~\eqref{eq:homogenization_scale_separation} only where the grading length is large compared with the local wavelength. Similarly, both reduce at any fixed $x$ to the homogeneous local dispersion relation of Section~\ref{subsubsec:non-dissipative_homogeneous_isotropic_dispersion} with $\omega_r\to\omega_r(x)$ and/or $n_0\to n(x)$. This frozen-parameter closure, in which $x$ enters the local dispersion relation only as a parameter, makes the two cases analytically tractable. It underlies the graded designs of \cite{liu2025metaplate,jin2026low} and the rainbow-reflection analyses of graded water-wave arrays \cite{bennetts2018graded,wilks2022rainbow}. It corresponds to the leading order of a Wentzel--Kramers--Brillouin (WKB) description; amplitude transport and the matching at turning points are not considered here. In what follows we obtain the corresponding local resonance-position and apodisation relations in closed form, within the local model.
+
+{\color{red} %to review
+Equation~\eqref{eq:anticrossing} adds a hydroelastic constraint on graded designs that has no counterpart in vacuo, where the mass ratio is the same at every position of a graded array. Since $K(k)\ge g$ for any host, the crossing condition $K(k_c)=\omega_r^2\big(m_\rho+M_{f,\rho}(k_c,H)\big)$ implies $m_\rho+M_{f,\rho}(k_c,H)\ge g/\omega_r^2$, and therefore
+\begin{equation}\label{eq:gravity_bound}
+    \mu(k_c)\le\frac{n_0\,m_{\rho,r}\,\omega_r^2}{g},
+\end{equation}
+for any structure stiffness, pre-tension and water depth, with equality for a limp surface, $T_\rho=C_\rho=0$. This bound can be interpreted as follows: the resonator mass per unit area competes with the mass of a fluid layer of thickness $g/\omega_r^2$, which grows rapidly as the resonance frequency decreases. Figure~\ref{fig:graded_dilution}(a) shows $\sqrt{\mu(k_c)}$ for the parameters of Table~\ref{tab:dispersion_test_parameters}. Over the range $\omega_r\in[8,11]~\si{\radian\per\second}$ of the graded metaplate in \cite{liu2025metaplate}, $\sqrt{\mu(k_c)}$ varies by less than $10\%$ ($0.154$--$0.167$ for $T_\rho=0$). Thus, a resonator population of identical resonator mass hybridises almost uniformly. Over $\omega_r\in[1,10]~\si{\radian\per\second}$ used in Figure~\ref{fig:graded_dispersion}, instead, $\sqrt{\mu(k_c)}$ decreases from $0.163$ to $0.032$ ($0.138$ to $0.032$ for $T_\rho>0$), and the absolute anticrossing width, $\sqrt{\mu(k_c)}\,\omega_r$, decreases by a factor of about $50$. Below $\omega_r\approx2~\si{\radian\per\second}$ both plates reach the bound~\eqref{eq:gravity_bound}, where the hybridisation is set by gravity and the fluid alone, and the host stiffness no longer matters.
+
+Above this frequency, the host stiffness acts against the hybridisation. A stiffer host raises the bare branch, lowers $k_c$ and increases $M_{f,\rho}(k_c,H)$. At $\omega_r=10~\si{\radian\per\second}$, bending reduces $\sqrt{\mu(k_c)}$ to $0.51$ of the limp-surface value~\eqref{eq:gravity_bound}, and pre-tension further to $0.43$. For a prescribed resonator mass, the most compliant host therefore gives the strongest resonator--plate coupling, which favours membrane-like hosts.
+
+Uniform hybridisation along a frequency-graded population requires the resonator mass loading to be graded together with the resonance frequency,
+\begin{equation}\label{eq:mass_grading_rule}
+    n(x)\,m_{\rho,r}(x)=\mu^*\big(m_\rho+M_{f,\rho}(k_c(x),H)\big)\;\ge\;\mu^*\frac{g}{\omega_r(x)^2},
+\end{equation}
+for a target mass ratio $\mu^*$, which combines the frequency and density grading considered separately below. Figure~\ref{fig:graded_dilution}(b) shows the required loading for $\sqrt{\mu^*}=0.163$, the value of Figure~\ref{fig:subsubsec_non_dissipative_homogeneous_isotropic_dispersion}. Across the range $[1,10]~\si{\radian\per\second}$ it increases by a factor of about $26$ for $T_\rho=0$ ($19$ for $T_\rho>0$), and at low frequency it follows the $\omega_r^{-2}$ scaling of the bound. At ocean-wave frequencies there is a strong constraint, i.e. $\sqrt{\mu^*}=0.1$ at $\omega_r=0.5~\si{\radian\per\second}$ requires $n_0m_{\rho,r}\ge0.39$~m, i.e.\ a resonator mass of at least $390~\si{\kilogram\per\meter\squared}$.
+\begin{figure*}[pos=htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/graded_dilution.png}
+    \caption{Fluid dilution of the resonator mass ratio along a frequency-graded population, local model, parameters of Table~\ref{tab:dispersion_test_parameters}. (a) Hybridisation $\sqrt{\mu(k_c)}$, equation~\eqref{eq:anticrossing}, for a fixed resonator loading $n_0m_{\rho,r}=0.01$~m; dotted: bound~\eqref{eq:gravity_bound}, attained by a limp surface. (b) Resonator loading required to keep $\sqrt{\mu(k_c)}=0.163$ along the array, equation~\eqref{eq:mass_grading_rule}; dotted: lower bound $\mu^*g/\omega_r^2$. Shaded: ocean-wave band, $\omega\in[0.3,1.3]~\si{\radian\per\second}$, and the resonance range of the graded metaplate in \cite{liu2025metaplate}, $[8,11]~\si{\radian\per\second}$. Multiply $n_0m_{\rho,r}$ by $\rho$ to obtain the resonator mass per unit area in \si{\kilogram\per\meter\squared}.}
+    \label{fig:graded_dilution}
+\end{figure*}
+}
+
+ 
+\subsubsection{Frequency-graded resonator population}
+Let the local resonant frequency decrease monotonically with $x$, $\omega_r(x_i)<\omega_r(x_j)$ for $x_i<x_j$, so that a wave of fixed frequency $\omega$ entering at $x=0$ (where $\omega_r(0)=\omega_{r,0}>\omega$) eventually reaches a position $x^*(\omega)$ at which the local resonance condition is met. From the effective-mass equation~\eqref{eq:effective_mass_dispersion}, the position $x^*$ can be defined implicitly by the condition
+\begin{equation}\label{eq:turning_point_general}
+    \omega_r(x^*(\omega)) = \omega .
+\end{equation}
+Here we derive explicit conditions for two closed-form grading laws and use them to estimate the spatial footprint of the local resonance position.
+ 
+Let us first consider a \emph{linear} grading over a grading length $L_g$,
+\begin{equation}\label{eq:linear_chirp}
+    \omega_r(x) = \omega_{r,0}\left(1-\frac{x}{L_g}\right), \qquad x\in[0,L_g),
+\end{equation}
+resulting in a turning point
+\begin{equation}\label{eq:x_star_linear}
+    x^*_{\rm lin}(\omega) = L_g\left(1-\frac{\omega}{\omega_{r,0}}\right).
+\end{equation}
+For an \emph{exponential} (geometric) grading law,
+\begin{equation}\label{eq:exp_chirp}
+    \omega_r(x) = \omega_{r,0}\,e^{-x/L_g}, \qquad x\ge0,
+\end{equation}
+the turning point is instead
+\begin{equation}\label{eq:x_star_exp}
+    x^*_{\rm exp}(\omega) = L_g\ln\!\left(\frac{\omega_{r,0}}{\omega}\right).
+\end{equation}
+
+With finite resonator damping, a given excitation frequency $\omega$ interacts with the local resonance over a band of positions around $x^*(\omega)$. In vacuo, this band is usually estimated from the resonator bandwidth, $\Delta\omega_r/\omega_r\approx2\zeta$, with $\zeta$ the damping ratio defined in equation~\eqref{eq:resonator_natural_freq_damping}. In the hydroelastic case, the frequency window over which the incident branch is modified by the resonators is also bounded below by the anticrossing width~\eqref{eq:anticrossing}, and we estimate $\Delta\omega_r/\omega_r\approx\max\{2\zeta,\sqrt{\mu(k_c)}\}$. Linearising the grading law about $x^*$ gives the {\color{red}local estimate of the} spatial footprint
+\begin{equation}\label{eq:footprint_general}
+    \Delta x(\omega)\approx\omega\left|\frac{dx^*}{d\omega}\right|\max\big\{2\zeta,\sqrt{\mu(k_c(x^*))}\big\},
+\end{equation}
+which, for the two grading laws, becomes
+\begin{equation}\label{eq:footprint_lin_exp}
+    \Delta x_{\rm lin}(\omega)=L_g\frac{\omega}{\omega_{r,0}}\max\big\{2\zeta,\sqrt{\mu}\big\},
+    \qquad
+    \Delta x_{\rm exp}(\omega)=L_g\max\big\{2\zeta,\sqrt{\mu}\big\}.
+\end{equation}
+%% [2026-10-28 numerical feedback, J2025-LRMM Sec. 6]
+% Replaced (2026-10-28, L2-6): "When damping dominates, exponential grading gives a frequency-independent footprint, whereas the linear footprint grows with frequency. When the hybridisation dominates, $\sqrt{\mu(k_c)}$ decreases towards low frequency (Figure~\ref{fig:graded_dilution}), so that the exponential footprint also shrinks at the low-frequency end, unless the resonator mass is graded according to equation~\eqref{eq:mass_grading_rule}."
+{\color{red}The finite element computations of graded arrays in Section~\ref{subsec:num_graded} confirm the turning point $x^*(\omega)$ of equations~\eqref{eq:x_star_linear} and~\eqref{eq:x_star_exp}, but not the width in equation~\eqref{eq:footprint_general}. The width of the dissipation zone is set by the damping, $\mathrm{FWHM}\approx c\,2\zeta\,\omega|dx^*/d\omega|$, with a factor $c$ of order one, about $1$ to $3$, that increases with the opacity of the array. This holds also where $\sqrt{\mu}>2\zeta$. The term $\sqrt{\mu(k_c)}$ in equation~\eqref{eq:footprint_general} therefore bounds the frequency window of the dispersion branch, not the spatial width of the dissipation. The hybridisation enters the width only through the depletion of the wave upstream of $x^*$, which broadens the footprint. Since $c$ depends on the opacity, the exponential width with uniform loading still varies with frequency, by a factor of $3.2$ over $\omega\in[3,7]~\si{\radian\per\second}$ in Section~\ref{subsec:num_graded}. Grading the resonator mass according to equation~\eqref{eq:mass_grading_rule} flattens it over most of the band: with exponential grading the width varies by $13\%$ over the same range, and is about half as wide at $\omega=2~\si{\radian\per\second}$.} These estimates characterise the spatial mapping of the local resonance; they do not establish the attenuation length of a finite graded array.
+
+A second argument follows from the scale-separation condition~\eqref{eq:homogenization_scale_separation}. The grading length $L_{\omega_r}(x)=\omega_r(x)/|\omega_r'(x)|$ vanishes as $x\to L_g$ for linear grading, causing the local approximation to deteriorate near the low-frequency end. For exponential grading, $L_{\omega_r}(x)=L_g$ is constant, so $\varepsilon_n=\lambda(x)/L_{\omega_r}(x)$ remains uniformly controlled. Thus, within the local model, exponential grading combines a frequency-independent footprint estimate with a more uniform homogenization validity.
+
+
+Under this closure, the graded problem has the algebraic structure of Appendix~\ref{app:closed_form_isotropic} with $\omega_r$ replaced by $\omega_r(x)$. With $K(k)=g+T_\rho k^2+C_\rho k^4$, $M_f(k)=1/(k\tanh(kH))$, $M_r=n_0m_{\rho,r}$ and $s\equiv\omega^2$, the explicit local branches are
+\begin{equation}\label{eq:omega_k_x_closed_form}
+    \omega_\pm(k,x) = \sqrt{s_\pm(k,x)},
+    \qquad
+    s_\pm(k,x)=\frac{\Sigma(k,x)\pm\sqrt{\Sigma(k,x)^2-4\,\omega_r(x)^2K(k)\big(m_\rho+M_f(k)\big)}}{2\big(m_\rho+M_f(k)\big)},
+\end{equation}
+where $\Sigma(k,x)=K(k)+\omega_r(x)^2\big(m_\rho+M_f(k)+M_r\big)$. Substitution of either grading law into $\omega_r(x)$ results into the local branches without further approximation.
+
+In the following figures we illustrate the local dispersion branches for the two grading laws and the two pre-tension states. Here we use the parameters defined in Table~\ref{tab:dispersion_test_parameters}, with the additional grading-specific parameters defined in Table~\ref{tab:grading_parameters}.
+
+\begin{table}[htbp]
+\caption{Grading-specific parameters used in the local dispersion illustrations.}
+\label{tab:grading_parameters}
+\centering
+\begin{tabular}{lll}
+    \hline
+    Parameter & Symbol & Value \\
+    \hline
+    Grading length & $L_g$ & $500\ \si{\meter}$ ($=500a$) \\
+    Frequency grading range & $\omega_r(x)$ & $10$ to $1\ \si{\radian\per\second}$ \\
+    \hline
+\end{tabular}
+\end{table}
+
+Figure~\ref{fig:graded_dispersion} shows the local branches for the two grading laws and the two pre-tension states. Each colour corresponds to a fixed position, with solid and dashed curves for the lower and upper branches, respectively. For linear grading, the sampled positions $x/L_g\in[0,0.9]$ span $\omega_r\in[1,10]~\si{\radian\per\second}$, whereas exponential grading requires $x/L_g\in[0,\ln10]\simeq[0,2.30]$ and spreads the low-frequency resonances over a longer distance. In all panels the branch separation shrinks towards the low-frequency positions. This is the fluid dilution of Figure~\ref{fig:graded_dilution}(a), not an effect of the grading law.
+
+\begin{figure*}[pos=htbp]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/graded_linear_T0.png}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/graded_linear_Tpositive.png}
+        \caption{}
+    \end{subfigure}
+
+    \vspace{0.5em}
+
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/graded_exponential_T0.png}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/graded_exponential_Tpositive.png}
+        \caption{}
+    \end{subfigure}
+    \caption{Local dispersion branches for frequency-graded resonator
+    populations. Panels (a) and (b) show linear grading with zero and positive
+    pre-tension, respectively; panels (c) and (d) show the corresponding
+    exponential-grading cases. Colours identify the sampled positions $x/L_g$;
+    solid and dashed curves denote the lower and upper branches,
+    respectively. The same $ka/\pi$ ($a=1/n_0$) and frequency limits are used in all
+    panels. All panels use $L_g=500a$, for which $\varepsilon_n\le0.104$ for exponential grading over the plotted band, and for linear grading only for $\omega\gtrsim2.4$ ($T_\rho=0$) and $2.6$ rad s$^{-1}$ ($T_\rho>0$).}
+    \label{fig:graded_dispersion}
+\end{figure*}
+ 
+% {\color{red}\emph{Turning-point asymptote.} The closed-form branches also clarify the matching rule~\eqref{eq:turning_point_general}. Vieta's formulas give
+% \begin{equation}\label{eq:vieta}
+%     s_+(k,x)\,s_-(k,x)=\frac{K(k)\,\omega_r(x)^2}{m_\rho+M_f(k)},
+%     \qquad
+%     s_+(k,x)+s_-(k,x)=\frac{\Sigma(k,x)}{m_\rho+M_f(k)}.
+% \end{equation}
+% As $k\to\infty$, $M_f(k)\to0$ and $K(k)\to\infty$ whenever $T_\rho>0$ or $C_\rho>0$. Hence $s_+(k,x)\sim K(k)/m_\rho$, and the product relation yields
+% \begin{equation}\label{eq:turning_point_rigorous}
+%     \lim_{k\to\infty}\omega_-(k,x) = \omega_r(x),
+% \end{equation}
+% with leading correction
+% \begin{equation}\label{eq:convergence_rate}
+%     \omega_r(x)^2-s_-(k,x) \;\sim\; \frac{n_0 m_{\rho,r}\,\omega_r(x)^4}{K(k)}, \qquad k\to\infty.
+% \end{equation}
+% Thus, within the local model, the matching rule~\eqref{eq:turning_point_general} coincides with the large-$k$ limit of the lower branch. Because $\varepsilon_s=d_s/\lambda$ grows without bound as $k\to\infty$, this limit lies outside the range of validity of the homogenized description, equation~\eqref{eq:homogenization_scale_separation}; it is a property of the local branches only. Along the graded population, the local lower-branch wavenumber at fixed $\omega$ increases as $x$ approaches $x^*$, where $\omega_r(x^*)=\omega$; equation~\eqref{eq:convergence_rate} quantifies the approach of the local branch to $\omega_r(x)$.}
+
+\subsubsection{Density-graded resonator population}\label{subsubsec:density_graded_resonators}
+Here we consider the case of density grading, still in the one-dimensional homogeneous supporting plate assumption. That is, we hold the resonator frequency fixed, $\omega_r(x)=\omega_r$, and vary the number density per unit length. In particular, we consider an exponential decay of the form
+\begin{equation}\label{eq:density_grade}
+    n(x)=n_0 e^{-x/L_g},
+    \qquad x\in[0,L_g].
+\end{equation}
+In that case, density grading does not produce the frequency-dependent turning point~\eqref{eq:turning_point_general}. Instead, the local resonance reference remains at the same $\omega_r$ throughout the graded region, while the separation and attenuation of the local branches weaken as $n(x)$ decreases.
+
+With the position-dependent loading $M_r(x)=n(x)\,m_{\rho,r}$, the local branches are given by equation~\eqref{eq:omega_k_x_closed_form} with $\omega_r(x)$ replaced by the constant $\omega_r$ and $M_r$ by $M_r(x)$, and the mass ratio~\eqref{eq:lat_mu} becomes $\mu(k;x)=n(x)\,m_{\rho,r}/\big(m_\rho+M_{f,\rho}(k,H)\big)$. As $M_r(x)\to0$, the bare hydroelastic dispersion relation is recovered. The density profile therefore controls the hybridisation strength, $\sqrt{\mu(k_c;x)}$, rather than its centre frequency.
+
+Equation~\eqref{eq:density_grade} is an apodisation law for the resonator impedance. Its characteristic grading length is constant,
+\begin{equation}
+    \frac{n(x)}{|n'(x)|}=L_g,
+\end{equation}
+so the homogenization requirement~\eqref{eq:homogenization_scale_separation} becomes $\lambda(x)/L_g\ll1$ throughout the graded region. Under this condition, the local effective-medium parameters vary adiabatically and the trailing edge approaches the bare-plate impedance without an abrupt density step. Under these adiabatic conditions, the taper is expected to reduce the reflection generated by an abrupt termination of the resonator loading{\color{red}. The finite element computations of Section~\ref{subsec:num_graded} confirm this for $L_g\ge5\lambda$, but the gain is modest: the band-averaged $|R|^2$ of the taper is $8$--$23\%$ lower than that of an abrupt array with the same number of resonators without damping, and $1$--$21\%$ lower at $\zeta=0.02$. The gain shrinks as $L_g$ grows.}
+%% W-BODY-01 A11 (map H-10).
+ Consequently, the density-graded resonator distribution complements frequency grading. That is, frequency grading separates incident frequencies through a spatially varying resonance condition, whereas density grading preserves a common resonant frequency while tapering the local coupling strength toward the bare-plate response.
+ 
+% \begin{figure}[pos=htbp]
+%     \centering
+%     \includegraphics[width=0.95\linewidth]{figures/graded_rainbow.png}
+%     \caption{(a) Turning-point law $x^*(\omega)$ for a linearly graded (blue) and an exponentially graded (red) resonant frequency profile of the same physical length $L$, spanning the same frequency range. (b) Corresponding trapping footprint $\Delta x(\omega)$ from equation~\eqref{eq:footprint_lin_exp}: linear grading gives a footprint that grows with frequency, whereas exponential grading gives a uniform, frequency-independent footprint across the entire band.}
+%     \label{fig:graded_rainbow}
+% \end{figure}
+
+Since the local relation depends on position only through the scalar loading $n(\xvec)\,m_{\rho,r}$, the same description applies to two-dimensional density fields, as developed for localised anisotropic populations in Section~\ref{subsec:anisotropic_density}.
+
+Figure~\ref{fig:density_graded_dispersion} illustrates the local branches predicted by equation~\eqref{eq:omega_k_x_closed_form} for the two pre-tension cases. The curves are evaluated at seven positions along the exponential taper. As $n(x)$ decreases, the lower and upper branches approach the bare-plate response and their separation around the fixed resonator frequency becomes weaker, following $\sqrt{\mu(k_c;x)}$, while the dotted line at $\omega_r$ remains unchanged. Pre-tension primarily modifies the host-plate branch through the $T_\rho k^2$ term; it does not shift the resonator reference frequency. These plots therefore visualize density grading as a spatial taper of resonant coupling, rather than as a frequency-separation mechanism.
+
+\begin{figure*}[pos=htbp]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/density_graded_T0.png}
+        \caption{Zero pre-tension, $T_\rho=0$.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/density_graded_Tpositive.png}
+        \caption{Positive pre-tension, $T_\rho>0$.}
+    \end{subfigure}
+    \caption{Local dispersion branches for an exponentially density-graded resonator population. The solid and dashed curves denote the lower and upper branches, respectively, at positions $x/L_g=0,0.17,0.33,0.50,0.67,0.83,1.00$; the corresponding normalized densities decrease from $n/n_0=1$ to approximately $0.37$. The dotted line marks the fixed resonator frequency $\omega_r$. Abscissa $ka/\pi$; $L_g=500a$. The scale-separation parameter $\varepsilon_n=\lambda/L_n$ (eq.~\eqref{eq:homogenization_scale_separation}) is at most $0.104$ along the incident lower branch over the plotted band (maximum at $\omega=1$ rad s$^{-1}$).}
+    \label{fig:density_graded_dispersion}
+\end{figure*}
+
+\subsection{Anisotropic resonator density distributions on an isotropic plate}\label{subsec:anisotropic_density}
+
+Let us consider now an \emph{isotropic} plate populated by a single family of identical resonators, $n(\xvec,\thetavec)=n(\xvec)\delta(\thetavec-\thetavec_r)$, whose areal number density $n(\xvec)$ is distributed \emph{anisotropically in space}. The anisotropy is therefore carried by the shape of the density field, not by a direction-dependent plate or fluid response. We consider a localised population, or resonator island, with an elliptically scaled profile,
+\begin{equation}\label{eq:elliptic_density}
+    n(\xvec) = n_0\,\phi\big(\xi(\xvec)\big), \qquad
+    \xi(\xvec) \equiv \sqrt{\left(\frac{x}{L_x}\right)^2+\left(\frac{y}{L_y}\right)^2},
+\end{equation}
+where $\phi\ge0$ is a monotonically decaying function, e.g. the Gaussian $\phi(\xi)=e^{-\xi^2/2}$, and $L_x$, $L_y$ set the footprint aspect ratio. Since the host and the fluid are isotropic, the local dispersion relation~\eqref{eq:dispersion_relation} depends on position only through the scalar loading $M_r(\xvec)\equiv n(\xvec)m_{\rho,r}$,
+\begin{equation}\label{eq:aniso_density_dispersion}
+    \mathcal Z_f(k,\omega) + g + T_\rho k^2 + C_\rho k^4 - \omega^2\big[m_\rho+M_r(\xvec)\,\chi(\omega)\big] = 0, \qquad
+    \chi(\omega)=\frac{1-2i\zeta_r\omega/\omega_r}{1-(\omega/\omega_r)^2-2i\zeta_r\omega/\omega_r},
+\end{equation}
+so that the local wavenumber on a given branch is a function of $\xi$ only,
+\begin{equation}\label{eq:k_of_position_general}
+    k(\omega,\xvec) = \mathcal K\big(\omega,\,n_0m_{\rho,r}\,\phi(\xi(\xvec))\big).
+\end{equation}
+Consequently, every level set of a local observable, such as $\mathrm{Re}\,k$ or $\mathrm{Im}\,k$, is an ellipse with the aspect ratio of the footprint, $\xi(\xvec)=\xi_0$, provided the local root is single-valued on the selected branch. The local model applies where the scale-separation conditions~\eqref{eq:homogenization_scale_separation} hold. For the Gaussian island, $L_n=L_x^2/|x|$ along the $x$-axis, so that $\varepsilon_n$ grows in the tails, where, however, the loading and its effect on the wave vanish.
+
+\subsubsection{Ray description: attenuation and focusing by a resonator island}\label{subsubsec:aniso_rays}
+When the island is large compared with the wavelength, $k_0\min(L_x,L_y)\gg1$, with $k_0$ the wavenumber of the bare floating plate, and the loading is weak, $|k-k_0|\ll k_0$, a plane wave crossing the island along $x$ follows nearly straight paths and accumulates the complex phase
+\begin{equation}\label{eq:eikonal_phase}
+    \Phi_x(y)=\int_{-\infty}^{\infty}\big[k(\omega,x,y)-k_0\big]\,\mathrm{d}x .
+\end{equation}
+Its imaginary part is the line-integrated attenuation, or optical depth, and its real part the phase delay that refracts the rays. Linearising equation~\eqref{eq:aniso_density_dispersion} about the bare root, $\mathcal D_0(k_0,\omega)=0$, gives the local wavenumber shift
+\begin{equation}\label{eq:weak_dk}
+    k-k_0\simeq\frac{\omega^2\,n(\xvec)\,m_{\rho,r}\,\chi(\omega)}{\mathcal D_0'(k_0)},
+    \qquad
+    \mathcal D_0'(k_0)=2T_\rho k_0+4C_\rho k_0^3-\omega^2\,\partial_kM_{f,\rho}(k_0,H),
+\end{equation}
+where $\mathcal D_0'$ is the density-normalised derivative of the bare symbol, i.e. the same quantity that sets the energy flux and the radiation of a single resonator in Section~\ref{sec:discrete_lattice}. Since $\partial_kM_{f,\rho}<0$, the fluid increases $\mathcal D_0'$ and thereby reduces the effect of the island, as in Section~\ref{subsubsec:fluid_dilution}. In deep water, $\mathcal D_0'(k_0)\ge\omega^2/k_0^2$, and the relative shift is bounded by $|k-k_0|/k_0\le k_0\,n(\xvec)m_{\rho,r}|\chi(\omega)|$: the resonator loading competes with a fluid layer of thickness $1/k_0$.
+
+\paragraph{Attenuation.} Substituting $u=x/L_x$ in equation~\eqref{eq:eikonal_phase} and using equation~\eqref{eq:k_of_position_general}, the optical depths along the two principal axes, $\mathcal A_x=\mathrm{Im}\,\Phi_x(0)$ and $\mathcal A_y=\mathrm{Im}\,\Phi_y(0)$, satisfy
+\begin{equation}\label{eq:aspect_ratio_law}
+    \frac{\mathcal A_x}{\mathcal A_y} = \frac{L_x}{L_y},
+\end{equation}
+for any profile $\phi$, loading, damping and depth, provided the same branch is used on both axes. This result does not require weak loading.
+
+\paragraph{Focusing.} The transverse variation of $\mathrm{Re}\,\Phi_x(y)$ makes the island a graded-index lens. Writing $\mathrm{Re}\,k(\omega,\xvec)-k_0=F(\xi)$, one has $\mathrm{Re}\,\Phi_x(y)=L_x\int F\big(\sqrt{u^2+y^2/L_y^2}\big)\,\mathrm{d}u$, and the paraxial (thin-lens) focal length, $f_x=-k_0/\mathrm{Re}\,\Phi_x''(0)$, is
+\begin{equation}\label{eq:focal_general}
+    f_x=\frac{k_0\,L_y^2}{L_x\,J},
+    \qquad
+    f_y=\frac{k_0\,L_x^2}{L_y\,J},
+    \qquad
+    J=-\int_{-\infty}^{\infty}\frac{F'(|u|)}{|u|}\,\mathrm{d}u,
+\end{equation}
+for incidence along $x$ and $y$, respectively. Hence
+\begin{equation}\label{eq:focal_ratio_law}
+    \frac{f_x}{f_y}=\Big(\frac{L_y}{L_x}\Big)^3,
+\end{equation}
+independently of the profile, the loading and the depth. The optical depth~\eqref{eq:aspect_ratio_law} scales linearly with the aspect ratio, whereas the focal length scales with its cube. For the Gaussian island in the weak-loading limit, equation~\eqref{eq:weak_dk} gives $J=\sqrt{2\pi}\,\omega^2n_0m_{\rho,r}\,\mathrm{Re}\,\chi/\mathcal D_0'(k_0)$, and
+\begin{equation}\label{eq:focal_gaussian}
+    f_x=\frac{k_0\,L_y^2\,\mathcal D_0'(k_0)}{\sqrt{2\pi}\,L_x\,\omega^2\,n_0m_{\rho,r}\,\mathrm{Re}\,\chi(\omega)} .
+\end{equation}
+Below the resonance, $\mathrm{Re}\,\chi>0$, the island slows the wave and the lens converges; above it, $\mathrm{Re}\,\chi<0$ and the lens diverges; near $\omega_r$, $\mathrm{Im}\,\chi$ dominates and the island acts mainly as an absorber. Figure~\ref{fig:aniso_island_rays} compares equation~\eqref{eq:focal_gaussian} with rays traced through the local wavenumber field~\eqref{eq:k_of_position_general} for the parameters of Table~\ref{tab:dispersion_test_parameters}, $n_0m_{\rho,r}=0.01$~m and $\omega=8~\si{\radian\per\second}$, for which $(k-k_0)/k_0\le0.019$ and the fluid contributes $28\%$ of $\mathcal D_0'(k_0)$. For $L_x=40$~m and $L_y=20$~m, equation~\eqref{eq:focal_gaussian} gives $f_x=213$~m and ray tracing $239$~m, measured from the island centre; the difference is the finite thickness of the lens. The ratio~\eqref{eq:focal_ratio_law} is reproduced within $9\%$ for $L_y/L_x\in[0.5,2]$.
+
+\begin{figure*}[pos=htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/aniso_island_rays.png}
+    \caption{Gaussian resonator island on a floating plate, local model, parameters of Table~\ref{tab:dispersion_test_parameters} with $T_\rho=0$, $n_0m_{\rho,r}=0.01$~m and $\omega=8~\si{\radian\per\second}$. (a) Rays traced through the local wavenumber field~\eqref{eq:k_of_position_general} for $L_x=40$~m and $L_y=20$~m; grey: contours of $n/n_0$; dotted: thin-lens focal length~\eqref{eq:focal_gaussian}; dot: paraxial ray focus. (b) Ratio of the focal lengths for incidence along $x$ and $y$ at fixed footprint area; dotted: equation~\eqref{eq:focal_ratio_law}.}
+    \label{fig:aniso_island_rays}
+\end{figure*}
+
+These three predictions, elliptic level sets, the linear optical-depth law~\eqref{eq:aspect_ratio_law} and the cubic focal-length law~\eqref{eq:focal_ratio_law} with the sign change of the focusing across $\omega_r$, are directly testable with the three-dimensional finite-element model of Section~\ref{sec:numerical_formulation}, which retains the discrete resonators and the diffraction neglected by the ray description.
+
+{\color{red}
+\subsubsection{Towards finite anisotropic structures}\label{subsubsec:aniso_finite}
+For a finite rectangular structure of sides $L_x$ and $L_y$ in open water, the divergence of the added mass is cut off by the size of the structure, as in configuration~B of Section~\ref{subsubsec:lat_long_wave}. To leading order, a wet mode with dominant wavenumber $k_{mn}$ sees the mass ratio
+\begin{equation}\label{eq:mode_dilution}
+    \mu_{mn}\simeq\frac{n_0\,m_{\rho,r}}{m_\rho+M_{f,\rho}(k_{mn},H)},
+    \qquad
+    k_{mn}\simeq\sqrt{\Big(\frac{\beta_m}{L_x}\Big)^2+\Big(\frac{\beta_n}{L_y}\Big)^2},
+\end{equation}
+with $\beta_m$ the free-edge modal constants. In deep water and for $M_{f,\rho}\gg m_\rho$, $\mu_{mn}\simeq n_0m_{\rho,r}\,k_{mn}$, so that the first mode varying along the short side hybridises more strongly than the first mode varying along the long side, with $\mu_{10}/\mu_{01}\simeq L_y/L_x$. A uniform resonator population on an elongated structure therefore couples anisotropically to its wet modes even though both the host and the population are isotropic {\color{red}[estimate]. In the vertical section, Section~\ref{subsubsec:num_L2_5} confirms the wavenumber cut-off and the scaling of the corresponding estimate for a free plate. The splitting $\sqrt{\mu}$ obtained with the local mass ratio at the modal wavenumber $\beta_1/L$ is, however, low by a factor of $1.4$--$1.5$, and the wet modal mass of the bare mode gives the splitting to $1$--$6.5\%$. Equation~\eqref{eq:mode_dilution} should therefore be read with a prefactor of order $1.5$. The ratio $\mu_{10}/\mu_{01}$ depends on this prefactor only through its variation between the two modes. The three-dimensional verification is being completed (Section~\ref{subsec:num_3D}).}
+}
