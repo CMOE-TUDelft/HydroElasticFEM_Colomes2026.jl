@@ -14,12 +14,16 @@ regular, a = 1 m, and 5 random); ω ∈ {2, 5, 9.8, 10, 10.2} rad/s; p = 3.
     a spurious reflection of relative size ~1e-6 whose phase depends on the
     domain length; it masks the e^{-2κ₁Δ} decay of the truncation change at
     ω ≥ 5 and disappears on 16 elements);
-  - derivative: ω(1 ± 1e-6) on 16 elements per wavelength (for the frequency-equivalent error).
+  - derivative: ω(1 ± 1e-6) on 16 elements per wavelength (for the frequency-equivalent error);
+  - profile: G_B(x, x) at 200 regular points (spacing 0.1 m, no random points)
+    on 16 elements per wavelength, 6 decay lengths, for the diagonal figure.
+    The points are not mesh nodes; these cases are stored in
+    data/sims/L2-1/profile/ (their record names do not carry n_regular).
 
 Acceptance (test matrix §L2.1; reciprocity is an identity of the discrete
 problem, not a truncation diagnostic: the Sommerfeld condition keeps the
 operator complex symmetric):
-  - type I, every case: ‖G − Gᵀ‖/‖G‖ ≤ 1e-8; mirror symmetry of the regular
+  - type I, every case (profile cases: same checks, in profile_checks.csv): ‖G − Gᵀ‖/‖G‖ ≤ 1e-8; mirror symmetry of the regular
     block about the plate centre ≤ 1e-8; spring residual (point-load
     construction) ≤ 1e-12;
   - type D, every ω: the changes of G between meshes and between truncations,
@@ -31,9 +35,13 @@ operator complex symmetric):
     lengths) ≤ 1e-5 and smaller than for 4 vs 6.
 
 Outputs:
-  data/sims/L2-1/      one DrWatson record per case
-  data/exp_pro/L2-1/   errors.csv, convergence.csv, diagonal.csv (G_B(x, x) along the plate), checks.csv
-  plots/L2-1/          diagonal.pdf/png (Re and Im G_B(x, x) along the plate)
+  data/sims/L2-1/      one DrWatson record per case (profile cases in profile/)
+  data/exp_pro/L2-1/   errors.csv, convergence.csv, diagonal.csv (G_B(x, x) at the 20 regular points),
+                       checks.csv; profile.csv (G_B(x, x) at the 200 profile points),
+                       profile_errors.csv, profile_checks.csv (kept apart: the verification tables read
+                       errors.csv and checks.csv)
+  plots/L2-1/          diagonal.pdf/png (Re and Im G_B(x, x) along the plate: lines at the profile
+                       points, markers at the 20 regular points)
 
 Run:
   julia --project -O1 scripts/L2-configB-vertical/L2-1_transfer_compliance.jl [--smoke] [--force]
@@ -61,6 +69,8 @@ const GAP_REF = 6.0
 const N_TRUNC = 16                    # truncation on the finest ladder mesh (see header)
 const FINE_W = (2.0, 5.0)              # frequencies with a 32-element level (coarse meshes, cheap)
 const DW = 1e-6                       # relative frequency step of the derivative
+const N_PROFILE = 200                 # regular points of the profile cases (0.1 m spacing)
+const PROFILE_DIR = "profile"
 
 function cases(; smoke::Bool=false)
     smoke && return [L2_1_Params(ω=2.0, elements_per_wavelength=4)]
@@ -71,6 +81,11 @@ function cases(; smoke::Bool=false)
              for ω in STUDY_W for s in (-1, 1)]
     return [ladder; fine; trunc; deriv]
 end
+
+"Dense profile of G_B(x, x): finest mesh, reference truncation, `N_PROFILE` regular points."
+profile_cases(; smoke::Bool=false) =
+    smoke ? L2_1_Params[] : [L2_1_Params(ω=ω, elements_per_wavelength=16, gap_decays=GAP_REF, n_regular=N_PROFILE, n_random=0)
+                             for ω in STUDY_W]
 
 # ─── 2. Simulation records (DrWatson) ───────────────────────────────────────
 
@@ -86,8 +101,8 @@ function hefem_pin()
                 "hefem_version" => string(pkgversion(HydroElasticFEM)))
 end
 
-function simulate(p::L2_1_Params; root::AbstractString=REPO, force::Bool=false)
-    path = joinpath(root, "data", "sims", TEST_ID)
+function simulate(p::L2_1_Params; root::AbstractString=REPO, force::Bool=false, sub::AbstractString="")
+    path = joinpath(root, "data", "sims", TEST_ID, sub)
     data, _ = produce_or_load(p, path; filename=record_name, tag=true, gitpath=REPO,
                               storepatch=true, force=force) do p
         stats = @timed run_case(p)
@@ -151,7 +166,7 @@ function convergence(cs, records)
     return DataFrame(rows)
 end
 
-"G_B(x, x) along the plate on the finest mesh, regular points."
+"G_B(x, x) along the plate on the finest mesh, regular points (the 20 of the study, or the profile points)."
 function diagonal(cs, records)
     rows = NamedTuple[]
     for (p, d) in zip(cs, records)
@@ -182,7 +197,7 @@ function checks(df::DataFrame, cv::DataFrame)
     return DataFrame(rows)
 end
 
-function plot_diagonal(dg::DataFrame, dir::AbstractString)
+function plot_diagonal(dg::DataFrame, pf::DataFrame, dir::AbstractString)
     nrow(dg) == 0 && return
     theme = Theme(fontsize=12, Axis=(xgridvisible=false, ygridvisible=false))
     mkpath(dir)
@@ -193,8 +208,17 @@ function plot_diagonal(dg::DataFrame, dir::AbstractString)
         for (i, ω) in enumerate(sort(unique(dg.ω)))
             g = sort(filter(r -> r.ω == ω, dg), :x)
             c = Makie.wong_colors()[i]
-            scatterlines!(axr, g.x, g.re_G; color=c, markersize=5, label=@sprintf("ω = %g", ω))
-            scatterlines!(axi, g.x, g.im_G; color=c, markersize=5)
+            lab = @sprintf("ω = %g", ω)
+            gp = sort(filter(r -> r.ω == ω, pf), :x)
+            if nrow(gp) > 0
+                lines!(axr, gp.x, gp.re_G; color=c, label=lab)
+                lines!(axi, gp.x, gp.im_G; color=c)
+                scatter!(axr, g.x, g.re_G; color=c, markersize=5)
+                scatter!(axi, g.x, g.im_G; color=c, markersize=5)
+            else
+                scatterlines!(axr, g.x, g.re_G; color=c, markersize=5, label=lab)
+                scatterlines!(axi, g.x, g.im_G; color=c, markersize=5)
+            end
         end
         Legend(fig[1, 3], axr; framevisible=false, labelsize=10)
         save(joinpath(dir, "diagonal.pdf"), fig)
@@ -207,17 +231,25 @@ end
 function main(; smoke::Bool=false, force::Bool=false, root::AbstractString=REPO)
     cs = cases(; smoke=smoke)
     records = [simulate(p; root=root, force=force) for p in cs]
+    ps = profile_cases(; smoke=smoke)
+    precords = [simulate(p; root=root, force=force, sub=PROFILE_DIR) for p in ps]
     df = DataFrame([errors(p, d) for (p, d) in zip(cs, records)])
     cv = convergence(cs, records)
     dg = diagonal(cs, records)
+    pf = diagonal(ps, precords)
     ck = checks(df, cv)
+    pe = DataFrame([errors(p, d) for (p, d) in zip(ps, precords)])
+    pck = nrow(pe) == 0 ? DataFrame() : checks(pe, DataFrame())
     out = joinpath(root, "data", "exp_pro", TEST_ID)
     mkpath(out)
     CSV.write(joinpath(out, "errors.csv"), df)
     CSV.write(joinpath(out, "convergence.csv"), cv)
     CSV.write(joinpath(out, "diagonal.csv"), dg)
+    CSV.write(joinpath(out, "profile.csv"), pf)
+    CSV.write(joinpath(out, "profile_errors.csv"), pe)
+    CSV.write(joinpath(out, "profile_checks.csv"), pck)
     CSV.write(joinpath(out, "checks.csv"), ck)
-    plot_diagonal(dg, joinpath(root, "plots", TEST_ID))
+    plot_diagonal(dg, pf, joinpath(root, "plots", TEST_ID))
 
     show(stdout, MIME"text/plain"(), select(df, :ω, :elements_per_wavelength, :gap_decays, :gap, :ndofs, :reciprocity, :mirror,
                                             :spring_residual, :wall_time_s); allrows=true)
@@ -225,7 +257,8 @@ function main(; smoke::Bool=false, force::Bool=false, root::AbstractString=REPO)
     show(stdout, MIME"text/plain"(), cv; allrows=true)
     println()
     @printf("%d/%d checks pass\n", count(ck.passed), nrow(ck))
-    for c in eachrow(filter(r -> !r.passed, ck))
+    nrow(pck) > 0 && @printf("%d/%d profile checks pass\n", count(pck.passed), nrow(pck))
+    for c in eachrow(filter(r -> !r.passed, nrow(pck) > 0 ? [ck; pck] : ck))
         @printf("FAIL  %-70s value = %.3g (tolerance %.3g)\n", c.name, c.value, c.tolerance)
     end
     return (errors=df, checks=ck)

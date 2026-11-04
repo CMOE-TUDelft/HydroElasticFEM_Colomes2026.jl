@@ -6,6 +6,9 @@ Study: P1 plate (T_ρ = 0), free edges, uniform lossless resonators every ≈ 1 
 at n₀m_ρ,r = 0.01 m tuned to the first elastic wet mode; L ∈ {2.3, 4.6, 11.5,
 23, 46} m (≈ {1, 2, 5, 10, 20} λ_p at ω = 10), H ∈ {3, 10, 30} m; p = 3 with 16
 elements per wavelength, and 32 at H = 10 m for L ≤ 11.5 m (mesh check).
+Profile (figure): the same case on 16 elements per wavelength at L ∈ {3, 4, 6, 8,
+14, 18, 28, 36} m (a = 1 m exactly, so N = 3 and 4 are included), with L ≤ 23 m at
+H = 30 m. √μ_B is a closed formula and is plotted on a fine grid.
 
 Acceptance (test matrix §L2.5):
   - type I: the hybridised modes have a projection ≥ 0.2 on the bare mode (the
@@ -24,12 +27,13 @@ Acceptance (test matrix §L2.5):
   and the paper's √μ_B and the local √μ(β₁/L) against the FE.
 
 Outputs:
-  data/sims/L2-5/      one DrWatson record per case
-  data/exp_pro/L2-5/   errors.csv, checks.csv
+  data/sims/L2-5/      one DrWatson record per case (profile cases in profile/)
+  data/exp_pro/L2-5/   errors.csv, checks.csv; profile_errors.csv, profile_checks.csv (kept apart:
+                       errors.csv and checks.csv hold the study cases only)
   plots/L2-5/          splitting.pdf/png (splitting against L for each H)
 
 Run:
-  julia --project -O1 scripts/L2-configB-vertical/L2-5_finite_size_dilution.jl [--smoke] [--force] [--cases 1:5]
+  julia --project -O1 scripts/L2-configB-vertical/L2-5_finite_size_dilution.jl [--smoke] [--force] [--cases 1:5] [--profile 1:5]
 =#
 
 using DrWatson
@@ -48,6 +52,8 @@ const STUDY_L = (2.3, 4.6, 11.5, 23.0, 46.0)
 const STUDY_H = (3.0, 10.0, 30.0)
 const MESH_L_MAX = 11.5               # 32-element check up to L = 11.5 m (≈ 16× the cost of 16 elements at larger L)
 const DEEP_L_MAX = 23.0               # H = 30: L = 46 m exceeds the 60 CPU-min budget; the deep-water exponent uses L ≤ 23 m
+const PROFILE_L = (3.0, 4.0, 6.0, 8.0, 14.0, 18.0, 28.0, 36.0)
+const PROFILE_DIR = "profile"
 
 function cases(; smoke::Bool=false)
     smoke && return [L2_5_Params(Lp=4.6, H=10.0, elements_per_wavelength=8)]
@@ -56,6 +62,10 @@ function cases(; smoke::Bool=false)
     fine = [L2_5_Params(Lp=L, H=10.0, elements_per_wavelength=32) for L in STUDY_L if L <= MESH_L_MAX]
     return [main; fine]
 end
+
+profile_cases(; smoke::Bool=false) =
+    smoke ? L2_5_Params[] : [L2_5_Params(Lp=L, H=H, elements_per_wavelength=16) for H in STUDY_H for L in PROFILE_L
+                             if !(H == 30.0 && L > DEEP_L_MAX)]
 
 record_name(p::L2_5_Params) = savename(p; accesses=VARIABLE, sigdigits=6) * "_fixed=" * fixed_hash(p)
 
@@ -69,8 +79,8 @@ function hefem_pin()
                 "hefem_version" => string(pkgversion(HydroElasticFEM)))
 end
 
-function simulate(p::L2_5_Params; root::AbstractString=REPO, force::Bool=false)
-    path = joinpath(root, "data", "sims", TEST_ID)
+function simulate(p::L2_5_Params; root::AbstractString=REPO, force::Bool=false, sub::AbstractString="")
+    path = joinpath(root, "data", "sims", TEST_ID, sub)
     data, _ = produce_or_load(p, path; filename=record_name, tag=true, gitpath=REPO,
                               storepatch=true, force=force) do p
         stats = @timed run_case(p)
@@ -127,9 +137,12 @@ function checks(df::DataFrame)
            DataFrame(rows)
 end
 
-function plot_split(df::DataFrame, dir::AbstractString)
+"√μ_B of the paper (eq:mu_B), closed formula."
+sqrt_mu_B(L, H; loading=L2_5_Params().loading) = sqrt(loading * π * tanh(π * H / L) / L)
+
+function plot_split(df::DataFrame, pe::DataFrame, dir::AbstractString)
     nrow(df) == 0 && return
-    main = filter(r -> r.elements_per_wavelength == 16, df)
+    main = vcat(filter(r -> r.elements_per_wavelength == 16, df), pe)
     theme = Theme(fontsize=12, Axis=(xgridvisible=false, ygridvisible=false))
     mkpath(dir)
     with_theme(theme) do
@@ -140,7 +153,8 @@ function plot_split(df::DataFrame, dir::AbstractString)
             c = Makie.wong_colors()[i]
             scatter!(ax, g.Lp, g.split; color=c, markersize=9, label=@sprintf("FE, H = %g m", H))
             lines!(ax, g.Lp, g.sqrt_mu_mode; color=c, label=@sprintf("√μ_mode, H = %g m", H))
-            lines!(ax, g.Lp, g.sqrt_mu_B; color=c, linestyle=:dash, label=@sprintf("√μ_B (paper), H = %g m", H))
+            Ld = exp.(range(log(first(g.Lp)), log(last(g.Lp)); length=200))
+            lines!(ax, Ld, sqrt_mu_B.(Ld, H); color=c, linestyle=:dash, label=@sprintf("√μ_B (paper), H = %g m", H))
         end
         Legend(fig[1, 2], ax; framevisible=false, labelsize=9)
         save(joinpath(dir, "splitting.pdf"), fig)
@@ -149,8 +163,17 @@ function plot_split(df::DataFrame, dir::AbstractString)
 end
 
 function main(; smoke::Bool=false, force::Bool=false, root::AbstractString=REPO,
-              only::Union{Nothing,AbstractVector{<:Integer}}=nothing)
+              only::Union{Nothing,AbstractVector{<:Integer}}=nothing,
+              only_profile::Union{Nothing,AbstractVector{<:Integer}}=nothing)
     cs = cases(; smoke=smoke)
+    ps = profile_cases(; smoke=smoke)
+    if only_profile !== nothing
+        for (i, p) in zip(only_profile, ps[only_profile])
+            @info "profile case $(i)/$(length(ps))" p.Lp p.H
+            simulate(p; root=root, force=force, sub=PROFILE_DIR)
+        end
+        return nothing
+    end
     if only !== nothing
         for (i, p) in zip(only, cs[only])
             @info "case $(i)/$(length(cs))" p.Lp p.H p.elements_per_wavelength
@@ -161,30 +184,36 @@ function main(; smoke::Bool=false, force::Bool=false, root::AbstractString=REPO,
     records = [simulate(p; root=root, force=force) for p in cs]
     df = DataFrame([errors(p, d) for (p, d) in zip(cs, records)])
     ck = checks(df)
+    precords = [simulate(p; root=root, force=force, sub=PROFILE_DIR) for p in ps]
+    pe = isempty(ps) ? filter(r -> false, df) : DataFrame([errors(p, d) for (p, d) in zip(ps, precords)])
+    pck = checks(pe)
     out = joinpath(root, "data", "exp_pro", TEST_ID)
     mkpath(out)
     CSV.write(joinpath(out, "errors.csv"), df)
     CSV.write(joinpath(out, "checks.csv"), ck)
-    plot_split(df, joinpath(root, "plots", TEST_ID))
+    CSV.write(joinpath(out, "profile_errors.csv"), pe)
+    CSV.write(joinpath(out, "profile_checks.csv"), pck)
+    plot_split(df, pe, joinpath(root, "plots", TEST_ID))
     show(stdout, MIME"text/plain"(), select(df, :Lp, :H, :elements_per_wavelength, :N, :omega_1, :split, :sqrt_mu_mode,
                                             :sqrt_mu_B, :ratio_mode, :ratio_galerkin, :modal_mass_ratio, :proj, :wall_time_s); allrows=true)
     println()
     deep3 = sort(filter(r -> r.H == 3.0 && r.Lp >= 11.5 && r.elements_per_wavelength == 16, df), :Lp)
     nrow(deep3) >= 2 && @printf("shallow-water exponent (H=3, L ≥ 11.5): %.3f\n", loglog_slope(deep3.Lp, deep3.split))
     @printf("%d/%d checks pass\n", count(ck.passed), nrow(ck))
-    for c in eachrow(filter(r -> !r.passed, ck))
+    nrow(pck) > 0 && @printf("%d/%d profile checks pass\n", count(pck.passed), nrow(pck))
+    for c in eachrow(filter(r -> !r.passed, nrow(pck) > 0 ? [ck; pck] : ck))
         @printf("FAIL  %-70s value = %.3g (tolerance %.3g)\n", c.name, c.value, c.tolerance)
     end
     return (errors=df, checks=ck)
 end
 
-function cases_arg(args)
-    i = findfirst(==("--cases"), args)
+function cases_arg(args, flag="--cases")
+    i = findfirst(==(flag), args)
     i === nothing && return nothing
     part(s) = occursin(':', s) ? range(parse.(Int, split(s, ":"))...) : [parse(Int, s)]
     return reduce(vcat, collect.(part.(split(args[i + 1], ","))))
 end
 
 if abspath(PROGRAM_FILE) == @__FILE__
-    main(; smoke="--smoke" in ARGS, force="--force" in ARGS, only=cases_arg(ARGS))
+    main(; smoke="--smoke" in ARGS, force="--force" in ARGS, only=cases_arg(ARGS), only_profile=cases_arg(ARGS, "--profile"))
 end

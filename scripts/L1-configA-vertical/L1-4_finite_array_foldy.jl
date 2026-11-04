@@ -48,7 +48,7 @@ using TOML
 import HydroElasticFEM
 using HydroElasticFEM_xxx2026.L1_4
 import HydroElasticFEM_xxx2026.L1_1
-using HydroElasticFEM_xxx2026.References: bloch_decay_1d, resonator_from_frequency, omega_X_1d, omega_gamma_1d, kappa1
+using HydroElasticFEM_xxx2026.References: bloch_decay_1d, resonator_from_frequency, omega_X_1d, omega_gamma_1d, kappa1, foldy_1d
 
 const TEST_ID = "L1-4"
 const REPO = normpath(joinpath(@__DIR__, "..", ".."))
@@ -205,11 +205,30 @@ function plot_transmission(cv::DataFrame, dir::AbstractString)
 end
 
 """
+    decay_dense(p, ωs) -> (rate_foldy, Im_q_zone_boundary)
+
+Foldy decay rate ln(|T₁₀|/|T₂₀|)/(10a) of the lossless array and Im q of the
+zone-boundary Bloch mode at the frequencies `ωs` (|T| does not depend on where
+the array is centred, so the resonators sit at (n − 1)a).
+"""
+function decay_dense(p::L1_4_Params, ωs)
+    h, r = L1_1.host(p), resonator_from_frequency(p.m_ρr, p.ω_r)
+    absT(N, ω) = abs(foldy_1d(h, ω, [(n - 1) * p.a for n in 1:N], fill(r, N)).T)
+    rate = [log(absT(10, ω) / absT(20, ω)) / (10p.a) for ω in ωs]
+    zb = map(ωs) do ω
+        att = filter(<(0), bloch_decay_1d(h, r, p.a, ω))
+        isempty(att) ? NaN : abs(att[1]) / p.a
+    end
+    return rate, zb
+end
+
+"""
 Decay rate between N = 10 and 20 inside the stop band [ω_X, ω_Γ] of each T_ρ:
 Foldy (line), FE (markers), Im q of the zone-boundary Bloch mode (dashed) and
-the decay rate κ₁ of the slowest fluid evanescent mode (dotted).
+the decay rate κ₁ of the slowest fluid evanescent mode (dotted). The continuous
+curves are evaluated on `n_dense` frequencies, the FE only at the computed ones.
 """
-function plot_decay(dc::DataFrame, p0::L1_4_Params, dir::AbstractString)
+function plot_decay(dc::DataFrame, p0::L1_4_Params, dir::AbstractString; n_dense::Int=401)
     nrow(dc) == 0 && return
     theme = Theme(fontsize=12, Axis=(xgridvisible=false, ygridvisible=false))
     mkpath(dir)
@@ -225,9 +244,11 @@ function plot_decay(dc::DataFrame, p0::L1_4_Params, dir::AbstractString)
             Tstr = @sprintf("%g", T)
             ax = Axis(fig[1, j]; xlabel=L"\omega\ \mathrm{(rad/s)}", ylabel=j == 1 ? L"\mathrm{decay\ rate}\ (1/\mathrm{m})" : "",
                       title=L"T_\rho = %$Tstr", limits=((ωX, ωΓ), (0, 1.0)))
-            lines!(ax, g.omega, g.rate_foldy; color=:black, label=L"\mathrm{Foldy},\ \ln(|T_{10}|/|T_{20}|)/10a")
+            ωd = range(ωX, ωΓ; length=n_dense)
+            rate_d, zb_d = decay_dense(p, ωd)
+            lines!(ax, ωd, rate_d; color=:black, label=L"\mathrm{Foldy},\ \ln(|T_{10}|/|T_{20}|)/10a")
             scatter!(ax, g.omega, g.rate_h; color=:firebrick, markersize=6, label="FE")
-            lines!(ax, g.omega, g.Im_q_zone_boundary; color=:royalblue, linestyle=:dash, label=L"\mathrm{Im}\,q,\ \mathrm{Re}\,q = \pi/a")
+            lines!(ax, ωd, zb_d; color=:royalblue, linestyle=:dash, label=L"\mathrm{Im}\,q,\ \mathrm{Re}\,q = \pi/a")
             hlines!(ax, [kappa1(h, p.ω_r)]; color=:gray50, linestyle=:dot, label=L"\kappa_1\ \mathrm{(fluid\ evanescent)}")
         end
         Legend(fig[1, length(STUDY_T) + 1], ax; framevisible=false, labelsize=10)

@@ -7,6 +7,10 @@ m_ρ,r = 0.01 m², ω_r = 10 rad/s; L_p ∈ {5, 20} m; x₁ ∈ {L_p/2, L_p/4, L
 0.25 m} and the mirror positions L_p − x₁ (incidence from the right); p = 3 with
 8 elements per wavelength, and 16 for L_p = 5 and for x₁ ∈ {L_p/2, 0.25} at
 L_p = 20 (mesh check). Damping ratio swept over 41 values in [1e-3, 1e-1].
+Profile (figure line): the same case on 8 elements per wavelength every 0.05 m
+(L_p = 5) and 0.1 m (L_p = 20) up to the centre; beyond it the bound follows from
+bound(x₁) + bound(L_p − x₁) = 1. The radiation pattern repeats about every
+1.14 m at ω ≈ 10, so the study positions alone alias it.
 
 Acceptance (test matrix §L2.4):
   - type D: radiated power ½ω Im G_B(x₁, x₁) against the open-water flux of the
@@ -21,12 +25,14 @@ Acceptance (test matrix §L2.4):
   - type D: bound on the two meshes, to 1e-3, where both exist.
 
 Outputs:
-  data/sims/L2-4/      one DrWatson record per case
-  data/exp_pro/L2-4/   errors.csv, absorption.csv (𝒜 against ζ), checks.csv
+  data/sims/L2-4/      one DrWatson record per case (profile cases in profile/)
+  data/exp_pro/L2-4/   errors.csv, absorption.csv (𝒜 against ζ), checks.csv; profile.csv (bound along the
+                       plate), profile_errors.csv, profile_checks.csv (kept apart: the verification
+                       tables read errors.csv and checks.csv)
   plots/L2-4/          bound.pdf/png (bound and max 𝒜 against x₁/L_p), absorption.pdf/png
 
 Run:
-  julia --project -O1 scripts/L2-configB-vertical/L2-4_asymmetric_absorption.jl [--smoke] [--force] [--cases 1:4]
+  julia --project -O1 scripts/L2-configB-vertical/L2-4_asymmetric_absorption.jl [--smoke] [--force] [--cases 1:4] [--profile 1:60]
 =#
 
 using DrWatson
@@ -40,6 +46,7 @@ using HydroElasticFEM_xxx2026.L2_4
 
 const TEST_ID = "L2-4"
 const REPO = normpath(joinpath(@__DIR__, "..", ".."))
+const PROFILE_DIR = "profile"
 
 positions(L) = sort(unique([L / 2, L / 4, L / 8, 0.25, L - L / 4, L - L / 8, L - 0.25]))
 
@@ -50,6 +57,16 @@ function cases(; smoke::Bool=false)
     fine20 = [L2_4_Params(Lp=20.0, x1=x, elements_per_wavelength=16) for x in (10.0, 0.25)]
     return [main; fine; fine20]
 end
+
+"Profile positions up to the centre, without the study positions (their records are reused)."
+function profile_positions(L)
+    dx = L == 5.0 ? 0.05 : 0.1
+    xs = [round(i * dx; digits=6) for i in 1:round(Int, L / 2 / dx)]
+    return filter(x -> !any(y -> isapprox(x, y; atol=1e-9), positions(L)), xs)
+end
+
+profile_cases(; smoke::Bool=false) =
+    smoke ? L2_4_Params[] : [L2_4_Params(Lp=L, x1=x, elements_per_wavelength=8) for L in (5.0, 20.0) for x in profile_positions(L)]
 
 record_name(p::L2_4_Params) = savename(p; accesses=VARIABLE, sigdigits=4) * "_fixed=" * fixed_hash(p)
 
@@ -63,8 +80,8 @@ function hefem_pin()
                 "hefem_version" => string(pkgversion(HydroElasticFEM)))
 end
 
-function simulate(p::L2_4_Params; root::AbstractString=REPO, force::Bool=false)
-    path = joinpath(root, "data", "sims", TEST_ID)
+function simulate(p::L2_4_Params; root::AbstractString=REPO, force::Bool=false, sub::AbstractString="")
+    path = joinpath(root, "data", "sims", TEST_ID, sub)
     data, _ = produce_or_load(p, path; filename=record_name, tag=true, gitpath=REPO,
                               storepatch=true, force=force) do p
         stats = @timed run_case(p)
@@ -130,20 +147,41 @@ function absorption_table(cs, records)
     return DataFrame(rows)
 end
 
-function plots(df::DataFrame, ab::DataFrame, dir::AbstractString)
+"""
+Bound along the plate on 8 elements per wavelength: study and profile positions,
+and their mirror images through bound(x₁) + bound(L_p − x₁) = 1 where not computed.
+"""
+function bound_profile(df::DataFrame, pe::DataFrame)
+    rows = NamedTuple[]
+    cols = [:Lp, :x1, :bound, :omega_tilde, :gamma_r]
+    g = vcat(select(filter(r -> r.elements_per_wavelength == 8, df), cols), select(pe, cols))
+    for r in eachrow(g)
+        push!(rows, (Lp=r.Lp, x1=r.x1, x1_rel=r.x1 / r.Lp, bound=r.bound, omega_tilde=r.omega_tilde, gamma_r=r.gamma_r, mirrored=false))
+        xm = r.Lp - r.x1
+        any(s -> s.Lp == r.Lp && isapprox(s.x1, xm; atol=1e-9), eachrow(g)) && continue
+        push!(rows, (Lp=r.Lp, x1=xm, x1_rel=xm / r.Lp, bound=1 - r.bound, omega_tilde=r.omega_tilde, gamma_r=r.gamma_r, mirrored=true))
+    end
+    return sort(DataFrame(rows), [:Lp, :x1])
+end
+
+function plots(df::DataFrame, ab::DataFrame, bp::DataFrame, dir::AbstractString)
     nrow(df) == 0 && return
     theme = Theme(fontsize=12, Axis=(xgridvisible=false, ygridvisible=false))
     mkpath(dir)
     with_theme(theme) do
-        fig = Figure(size=(560, 340))
-        ax = Axis(fig[1, 1]; xlabel=L"x_1/L_p", ylabel=L"\mathcal{A}", limits=(0, 1, 0, 1.05))
-        for (L, c) in ((5.0, :royalblue), (20.0, :firebrick))
+        fig = Figure(size=(760, 310))
+        for (j, (L, c)) in enumerate(((5.0, :royalblue), (20.0, :firebrick)))
+            Lstr = @sprintf("%g", L)
+            ax = Axis(fig[1, j]; xlabel=L"x_1\ \mathrm{(m)}", ylabel=j == 1 ? L"\mathcal{A}" : "", title=L"L_p = %$Lstr\ \mathrm{m}",
+                      limits=(0, L, 0, 1.05))
+            gb = filter(r -> r.Lp == L, bp)
             g = sort(filter(r -> r.Lp == L && r.elements_per_wavelength == 8, df), :x1)
-            lines!(ax, g.x1_rel, g.bound; color=c, label=@sprintf("bound |a⁻|²/(|a⁻|²+|a⁺|²), Lp = %g m", L))
-            scatter!(ax, g.x1_rel, g.max_absorbed; color=c, marker=:circle, label=@sprintf("max 𝒜 (FE), Lp = %g m", L))
+            lines!(ax, gb.x1, gb.bound; color=c)
+            scatter!(ax, g.x1, g.max_absorbed; color=:black, marker=:circle, markersize=7)
+            hlines!(ax, [0.5]; color=:gray60, linestyle=:dot)
         end
-        hlines!(ax, [0.5]; color=:gray60, linestyle=:dot)
-        axislegend(ax; position=:ct, framevisible=false, labelsize=9)
+        Legend(fig[2, 1:2], [LineElement(color=:gray30), MarkerElement(color=:black, marker=:circle, markersize=7)],
+               ["bound |a⁻|²/(|a⁻|²+|a⁺|²)", "max 𝒜 over ζ (FE)"]; orientation=:horizontal, framevisible=false, labelsize=10)
         save(joinpath(dir, "bound.pdf"), fig)
         save(joinpath(dir, "bound.png"), fig; px_per_unit=300 / 96)
         nrow(ab) == 0 && return
@@ -163,8 +201,17 @@ function plots(df::DataFrame, ab::DataFrame, dir::AbstractString)
 end
 
 function main(; smoke::Bool=false, force::Bool=false, root::AbstractString=REPO,
-              only::Union{Nothing,AbstractVector{<:Integer}}=nothing)
+              only::Union{Nothing,AbstractVector{<:Integer}}=nothing,
+              only_profile::Union{Nothing,AbstractVector{<:Integer}}=nothing)
     cs = cases(; smoke=smoke)
+    ps = profile_cases(; smoke=smoke)
+    if only_profile !== nothing
+        for (i, p) in zip(only_profile, ps[only_profile])
+            @info "profile case $(i)/$(length(ps))" p.Lp p.x1
+            simulate(p; root=root, force=force, sub=PROFILE_DIR)
+        end
+        return nothing
+    end
     if only !== nothing
         for (i, p) in zip(only, cs[only])
             @info "case $(i)/$(length(cs))" p.Lp p.x1 p.elements_per_wavelength
@@ -176,29 +223,37 @@ function main(; smoke::Bool=false, force::Bool=false, root::AbstractString=REPO,
     df = DataFrame([errors(p, d) for (p, d) in zip(cs, records)])
     ab = absorption_table(cs, records)
     ck = checks(df)
+    precords = [simulate(p; root=root, force=force, sub=PROFILE_DIR) for p in ps]
+    pe = isempty(ps) ? filter(r -> false, df) : DataFrame([errors(p, d) for (p, d) in zip(ps, precords)])
+    pck = nrow(pe) == 0 ? DataFrame() : checks(pe)
+    bp = bound_profile(df, pe)
     out = joinpath(root, "data", "exp_pro", TEST_ID)
     mkpath(out)
     CSV.write(joinpath(out, "errors.csv"), df)
     CSV.write(joinpath(out, "absorption.csv"), ab)
     CSV.write(joinpath(out, "checks.csv"), ck)
-    plots(df, ab, joinpath(root, "plots", TEST_ID))
+    CSV.write(joinpath(out, "profile.csv"), bp)
+    CSV.write(joinpath(out, "profile_errors.csv"), pe)
+    CSV.write(joinpath(out, "profile_checks.csv"), pck)
+    plots(df, ab, bp, joinpath(root, "plots", TEST_ID))
     show(stdout, MIME"text/plain"(), select(df, :Lp, :x1, :elements_per_wavelength, :omega_tilde, :bound, :max_absorbed,
                                             :absorbed_crit, :absorbed_mono, :power_err, :radiation_in, :wall_time_s); allrows=true)
     println()
     @printf("%d/%d checks pass\n", count(ck.passed), nrow(ck))
-    for c in eachrow(filter(r -> !r.passed, ck))
+    nrow(pck) > 0 && @printf("%d/%d profile checks pass\n", count(pck.passed), nrow(pck))
+    for c in eachrow(filter(r -> !r.passed, nrow(pck) > 0 ? [ck; pck] : ck))
         @printf("FAIL  %-75s value = %.3g (tolerance %.3g)\n", c.name, c.value, c.tolerance)
     end
     return (errors=df, checks=ck)
 end
 
-function cases_arg(args)
-    i = findfirst(==("--cases"), args)
+function cases_arg(args, flag="--cases")
+    i = findfirst(==(flag), args)
     i === nothing && return nothing
     part(s) = occursin(':', s) ? range(parse.(Int, split(s, ":"))...) : [parse(Int, s)]
     return reduce(vcat, collect.(part.(split(args[i + 1], ","))))
 end
 
 if abspath(PROGRAM_FILE) == @__FILE__
-    main(; smoke="--smoke" in ARGS, force="--force" in ARGS, only=cases_arg(ARGS))
+    main(; smoke="--smoke" in ARGS, force="--force" in ARGS, only=cases_arg(ARGS), only_profile=cases_arg(ARGS, "--profile"))
 end
